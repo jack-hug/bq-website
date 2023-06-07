@@ -1,89 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>{% block title %}
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>{% block title %}
         base
-        {% endblock %}</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="{{ url_for('static',filename = 'assets/fav.ico') }}" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://cdn.staticfile.org/font-awesome/6.4.0/js/all.js" crossorigin="anonymous"></script>
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{{ url_for('static',filename = 'css/styles.css') }}" rel="stylesheet" />
-    </head>
-    <body id="page-top">
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
-            <div class="container">
-                <a class="navbar-brand" href="#page-top">广西邦琪药业集团有限公司</a>
-                <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    Menu
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded active" href={{ url_for('index') }}>主 页</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href={{ url_for('news') }}>新闻资讯</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href={{ url_for('product') }}>产品中心</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href={{ url_for('introduce') }}>公司介绍</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href={{ url_for('honor') }}>企业荣誉</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href={{ url_for('contact') }}>联系我们</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        {% block content %}
-
-        {% endblock %}
-       <!-- Footer-->
-        <footer class="footer text-center">
-            <div class="container">
-                <div class="row">
-                    <!-- Footer Location-->
-                    <div class="col-lg-4 mb-5 mb-lg-0">
-                        <h4 class="text-uppercase mb-4">企业地址</h4>
-                        <p class="lead mb-0">
-                            广西壮族自治区
-                            <br />
-                            钦州市钦北区皇马工业园
-                        </p>
-                    </div>
-                    <!-- Footer Social Icons-->
-                    <div class="col-lg-4 mb-5 mb-lg-0">
-                        <h4 class="text-uppercase mb-4">集团与分公司</h4>
-                            <p class="lead mb-0 ">广西邦琪药业集团有限公司</p>
-                        <p class="lead mb-0">广西百琪药业有限公司</p>
-                        <p class="lead mb-0">广西葛洪堂药业有限公司</p>
-                        <p class="lead mb-0">广西葛洪堂方略制药有限公司</p>
-                        <p class="lead mb-0">广西泰和制药有限公司</p>
-                    </div>
-                    <!-- Footer About Text-->
-                    <div class="col-lg-4">
-                        <h4 class="text-uppercase mb-4">企业公众号</h4>
-                        <p class="lead mb-0">
-                            <img class="img-fluid rounded mb-5"  src="{{ url_for('static', filename = 'assets/img/gongzhonghao.svg') }}" alt="">
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- Copyright Section-->
-        <div class="copyright py-4 text-center text-white">
-            <div class="container"><small>Copyright ©2023 广西邦琪药业集团有限公司 All Rights Reserved</small></div>
-            <div class="container"><small>互联网药品信息服务资格证书：（桂）-非经营性-2023-0020号 <a href="https://beian.miit.gov.cn" target="_blank"  class="px-0 px-lg-3 rounded" style="color: #fff; text-decoration: none">桂ICP备14001107号-1</a></small>
+    {% endblock %}</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static',filename = 'assets/fav.ico') }}"/>
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://cdn.staticfile.org/font-awesome/6.4.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{{ url_for('static',filename = 'css/styles.css') }}" rel="stylesheet"/>
+</head>
+<body id="page-top">
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand p-0 me-0 me-lg-3" href="/" aria-label="邦琪集团">
+            <img src="{{ url_for('static', filename = 'assets/img/logo2.png') }}" width="50" height="47" class="d-block my-1" viewBox="0 0 118 94"
+                 role="img">
+            </img>
+        </a>
+        <a class="navbar-brand" href="#page-top">广西邦琪药业集团有限公司</a>
+        <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item mx-0 mx-lg-1"><a
+                        class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_index %}{% endblock %}"
+                        href={{ url_for('index') }}>主 页</a></li>
+                <li class="nav-item mx-0 mx-lg-1"><a
+                        class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_news %}{% endblock %}"
+                        href={{ url_for('news') }}>新闻资讯</a></li>
+                <li class="nav-item mx-0 mx-lg-1"><a
+                        class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_products %}{% endblock %}"
+                        href={{ url_for('product') }}>产品中心</a></li>
+                <li class="nav-item mx-0 mx-lg-1"><a
+                        class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_intro %}{% endblock %}"
+                        href={{ url_for('introduce') }}>公司介绍</a></li>
+                <li class="nav-item mx-0 mx-lg-1"><a
+                        class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_honor %}{% endblock %}"
+                        href={{ url_for('honor') }}>企业荣誉</a></li>
+                <li class="nav-item mx-0 mx-lg-1"><a
+                        class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_contact %}{% endblock %}"
+                        href={{ url_for('contact') }}>联系我们</a></li>
+            </ul>
         </div>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.staticfile.org/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="{{ url_for('static',filename = 'js/scripts.js') }}"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-    </body>
+    </div>
+</nav>
+{% block content %}
+
+{% endblock %}
+<!-- Footer-->
+<footer class="footer text-center">
+    <div class="container">
+        <div class="row">
+            <!-- Footer Location-->
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <h4 class="text-uppercase mb-4">企业地址</h4>
+                <p class="lead mb-0">
+                    广西壮族自治区
+                    <br/>
+                    钦州市钦北区皇马工业园
+                </p>
+            </div>
+            <!-- Footer Social Icons-->
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <h4 class="text-uppercase mb-4">集团与分公司</h4>
+                <p class="lead mb-0 ">广西邦琪药业集团有限公司</p>
+                <p class="lead mb-0">广西百琪药业有限公司</p>
+                <p class="lead mb-0">广西葛洪堂药业有限公司</p>
+                <p class="lead mb-0">广西葛洪堂方略制药有限公司</p>
+                <p class="lead mb-0">广西泰和制药有限公司</p>
+            </div>
+            <!-- Footer About Text-->
+            <div class="col-lg-4">
+                <h4 class="text-uppercase mb-4">企业公众号</h4>
+                <p class="lead mb-0">
+                    <img class="img-fluid rounded mb-5"
+                         src="{{ url_for('static', filename = 'assets/img/gongzhonghao.svg') }}" alt="">
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Copyright Section-->
+<div class="copyright py-4 text-center text-white">
+    <div class="container"><small>Copyright ©2023 广西邦琪药业集团有限公司 All Rights Reserved</small></div>
+    <div class="container"><small>互联网药品信息服务资格证书：（桂）-非经营性-2023-0020号 <a
+            href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded"
+            style="color: #fff; text-decoration: none">桂ICP备14001107号-1</a></small>
+    </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.staticfile.org/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="{{ url_for('static',filename = 'js/scripts.js') }}"></script>
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <!-- * *                               SB Forms JS                               * *-->
+    <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+</body>
 </html>

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    公司新闻
+{% endblock %}
+{% block nav_news %}active{% endblock %}
+{% block content %}
+    <header class="masthead bg-primary text-white text-center">
+        <div class="news_bg_img"></div>
+    </header>
+    <section class="page-section portfolio bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-1">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header fw-bold">
+                            新闻资讯
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item active"><a href="{{ url_for('news_company') }}">公司新闻</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('news_industry') }}">行业资讯</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-9 row">
+                    <div class="card mb-2">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <img src="{{ url_for('static',filename = 'assets/img/news/news_logo.png') }}"
+                                     class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body gx-5">
+                                    <h5 class="card-title">这是新闻标题</h5>
+                                    <p class="card-text">
+                                        这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。</p>
+                                    <p class="card-text"><small class="text-muted">2023年6月6日 <a
+                                            href="" class="">查看详情>></a></small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-2">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <img src="{{ url_for('static',filename = 'assets/img/news/news_logo.png') }}"
+                                     class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <h5 class="card-title">这是新闻标题</h5>
+                                    <p class="card-text">
+                                        这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。</p>
+                                    <p class="card-text justify-content-end"><small
+                                            class="text-muted">2023年6月6日</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-2">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <img src="{{ url_for('static',filename = 'assets/img/news/news_logo.png') }}"
+                                     class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <h5 class="card-title">这是新闻标题</h5>
+                                    <p class="card-text">
+                                        这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。</p>
+                                    <p class="card-text justify-content-end"><small
+                                            class="text-muted">2023年6月6日</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                    <div class="card mb-2">
+                    <div class="row g-0">
+                        <div class="col-md-2">
+                            <img src="{{ url_for('static',filename = 'assets/img/news/news_logo.png') }}"
+                                 class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-body">
+                                <h5 class="card-title">这是新闻标题</h5>
+                                <p class="card-text">
+                                    这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。这是新闻内容。</p>
+                                <p class="card-text justify-content-end"><small class="text-muted">2023年6月6日</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+    </section>
+{% endblock %}

@@ -251,11 +251,12 @@ sup {
 
 a {
     color: var(--bs-link-color);
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 a:hover {
     color: var(--bs-link-hover-color);
+    text-decoration: none;
 }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
@@ -12671,4 +12672,37 @@ html {
 
 .copyright .a {
     color: #fff;
+}
+
+.news_bg_img {
+
+    height: 400px;
+    background-image: url('../assets/img/bg_img01.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center 0;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+}
+
+.hover-effect:hover {
+    -ms-transform: translate3d(0, -2px, 0);
+    transform: translate3d(0, -2px, 0);
+    box-shadow: 0 5px 15px #fff3cd;
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+    -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+    -o-box-shadow: 0 5px 15px rgba(0, 0, 0, .1)
+}
+
+.hover-image {
+    transition: 0.5s;
+}
+
+.hover-image:hover {
+    opacity: 0.5;
+    cursor: pointer;
+
 }

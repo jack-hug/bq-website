@@ -3,6 +3,7 @@
 {% block title %}
     广西邦琪药业集团有限公司官方网站
 {% endblock %}
+{% block nav_index %}active{% endblock %}
 {% block content %}
     <!-- Masthead-->
 
@@ -30,6 +31,16 @@
                          alt="...">
                 </div>
             </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
     </header>
     <!-- Portfolio Section-->
@@ -54,7 +65,7 @@
                             </div>
                         </div>
                         <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
                              alt="..."/>
                     </div>
                 </div>
@@ -67,7 +78,7 @@
                             </div>
                         </div>
                         <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
                              alt="..."/>
                     </div>
                 </div>
@@ -80,7 +91,7 @@
                             </div>
                         </div>
                         <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
                              alt="..."/>
                     </div>
                 </div>
@@ -93,7 +104,7 @@
                             </div>
                         </div>
                         <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
                              alt="..."/>
                     </div>
                 </div>
@@ -106,7 +117,7 @@
                             </div>
                         </div>
                         <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
                              alt="..."/>
                     </div>
                 </div>
@@ -119,8 +130,73 @@
                             </div>
                         </div>
                         <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
                              alt="..."/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- News list -->
+    <section class="page-section portfolio bg-light mb-0" id="news-list">
+        <div class="container">
+            <h2 class="page-section-heading text-center text-secondary mb-0 text-uppercase">新闻资讯</h2>
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-3 mb-5">
+                    <div class="card portfolio-item mx-auto" style="width: 18rem;">
+                        <img src="{{ url_for('static',filename = 'assets/img/news/news_01.png') }}"
+                             class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">新闻标题</h6>
+                            <p class="card-text">这里放的是新闻内容，这里有一些字数上的限制</p>
+                            <div class="text-center"><a href="#" class="btn btn-primary">查看更多</a></div>
+                        </div>
+                        <div class="card-footer text-center"><span class="text-muted small">2023年6月3日 10:45:18</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-5">
+                    <div class="card portfolio-item mx-auto" style="width: 18rem;">
+                        <img src="{{ url_for('static',filename = 'assets/img/news/news_01.png') }}"
+                             class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">新闻标题</h6>
+                            <p class="card-text">这里放的是新闻内容，这里有一些字数上的限制</p>
+                            <div class="text-center"><a href="#" class="btn btn-primary">查看更多</a></div>
+                        </div>
+                        <div class="card-footer text-center"><span class="text-muted small">2023年6月3日 10:45:18</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-5">
+                    <div class="card portfolio-item mx-auto" style="width: 18rem;">
+                        <img src="{{ url_for('static',filename = 'assets/img/news/news_01.png') }}"
+                             class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">新闻标题</h6>
+                            <p class="card-text">这里放的是新闻内容，这里有一些字数上的限制</p>
+                            <div class="text-center"><a href="#" class="btn btn-primary">查看更多</a></div>
+                        </div>
+                        <div class="card-footer text-center"><span class="text-muted small">2023年6月3日 10:45:18</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-5">
+                    <div class="card portfolio-item mx-auto" style="width: 18rem;">
+                        <img src="{{ url_for('static',filename = 'assets/img/news/news_01.png') }}"
+                             class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">新闻标题</h6>
+                            <p class="card-text">这里放的是新闻内容，这里有一些字数上的限制</p>
+                            <div class="text-center"><a href="#" class="btn btn-primary">查看更多</a></div>
+                        </div>
+                        <div class="card-footer text-center"><span class="text-muted small">2023年6月3日 10:45:18</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -151,36 +227,35 @@
                                 <div class="row justify-content-center">
                                     <div class="col-md-4">
                                         <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
                                              alt="..."/>
                                     </div>
                                     <div class="col-md-4">
                                         <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
                                              alt="..."/>
                                     </div>
                                     <div class="col-md-4">
                                         <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
                                              alt="..."/>
                                     </div>
                                     <div class="col-md-4">
                                         <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
                                              alt="..."/>
                                     </div>
                                     <div class="col-md-4">
                                         <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
                                              alt="..."/>
                                     </div>
                                     <div class="col-md-4">
                                         <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/guilong.png') }}"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
                                              alt="..."/>
                                     </div>
                                 </div>
-
                                 <button class="btn btn-primary" data-bs-dismiss="modal">
                                     点击查看更多
                                 </button>
@@ -204,7 +279,7 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
                                 <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Tasty Cake</h2>
+                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">颗粒剂</h2>
                                 <!-- Icon Divider-->
                                 <div class="divider-custom">
                                     <div class="divider-custom-line"></div>
@@ -212,17 +287,40 @@
                                     <div class="divider-custom-line"></div>
                                 </div>
                                 <!-- Portfolio Modal - Image-->
-                                <img class="img-fluid rounded mb-5"
-                                     src="{{ url_for('static',filename = 'assets/img/portfolio/cake.png') }}"
-                                     alt="..."/>
-                                <!-- Portfolio Modal - Text-->
-                                <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque
-                                    assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam
-                                    velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque.
-                                    Nam.</p>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                </div>
                                 <button class="btn btn-primary" data-bs-dismiss="modal">
-                                    <i class="fas fa-xmark fa-fw"></i>
-                                    Close Window
+                                    点击查看更多
                                 </button>
                             </div>
                         </div>
@@ -244,7 +342,7 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
                                 <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Circus Tent</h2>
+                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">糖浆剂</h2>
                                 <!-- Icon Divider-->
                                 <div class="divider-custom">
                                     <div class="divider-custom-line"></div>
@@ -252,17 +350,40 @@
                                     <div class="divider-custom-line"></div>
                                 </div>
                                 <!-- Portfolio Modal - Image-->
-                                <img class="img-fluid rounded mb-5"
-                                     src="{{ url_for('static',filename = 'assets/img/portfolio/circus.png') }}"
-                                     alt="..."/>
-                                <!-- Portfolio Modal - Text-->
-                                <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque
-                                    assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam
-                                    velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque.
-                                    Nam.</p>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                </div>
                                 <button class="btn btn-primary" data-bs-dismiss="modal">
-                                    <i class="fas fa-xmark fa-fw"></i>
-                                    Close Window
+                                    点击查看更多
                                 </button>
                             </div>
                         </div>
@@ -284,7 +405,7 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
                                 <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Controller</h2>
+                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">胶囊</h2>
                                 <!-- Icon Divider-->
                                 <div class="divider-custom">
                                     <div class="divider-custom-line"></div>
@@ -292,17 +413,40 @@
                                     <div class="divider-custom-line"></div>
                                 </div>
                                 <!-- Portfolio Modal - Image-->
-                                <img class="img-fluid rounded mb-5"
-                                     src="{{ url_for('static',filename = 'assets/img/portfolio/game.png') }}"
-                                     alt="..."/>
-                                <!-- Portfolio Modal - Text-->
-                                <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque
-                                    assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam
-                                    velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque.
-                                    Nam.</p>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                </div>
                                 <button class="btn btn-primary" data-bs-dismiss="modal">
-                                    <i class="fas fa-xmark fa-fw"></i>
-                                    Close Window
+                                    点击查看更多
                                 </button>
                             </div>
                         </div>
@@ -324,7 +468,7 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
                                 <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Locked Safe</h2>
+                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">片 剂</h2>
                                 <!-- Icon Divider-->
                                 <div class="divider-custom">
                                     <div class="divider-custom-line"></div>
@@ -332,16 +476,40 @@
                                     <div class="divider-custom-line"></div>
                                 </div>
                                 <!-- Portfolio Modal - Image-->
-                                <img class="img-fluid rounded mb-5"
-                                     src="{{ url_for('static',filename='assets/img/portfolio/safe.png') }}" alt="..."/>
-                                <!-- Portfolio Modal - Text-->
-                                <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque
-                                    assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam
-                                    velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque.
-                                    Nam.</p>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                </div>
                                 <button class="btn btn-primary" data-bs-dismiss="modal">
-                                    <i class="fas fa-xmark fa-fw"></i>
-                                    Close Window
+                                    点击查看更多
                                 </button>
                             </div>
                         </div>
@@ -363,7 +531,7 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
                                 <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Submarine</h2>
+                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">酊 剂</h2>
                                 <!-- Icon Divider-->
                                 <div class="divider-custom">
                                     <div class="divider-custom-line"></div>
@@ -371,17 +539,40 @@
                                     <div class="divider-custom-line"></div>
                                 </div>
                                 <!-- Portfolio Modal - Image-->
-                                <img class="img-fluid rounded mb-5"
-                                     src="{{ url_for('static',filename = 'assets/img/portfolio/submarine.png') }}"
-                                     alt="..."/>
-                                <!-- Portfolio Modal - Text-->
-                                <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque
-                                    assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam
-                                    velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque.
-                                    Nam.</p>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-fluid rounded mb-4"
+                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
+                                             alt="..."/>
+                                    </div>
+                                </div>
                                 <button class="btn btn-primary" data-bs-dismiss="modal">
-                                    <i class="fas fa-xmark fa-fw"></i>
-                                    Close Window
+                                    点击查看更多
                                 </button>
                             </div>
                         </div>
@@ -411,7 +602,7 @@
             <!-- About Section Button-->
             <div class="text-center mt-4">
                 <a class="btn btn-xl btn-outline-light" href="#">
-                    查看更多
+                    了解更多
                 </a>
             </div>
         </div>
