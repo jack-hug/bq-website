@@ -27,6 +27,7 @@ class News(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     news_title = db.Column(db.String(100))
     news_content = db.Column(db.Text)
+    news_categories = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime, nullable=True, default=datetime.now, index=True)
 
 

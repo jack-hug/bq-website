@@ -41,6 +41,11 @@ def news_file():
     return render_template('news_file.html')
 
 
+@app.route('/news_detail')
+def news_detail():
+    return render_template('news_detail.html')
+
+
 @app.route('/product')
 def product():
     return render_template('product.html')

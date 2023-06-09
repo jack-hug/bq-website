@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    新闻资讯
+    公司通告
 {% endblock %}
 {% block nav_news %}active{% endblock %}
 {% block content %}
     <header class="masthead bg-primary text-white text-center">
-        <div class="news_bg_img"></div>
+        <div class="news_bg_img01"></div>
     </header>
     <section class="page-section portfolio bg-light">
         <div class="container">
             <div class="row">
-                <div class="col-md-3 col-sm-1">
-                    <div class="list-group mb-3">
+               <div class="col-lg-3 col-md-3 col-sm-12">
+                    <div class="list-group mb-3 mx-auto">
                         <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
                             新闻资讯
                         </div>
@@ -23,7 +23,7 @@
                         <a href="{{ url_for('news_industry') }}"
                            class="list-group-item list-group-item-action">行业资讯</a>
                     </div>
-                    <div class="list-group mb-3">
+                    <div class="list-group mb-3 mx-auto">
                         <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
                             最近文章
                         </div>
@@ -51,7 +51,7 @@
                 </div>
                 <div class="col-md-9">
                     <div class="list-group bg-white list-group-flush px-2">
-                        <h3 class="text-center text-uppercase text-secondary mt-3">公司通告</h3>
+                        <h3 class="text-center text-secondary mt-3">公司通告</h3>
                         <hr>
                         <a href="#" class="list-group-item list-group-item-action" aria-current="true">
                             {#                            <img src="{{ url_for('static',filename = 'assets/img/news/news_logo.png') }}"#}
