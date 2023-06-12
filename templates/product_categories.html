@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    产品中心
+{% endblock %}
+{% block nav_products %}active{% endblock %}
+{% block content %}
+    <header class="masthead bg-primary text-white text-center">
+        <div class="news_bg_img02"></div>
+    </header>
+    <section class="page-section portfolio bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <div class="list-group mb-3">
+                        <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
+                            产品中心
+                        </div>
+                        <a href="#"
+                           class="list-group-item list-group-item-action active">膏 剂</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">颗粒剂</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">糖浆剂</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">胶 囊</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">片 剂</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">酊 剂</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">散 剂</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">搽 剂</a>
+                    </div>
+                    <div class="list-group mb-3">
+                        <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
+                            热门产品
+                        </div>
+                        <a href="#"
+                           class="list-group-item list-group-item-action"><span class=""></span>桂龙药膏</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">感冒灵颗粒</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">抗宫炎颗粒</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">复方鱼腥草颗粒</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">小儿化痰止咳糖浆</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">强力枇杷露</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">藿香正气合剂</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">小儿氨酚黄那敏颗粒</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">百咳静糖浆</a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action">川贝清肺糖浆</a>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-8 mb-3">
+                            <div class="card hover-effect">
+                                <img src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
+                                     class="card-img-top hover-image"
+                                     alt="...">
+                                <div class="card-body">
+                                    <h6 class="card-title text-center"><a href="#">桂龙药膏</a></h6>
+                                    <p class="card-text text-center">功能主治</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-8 mb-3">
+                            <div class="card hover-effect">
+                                <img src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
+                                     class="card-img-top hover-image"
+                                     alt="...">
+                                <div class="card-body">
+                                    <h6 class="card-title text-center"><a href="#">桂龙药膏</a></h6>
+                                    <p class="card-text text-center">功能主治</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-8 mb-3">
+                            <div class="card hover-effect">
+                                <img src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
+                                     class="card-img-top hover-image"
+                                     alt="...">
+                                <div class="card-body">
+                                    <h6 class="card-title text-center"><a href="#">桂龙药膏</a></h6>
+                                    <p class="card-text text-center">功能主治</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-8 mb-3">
+                            <div class="card hover-effect">
+                                <img src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
+                                     class="card-img-top hover-image"
+                                     alt="...">
+                                <div class="card-body">
+                                    <h6 class="card-title text-center"><a href="#">桂龙药膏</a></h6>
+                                    <p class="card-text text-center">功能主治</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-8 mb-3">
+                            <div class="card hover-effect">
+                                <img src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
+                                     class="card-img-top hover-image"
+                                     alt="...">
+                                <div class="card-body">
+                                    <h6 class="card-title text-center"><a href="#">桂龙药膏</a></h6>
+                                    <p class="card-text text-center">功能主治</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-8 mb-3">
+                            <div class="card hover-effect">
+                                <img src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
+                                     class="card-img-top hover-image"
+                                     alt="...">
+                                <div class="card-body">
+                                    <h6 class="card-title text-center"><a href="#">桂龙药膏</a></h6>
+                                    <p class="card-text text-center">功能主治</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-8 mb-3">
+                            <div class="card hover-effect">
+                                <img src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
+                                     class="card-img-top hover-image"
+                                     alt="...">
+                                <div class="card-body">
+                                    <h6 class="card-title text-center"><a href="#">桂龙药膏</a></h6>
+                                    <p class="card-text text-center">功能主治</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

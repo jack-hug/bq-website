@@ -50,6 +50,14 @@ def news_detail():
 def product():
     return render_template('product.html')
 
+@app.route('/product_categories')
+def proudct_categories():
+    return render_template('product_categories.html')
+
+@app.route('/product_detail')
+def product_detail():
+    return render_template('product_detail.html')
+
 
 @app.route('/introduce')
 def introduce():

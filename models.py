@@ -19,7 +19,9 @@ class Products(db.Model):
     categories_id = db.Column(db.Integer, db.ForeignKey('product_categories.id'))
     category = db.relationship('Categories', back_populates='products')
     brand_id = db.Column(db.Integer, db.ForeignKey('brand.id'))
+    clicks = db.Column(db.Integer, default=0)
     brand = db.relationship('Brand', back_populates='products')
+
 
 
 class News(db.Model):
@@ -39,6 +41,7 @@ class Banner(db.Model):
 class Honor(db.Model):
     __tablename__ = 'honor'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    hornor_title = db.Column(db.String(100))
     honor_img = db.Column(db.String(200))
 
 
