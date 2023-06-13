@@ -12760,6 +12760,17 @@ html {
     padding: 10px;
 }
 
+.product_hover_effect p {
+    color: #fff;
+    text-align: center;
+    position: relative;
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    padding: 5px;
+}
+
 .product_hover_effect a.info {
     text-decoration: none;
     display: inline-block;
@@ -12771,7 +12782,6 @@ html {
     filter: alpha(opacity=0);
     -webkit-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
-    margin: 50px 0 0;
     padding: 7px 14px;
 }
 

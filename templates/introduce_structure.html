@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    新闻资讯
+{% endblock %}
+{% block nav_intro %}active{% endblock %}
+{% block content %}
+    <header class="masthead bg-primary text-white text-center">
+        <div class="news_bg_img01"></div>
+    </header>
+    <section class="page-section portfolio bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <div class="list-group mb-3 mx-auto">
+                        <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
+                            新闻资讯
+                        </div>
+                        <a href="{{ url_for('introduce_company') }}"
+                           class="list-group-item list-group-item-action">公司介绍</a>
+                        <a href="{{ url_for('introduce_quality') }}"
+                           class="list-group-item list-group-item-action">质量机构</a>
+                        <a href="{{ url_for('introduce_structure') }}"
+                           class="list-group-item list-group-item-action active">企业架构</a>
+                        <a href="{{ url_for('introduce_responsibility') }}"
+                           class="list-group-item list-group-item-action">社会责任</a>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 bg-white">
+                    <h3 class="text-center text-secondary mt-3 ">企业架构</h3>
+                    <p class="text-muted text-center"><small>发布时间：datestamp</small></p>
+                    <hr>
+                    <p class="lh-base text-start">企业架构内容</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
