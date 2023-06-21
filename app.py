@@ -1,30 +1,72 @@
 from flask import Flask, render_template
-from models import Categories, Products, News, Brand, Honor, Banner, Introduce
-from exts import db
+from models import Categories, Products, News, Brand, Honor, Banner, Introduce, ProductImage, NewsCategory, IntroduceCategory
+from exts import db, admin
 from flask_migrate import Migrate
 import config
+from flask_admin.contrib.sqla import ModelView
+
 app = Flask(__name__)
 
-intro = {
-    'introduce': '广西邦琪药业集团有限公司是一家已有20'
-                 '多年的发展历史的民营制药企业，连续入榜广西民营制造业百强、广西高新技术企业百强行列，是广西优秀企业，是集科研、生产、销售、服务为一体的综合性企业集团。集团公司旗下现有10'
-                 '多家子公司，包括百琪药业、葛洪堂药业、邦琪医药、泰和制药等多家医药企业。集团公司在药品的生产销售和药品研发方面有较强的特色和优势，产品资源相当丰富，药品生产批文号400多个，独家品种45个（其中10'
-                 '个有新药证书）。主要产品有桂龙药膏、复方鱼腥草颗粒、金鸡胶囊、五参安神口服液、罗汉果止咳膏、黄荆油胶丸、抗宫炎颗粒、三参益气口服液、参芪首乌补汁、咳喘停膏等品种。'
-}
+
+class ProductView(ModelView):
+    column_list = ('product_name', 'product_indication', 'product_manual', 'timestamp', 'clicks', 'category.product_category')
+    # column_choices = {
+    #     'category': [
+    #         (Categories.id, '膏剂'),
+    #     ]
+    # }
+    column_labels = {
+        'category.product_category': '剂型'
+    }
+
+    column_formatters = {
+        'category.product_category': Categories.product_category
+    }
+
+
+# class EmployeeView(ModelView):
+#
+#     column_list = ('name', 'department.name')  # 显示部门名称而不是外键 ID
+#
+#     column_labels = {
+#         'department.name': 'Department'
+#     }
+#
+#     def _department_formatter(self, context, model, name):
+#         return model.department.name
+#
+#     column_formatters = {
+#         'department.name': _department_formatter
+#     }
+
 
 app.config.from_object(config)
 db.init_app(app)
 migrate = Migrate(app, db)
+admin.init_app(app)
+admin.add_view(ModelView(Products, db.session, name='产品'))
+admin.add_view(ModelView(Categories, db.session, name='产品分类'))
+admin.add_view(ModelView(News, db.session, name='新闻'))
+admin.add_view(ModelView(NewsCategory, db.session, name='新闻分类'))
+admin.add_view(ModelView(Brand, db.session, name='商标'))
+admin.add_view(ModelView(Honor, db.session, name='公司荣誉'))
+admin.add_view(ModelView(Banner, db.session, name='banner图片管理'))
+admin.add_view(ModelView(Introduce, db.session, name='公司介绍'))
+admin.add_view(ModelView(IntroduceCategory, db.session, name='介绍分类'))
+admin.add_view(ModelView(ProductImage, db.session, name='产品图片'))
 
 
 @app.route('/')
 def index():
+    intro = Introduce.query.first()
     return render_template('index.html', intro=intro)
 
 
 @app.route('/news')
 def news():
-    return render_template('news.html')
+    news_category = NewsCategory.query.all()
+    return render_template('news.html', news_category=news_category)
+
 
 @app.route('/news_company')
 def news_company():

@@ -16,12 +16,16 @@
                         <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
                             新闻资讯
                         </div>
-                        <a href="{{ url_for('news_file') }}"
-                           class="list-group-item list-group-item-action">公司通告</a>
-                        <a href="{{ url_for('news_company') }}"
-                           class="list-group-item list-group-item-action">公司新闻</a>
-                        <a href="{{ url_for('news_industry') }}"
-                           class="list-group-item list-group-item-action">行业资讯</a>
+                        {% for news_category in news_category %}
+                            <a href="{{ url_for('news_file') }}"
+                           class="list-group-item list-group-item-action">{{ news_category.news_categories }}</a>
+                        {% endfor %}
+{#                        <a href="{{ url_for('news_file') }}"#}
+{#                           class="list-group-item list-group-item-action">公司通告</a>#}
+{#                        <a href="{{ url_for('news_company') }}"#}
+{#                           class="list-group-item list-group-item-action">公司新闻</a>#}
+{#                        <a href="{{ url_for('news_industry') }}"#}
+{#                           class="list-group-item list-group-item-action">行业资讯</a>#}
                     </div>
                     <div class="list-group mb-3 mx-auto">
                         <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
