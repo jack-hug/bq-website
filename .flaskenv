@@ -1,0 +1,2 @@
+FLASK_APP=bqwebsite
+FLASK_ENV=development

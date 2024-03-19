@@ -1,0 +1,32 @@
+{% extends 'main/../base.html' %}
+
+{% block title %}
+    新闻资讯
+{% endblock %}
+{% block nav_contact %}active{% endblock %}
+{% block content %}
+    <header class="masthead bg-primary text-white text-center">
+        <div class="news_bg_img01"></div>
+    </header>
+    <section class="page-section portfolio bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <div class="list-group mb-3 mx-auto">
+                        <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
+                            联系我们
+                        </div>
+                        <a href="{{ url_for('contact') }}"
+                           class="list-group-item list-group-item-action">联系方式</a>
+                        <a href="{{ url_for('contact_cooperate') }}"
+                           class="list-group-item list-group-item-action active">商业合作</a>
+                        <a href="{{ url_for('contact_recruit') }}"
+                           class="list-group-item list-group-item-action">企业招聘</a>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 row">
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
