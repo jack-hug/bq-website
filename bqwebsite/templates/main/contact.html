@@ -1,4 +1,4 @@
-{% extends 'main/../base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}
     新闻资讯
@@ -16,11 +16,11 @@
                         <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
                             联系我们
                         </div>
-                        <a href="{{ url_for('contact') }}"
+                        <a href="{{ url_for('main.contact') }}"
                            class="list-group-item list-group-item-action active">联系方式</a>
-                        <a href="{{ url_for('contact_cooperate') }}"
+                        <a href="{{ url_for('main.contact_cooperate') }}"
                            class="list-group-item list-group-item-action">商业合作</a>
-                        <a href="{{ url_for('contact_recruit') }}"
+                        <a href="{{ url_for('main.contact_recruit') }}"
                            class="list-group-item list-group-item-action">企业招聘</a>
                     </div>
                 </div>

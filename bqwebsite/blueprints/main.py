@@ -12,8 +12,7 @@ def index():
 
 @main_bp.route('/news')
 def news():
-    news_category = NewCategory.query.all()
-    return render_template('main/news.html', news_category=news_category)
+    return render_template('main/news.html')
 
 
 @main_bp.route('/news_company')
@@ -41,7 +40,7 @@ def product():
     return render_template('main/product.html')
 
 @main_bp.route('/product_categories')
-def proudct_categories():
+def product_categories():
     return render_template('main/product_categories.html')
 
 @main_bp.route('/product_detail')

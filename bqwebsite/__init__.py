@@ -4,6 +4,7 @@ import os
 from flask import Flask, render_template
 
 from bqwebsite.blueprints.main import main_bp
+from bqwebsite.blueprints.admin import admin_bp
 from bqwebsite.config import config
 from bqwebsite.extensions import bootstrap, db, csrf
 from bqwebsite.models import Category, Product, New, Brand, Honor, Banner, Introduce, Photo, NewCategory, \
@@ -33,6 +34,7 @@ def register_extensions(app):
 
 def register_blueprints(app):
     app.register_blueprint(main_bp)
+    app.register_blueprint(admin_bp, url_prefix='/admin')
 
 def register_shell_context(app):
     @app.shell_context_processor

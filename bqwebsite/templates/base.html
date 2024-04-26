@@ -6,15 +6,14 @@
     <meta name="description" content="bangqi"/>
     <meta name="author" content="bangqi"/>
     {% block head %}
-        <title>{% block title %}base templates{% endblock %}</title>
+        <title>{% block title %}base{% endblock %}-广西邦琪药业集团有限公司</title>
         {% block styles %}
-            <!-- Favicon-->
+            <!-- 集团logo -->
             <link rel="icon" type="image/x-icon" href="{{ url_for('static',filename = 'assets/fav.ico') }}"/>
             <!-- Font Awesome icons (free version)-->
-            <script src="https://cdn.staticfile.org/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"></script>
+            <script src="https://cdn.staticfile.net/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"></script>
             <!-- Core theme CSS (includes Bootstrap)-->
-            <link href="{{ url_for('static',filename = 'css/bootstrap.css') }}" rel="stylesheet"/>
-            <link href="{{ url_for('static',filename = 'css/style.css') }}" rel="stylesheet"/>
+            <link href="{{ url_for('static',filename = 'css/styles.css') }}" rel="stylesheet"/>
         {% endblock %}
     {% endblock %}
 </head>
@@ -23,10 +22,10 @@
 {% block navbar %}
     <nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand p-0 me-0 me-lg-3" href="/bqwebsite/static" aria-label="邦琪集团">
+            <a class="navbar-brand p-0 me-0 me-lg-3" href="{{ url_for('main.index') }}" aria-label="邦琪集团">
                 <img src="{{ url_for('static', filename = 'assets/img/logo2.png') }}" width="50" height="47"
-                     class="d-block my-1" viewBox="0 0 118 94"
-                     role="img">
+                     class="d-block my-1"
+                     role="img" alt="bangqijituan">
             </a>
             <a class="navbar-brand" href="#page-top">广西邦琪药业集团有限公司</a>
             <button class="navbar-toggler font-weight-bold bg-primary text-white rounded" type="button"
@@ -35,26 +34,26 @@
                 Menu
                 <i class="fas fa-bars"></i>
             </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
+            <div class="collapse navbar-collapse rounded" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item mx-0 mx-lg-1"><a
-                            class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_index %}{% endblock %}"
-                            href={{ url_for('main.index') }}>主 页</a></li>
+                            class="nav-link py-3 px-0 px-lg-4 rounded {% block nav_index %}{% endblock %}"
+                            href="{{ url_for('main.index') }}">主 页</a></li>
                     <li class="nav-item mx-0 mx-lg-1"><a
-                            class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_news %}{% endblock %}"
-                            href={{ url_for('main.news') }}>邦资讯</a></li>
+                            class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_news %} {% endblock %}"
+                            href="{{ url_for('main.news') }}">邦资讯</a></li>
                     <li class="nav-item mx-0 mx-lg-1"><a
                             class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_products %}{% endblock %}"
-                            href={{ url_for('main.product') }}>产品中心</a></li>
+                            href="{{ url_for('main.product') }}">产品中心</a></li>
                     <li class="nav-item mx-0 mx-lg-1"><a
                             class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_intro %}{% endblock %}"
-                            href={{ url_for('main.introduce_company') }}>公司介绍</a></li>
+                            href="{{ url_for('main.introduce_company') }}">公司介绍</a></li>
                     <li class="nav-item mx-0 mx-lg-1"><a
                             class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_honor %}{% endblock %}"
-                            href={{ url_for('main.honor') }}>企业荣誉</a></li>
+                            href="{{ url_for('main.honor') }}">企业荣誉</a></li>
                     <li class="nav-item mx-0 mx-lg-1"><a
                             class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_contact %}{% endblock %}"
-                            href={{ url_for('main.contact') }}>联系我们</a></li>
+                            href="{{ url_for('main.contact') }}">联系我们</a></li>
                 </ul>
             </div>
         </div>
@@ -66,6 +65,7 @@
 {% endblock %}
 
 <!-- Footer-->
+{% block footer %}
 <footer class="footer text-center">
     <div class="container">
         <div class="row">
@@ -101,6 +101,7 @@
         </div>
     </div>
 </footer>
+{% endblock %}
 
 <!-- Copyright Section-->
 <div class="copyright py-4 text-center text-white">
@@ -110,10 +111,12 @@
             style="color: #fff; text-decoration: none">桂ICP备14001107号-1</a></small>
     </div>
 </div>
-<!-- Bootstrap core JS-->
-<script src="{{ url_for('static',filename = 'js/bootstrap.bundle.js') }}"></script>
-<!-- Core theme JS-->
-<script src="{{ url_for('static',filename = 'js/scripts.js') }}"></script>
+
+{% block script %}
+<script src="https://cdn.staticfile.net/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename = 'js/scripts.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/anim-cards.min.js') }}"></script>
 <script src="{{ url_for('static',filename = 'js/sb-forms-0.4.1.js') }}"></script>
+{% endblock %}
 </body>
 </html>

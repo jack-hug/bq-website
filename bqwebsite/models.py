@@ -29,6 +29,9 @@ class Product(db.Model):
     brand_id = db.Column(db.Integer, db.ForeignKey('brand.id'))
     brand = db.relationship('Brand', back_populates='products')
 
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))
+    subject = db.relationship('Subject', back_populates='products')
+
     photos = db.relationship('Photo', back_populates='product')
 
 
@@ -107,8 +110,16 @@ class Introduce(db.Model):
 
 
 class IntroduceCategory(db.Model):
+    # 公司介绍分类
     __tablename__ = 'introducecategory'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     introduce_category = db.Column(db.String(100))
 
     introduces = db.relationship('Introduce', back_populates='introduce_category')
+
+class Subject(db.Model):
+    # 门科分类
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100))
+
+    products = db.relationship('Product', back_populates='subject')

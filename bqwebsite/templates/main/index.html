@@ -1,610 +1,229 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    广西邦琪药业集团有限公司官方网站
+    首页
 {% endblock %}
 {% block nav_index %}active{% endblock %}
 {% block content %}
     <!-- Masthead-->
-
-    <header class="masthead bg-primary text-white text-center">
-        <div id="carousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active"
-                        aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carousel" data-bs-slide-to="1"
-                        aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carousel" data-bs-slide-to="2"
-                        aria-label="Slide 3"></button>
-            </div>
+    <header class="masthead bg-primary text-center">
+        <div id="carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="{{ url_for('static', filename = 'assets/img/banner01.png') }}" class="d-block w-100"
-                         alt="...">
+                         alt="banner01">
                 </div>
                 <div class="carousel-item">
                     <img src="{{ url_for('static', filename = 'assets/img/banner02.png') }}" class="d-block w-100"
-                         alt="...">
+                         alt="banner02">
                 </div>
                 <div class="carousel-item">
                     <img src="{{ url_for('static', filename = 'assets/img/banner03.png') }}" class="d-block w-100"
-                         alt="...">
+                         alt="banner03">
                 </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carousel"
-                    data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carousel"
-                    data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
         </div>
     </header>
-    <!-- Portfolio Section-->
-    <section class="page-section portfolio" id="portfolio">
+    <!-- scroll cards -->
+    <div class="container-fluid">
+        <div id="animated-cards">
+            <div class="anim-cards js-anim-cards">
+                <ul class="anim-cards_list">
+                    <li class="anim-cards_item">
+                        <div class="card-v2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/gaoji.png') }}"
+                                 alt="Image description">
+                        </div>
+                    </li>
+                    <li class="anim-cards_item">
+                        <div class="card-v2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/dingji.png') }}"
+                                 alt="Image description">
+                        </div>
+                    </li>
+                    <li class="anim-cards_item">
+                        <div class="card-v2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/jiaonang.png') }}"
+                                 alt="Image description">
+                        </div>
+                    </li>
+                    <li class="anim-cards_item">
+                        <div class="card-v2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/keli.png') }}"
+                                 alt="Image description">
+                        </div>
+                    </li>
+                    <li class="anim-cards_item">
+                        <div class="card-v2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/pianji.png') }}"
+                                 alt="Image description">
+                        </div>
+                    </li>
+                    <li class="anim-cards_item">
+                        <div class="card-v2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/tangjiang.png') }}"
+                                 alt="Image description">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Categories Section-->
+    <section class="page-section portfolio">
         <div class="container">
-            <!-- Portfolio Section Heading-->
-            <h2 class="page-section-heading text-center text-secondary mb-0">产品分类</h2>
-            <!-- Icon Divider-->
+            <!-- Categories Section Heading-->
+            <h3 class="page-section-heading text-center text-secondary mb-0">产品分类</h3>
             <div class="divider-custom">
                 <div class="divider-custom-line"></div>
                 <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                 <div class="divider-custom-line"></div>
             </div>
-            <!-- Portfolio Grid Items-->
-            <div class="row justify-content-center">
-                <!-- Portfolio Item 1-->
-                <div class="col-md-6 col-lg-4 mb-5">
-                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
-                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                            <div class="portfolio-item-caption-content text-center text-white">
-                                <p class="lead">膏 剂</p>
-                            </div>
-                        </div>
-                        <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
-                             alt="..."/>
-                    </div>
-                </div>
-                <!-- Portfolio Item 2-->
-                <div class="col-md-6 col-lg-4 mb-5">
-                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal2">
-                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                            <div class="portfolio-item-caption-content text-center text-white">
-                                <p class="lead">颗粒剂</p>
-                            </div>
-                        </div>
-                        <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
-                             alt="..."/>
-                    </div>
-                </div>
-                <!-- Portfolio Item 3-->
-                <div class="col-md-6 col-lg-4 mb-5">
-                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal3">
-                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                            <div class="portfolio-item-caption-content text-center text-white">
-                                <p class="lead">糖浆剂</p>
-                            </div>
-                        </div>
-                        <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
-                             alt="..."/>
-                    </div>
-                </div>
-                <!-- Portfolio Item 4-->
-                <div class="col-md-6 col-lg-4 mb-5 mb-lg-0">
-                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal4">
-                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                            <div class="portfolio-item-caption-content text-center text-white">
-                                <p class="lead">胶 囊</p>
-                            </div>
-                        </div>
-                        <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
-                             alt="..."/>
-                    </div>
-                </div>
-                <!-- Portfolio Item 5-->
-                <div class="col-md-6 col-lg-4 mb-5 mb-md-0">
-                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal5">
-                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                            <div class="portfolio-item-caption-content text-center text-white">
-                                <p class="lead">片 剂</p>
-                            </div>
-                        </div>
-                        <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
-                             alt="..."/>
-                    </div>
-                </div>
-                <!-- Portfolio Item 6-->
+            <!-- Categories Section body-->
+            <div class="row text-center">
                 <div class="col-md-6 col-lg-4">
-                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal6">
-                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                            <div class="portfolio-item-caption-content text-center text-white">
-                                <p class="lead">酊 剂</p>
-                            </div>
+                    <figure class="lift rounded-3 mb-5 hovereffect">
+                        <img
+                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/gaoji.png') }}"
+                                alt="">
+                        <div class="overlay">
+                            <a class="info" href="#">膏 剂</a>
                         </div>
-                        <img class="img-fluid hover-image"
-                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
-                             alt="..."/>
-                    </div>
+                    </figure>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <figure class="lift rounded-3 mb-5 hovereffect">
+                        <img
+                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/tangjiang.png') }}"
+                                alt="">
+                        <div class="overlay">
+                            <a class="info" href="#">糖 浆</a>
+                        </div>
+                    </figure>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <figure class="lift rounded-3 mb-5 hovereffect">
+                        <img
+                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/jiaonang.png') }}"
+                                alt="">
+                        <div class="overlay">
+                            <a class="info" href="#">胶 囊</a>
+                        </div>
+                    </figure>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <figure class="lift rounded-3 mb-5 hovereffect">
+                        <img
+                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/keli.png') }}"
+                                alt="">
+                        <div class="overlay">
+                            <a class="info" href="#">颗 粒</a>
+                        </div>
+                    </figure>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <figure class="lift rounded-3 mb-5 hovereffect">
+                        <img
+                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/pianji.png') }}"
+                                alt="">
+                        <div class="overlay">
+                            <a class="info" href="#">片 剂</a>
+                        </div>
+
+                    </figure>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <figure class="lift rounded-3 mb-5 hovereffect">
+                        <img
+                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/dingji.png') }}"
+                                alt="">
+                        <div class="overlay">
+                            <a class="info" href="#">酊 剂</a>
+                        </div>
+                    </figure>
                 </div>
             </div>
         </div>
     </section>
-    <!-- News list -->
-    <section class="page-section portfolio bg-light mb-0" id="news-list">
+
+    <!-- About Section-->
+    <section class="page-section mb-0" id="about">
         <div class="container">
-            <h2 class="page-section-heading text-center text-secondary mb-0">新闻资讯</h2>
+            <h3 class="page-section-heading text-center text-secondary mb-3">产品优势</h3>
             <div class="divider-custom">
                 <div class="divider-custom-line"></div>
                 <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                 <div class="divider-custom-line"></div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-3 mb-5">
-                    <div class="card portfolio-item mx-auto hover-effect">
-                        <img src="{{ url_for('static',filename = 'assets/img/news/news_01.png') }}"
-                             class="card-img-top hover-image" alt="...">
-                        <div class="card-body">
-                            <h6 class="card-title"><a href="...">新闻标题</a></h6>
-                            <p class="card-text">这里放的是新闻内容，这里有一些字数上的限制</p>
-                            <div class="text-center"><a href="#" class="btn btn-primary">查看更多</a></div>
-                        </div>
-                        <div class="card-footer text-center"><span class="text-muted small">2023年6月3日 10:45:18</span>
-                        </div>
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <h2>生产批文</h2>
+                    <span class="counter font-s text-danger">350</span><span class="font-s text-danger">个</span>
+                </div>
+                <div class="col-md-4">
+                    <h2>独家品种</h2>
+                    <span class="counter font-s text-danger">40</span><span class="font-s text-danger">个</span>
+                </div>
+                <div class="col-md-4">
+                    <h2>煎膏剂年产量</h2>
+                    <span class="counter font-s text-danger">2000</span><span class="font-s text-danger">吨</span>
+                </div>
+            </div>
+            <div class="row mt-5 pt-5 align-items-center">
+                <div class="col-md-7">
+                    <img src="{{ url_for('static', filename='assets/img/effect-img.png') }}" alt="">
+                </div>
+                <div class="col-md-4 ms-auto">
+                    <div class="mb-5">
+                        <h4 class="mb-1">宣传标题01</h4>
+                        <p class="mb-0">宣传内容01</p>
+                    </div>
+                    <div class="mb-5">
+                        <h4 class="mb-1">宣传标题02</h4>
+                        <p class="mb-0">宣传内容02</p>
+                    </div>
+                    <div class="mb-5">
+                        <h4 class="mb-1">宣传标题03</h4>
+                        <p class="mb-0">宣传内容03</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3 mb-5">
-                    <div class="card portfolio-item mx-auto hover-effect">
-                        <img src="{{ url_for('static',filename = 'assets/img/news/news_01.png') }}"
-                             class="card-img-top hover-image" alt="...">
-                        <div class="card-body">
-                            <h6 class="card-title"><a href="...">新闻标题</a></h6>
-                            <p class="card-text">这里放的是新闻内容，这里有一些字数上的限制</p>
-                            <div class="text-center"><a href="#" class="btn btn-primary">查看更多</a></div>
-                        </div>
-                        <div class="card-footer text-center"><span class="text-muted small">2023年6月3日 10:45:18</span>
-                        </div>
+            </div>
+            <div class="row mt-5 pt-5 align-items-center">
+                <div class="col-md-4 ms-auto">
+                    <div class="mb-5">
+                        <h4 class="mb-1">宣传标题01</h4>
+                        <p class="mb-0">宣传内容01</p>
+                    </div>
+                    <div class="mb-5">
+                        <h4 class="mb-1">宣传标题02</h4>
+                        <p class="mb-0">宣传内容02</p>
+                    </div>
+                    <div class="mb-5">
+                        <h4 class="mb-1">宣传标题03</h4>
+                        <p class="mb-0">宣传内容03</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3 mb-5">
-                    <div class="card portfolio-item mx-auto hover-effect">
-                        <img src="{{ url_for('static',filename = 'assets/img/news/news_01.png') }}"
-                             class="card-img-top hover-image" alt="...">
-                        <div class="card-body">
-                            <h6 class="card-title"><a href="...">新闻标题</a></h6>
-                            <p class="card-text">这里放的是新闻内容，这里有一些字数上的限制</p>
-                            <div class="text-center"><a href="#" class="btn btn-primary">查看更多</a></div>
-                        </div>
-                        <div class="card-footer text-center"><span class="text-muted small">2023年6月3日 10:45:18</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3 mb-5">
-                    <div class="card portfolio-item mx-auto hover-effect">
-                        <img src="{{ url_for('static',filename = 'assets/img/news/news_01.png') }}"
-                             class="card-img-top hover-image" alt="...">
-                        <div class="card-body">
-                            <h6 class="card-title"><a href="...">新闻标题</a></h6>
-                            <p class="card-text">这里放的是新闻内容，这里有一些字数上的限制</p>
-                            <div class="text-center"><a href="#" class="btn btn-primary">查看更多</a></div>
-                        </div>
-                        <div class="card-footer text-center"><span class="text-muted small">2023年6月3日 10:45:18</span>
-                        </div>
-                    </div>
+                <div class="col-md-7">
+                    <img src="{{ url_for('static', filename='assets/img/effect-img.png') }}" alt="">
                 </div>
             </div>
         </div>
     </section>
-    <!-- Portfolio Modals-->
-    <!-- Portfolio Modal 1-->
-    <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" aria-labelledby="portfolioModal1"
-         aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center pb-5">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary mb-0">膏 剂</h2>
-                                <!-- Icon Divider-->
-                                <div class="divider-custom">
-                                    <div class="divider-custom-line"></div>
-                                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                    <div class="divider-custom-line"></div>
-                                </div>
-                                <!-- Portfolio Modal - Image-->
-                                <div class="row justify-content-center">
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/gaoji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary" data-bs-dismiss="modal">
-                                    点击查看更多
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Portfolio Modal 2-->
-    <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" aria-labelledby="portfolioModal2"
-         aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center pb-5">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary mb-0">颗粒剂</h2>
-                                <!-- Icon Divider-->
-                                <div class="divider-custom">
-                                    <div class="divider-custom-line"></div>
-                                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                    <div class="divider-custom-line"></div>
-                                </div>
-                                <!-- Portfolio Modal - Image-->
-                                <div class="row justify-content-center">
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/keli.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary" data-bs-dismiss="modal">
-                                    点击查看更多
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Portfolio Modal 3-->
-    <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" aria-labelledby="portfolioModal3"
-         aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center pb-5">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary mb-0">糖浆剂</h2>
-                                <!-- Icon Divider-->
-                                <div class="divider-custom">
-                                    <div class="divider-custom-line"></div>
-                                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                    <div class="divider-custom-line"></div>
-                                </div>
-                                <!-- Portfolio Modal - Image-->
-                                <div class="row justify-content-center">
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/tangjiang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary" data-bs-dismiss="modal">
-                                    点击查看更多
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Portfolio Modal 4-->
-    <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" aria-labelledby="portfolioModal4"
-         aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center pb-5">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary mb-0">胶囊</h2>
-                                <!-- Icon Divider-->
-                                <div class="divider-custom">
-                                    <div class="divider-custom-line"></div>
-                                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                    <div class="divider-custom-line"></div>
-                                </div>
-                                <!-- Portfolio Modal - Image-->
-                                <div class="row justify-content-center">
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/jiaonang.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary" data-bs-dismiss="modal">
-                                    点击查看更多
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Portfolio Modal 5-->
-    <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" aria-labelledby="portfolioModal5"
-         aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center pb-5">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary mb-0">片 剂</h2>
-                                <!-- Icon Divider-->
-                                <div class="divider-custom">
-                                    <div class="divider-custom-line"></div>
-                                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                    <div class="divider-custom-line"></div>
-                                </div>
-                                <!-- Portfolio Modal - Image-->
-                                <div class="row justify-content-center">
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/pianji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary" data-bs-dismiss="modal">
-                                    点击查看更多
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Portfolio Modal 6-->
-    <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" aria-labelledby="portfolioModal6"
-         aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center pb-5">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary mb-0">酊 剂</h2>
-                                <!-- Icon Divider-->
-                                <div class="divider-custom">
-                                    <div class="divider-custom-line"></div>
-                                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                    <div class="divider-custom-line"></div>
-                                </div>
-                                <!-- Portfolio Modal - Image-->
-                                <div class="row justify-content-center">
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img class="img-fluid rounded mb-4"
-                                             src="{{ url_for('static',filename = 'assets/img/portfolio/dingji.png') }}"
-                                             alt="..."/>
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary" data-bs-dismiss="modal">
-                                    点击查看更多
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- About Section-->
-    <section class="page-section bg-primary text-white mb-0" id="about">
-        <div class="container">
-            <!-- About Section Heading-->
-            <h2 class="page-section-heading text-center text-white">企业介绍</h2>
-            <!-- Icon Divider-->
-            <div class="divider-custom divider-light">
-                <div class="divider-custom-line"></div>
-                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                <div class="divider-custom-line"></div>
-            </div>
-            <!-- About Section Content-->
-            <div class="row">
-                <div class="col-lg-2 ms-auto"></div>
-                <div class="col-lg-8 ms-auto"><p class="lead m-0">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;邦琪介绍</p></div>
-                <div class="col-lg-2 ms-auto"></div>
-            </div>
-            <!-- About Section Button-->
-            <div class="text-center mt-4">
-                <a class="btn btn-xl btn-outline-light" href="#">
-                    了解更多
-                </a>
-            </div>
+    <!-- index banner section -->
+    <section class="page-section mb-0">
+        <div class="container-fluid">
+            <div class="bg-light" style="height: 800px;"></div>
+            <div class="bg-info" style="height: 800px;"></div>
         </div>
     </section>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+    <script>window.jQuery || document.write('<script src="{{ url_for('static', filename = 'js/jquery-1.11.0.min.js') }}"><\/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.countup.js') }}"></script>
+    <script type="text/javascript">
+        $('.counter').countUp();
+    </script>
 {% endblock %}
