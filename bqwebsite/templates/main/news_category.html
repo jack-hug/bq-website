@@ -2,8 +2,9 @@
 {% from 'bootstrap5/pagination.html' import render_pagination %}
 
 {% block title %}
-    全部新闻
+    {{ news_category.name }}
 {% endblock %}
+{% set active_page = news_category.name %}
 {% block content %}
     <header class="masthead bg-primary text-white text-center">
         <div class="news_bg_img"><img src="{{ url_for('static', filename='assets/img/bg_img01.png') }}"
@@ -17,12 +18,12 @@
                     <nav aria-label="breadcrumb" class="p-1 bg-light">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ url_for('main.news') }}">邦资讯</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">全部新闻</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ news_category.name }}</li>
                         </ol>
                     </nav>
                     <hr>
-                    {% if all_news %}
-                        {% for news in all_news %}
+                    {% if news_list %}
+                        {% for news in news_list %}
                             <div class="col-md-4 mb-3 col-sm-6">
                                 <div class="card hover-effect">
                                     <img src="{{ url_for('static', filename='assets/img/news/bangqi01.png') }}"
@@ -41,7 +42,7 @@
                             </div>
                         {% endfor %}
                     {% endif %}
-                    {% if all_news %}
+                    {% if news_list %}
                         <div class="pt-2">
                             {{ render_pagination(pagination, align='center', prev='上一页', next='下一页') }}
                         </div>

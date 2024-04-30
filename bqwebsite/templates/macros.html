@@ -1,0 +1,8 @@
+
+
+{# nav_link宏 #}
+{% macro nav_link(endpoint, text) -%}
+    <a class="list-group-item list-group-item-action {% if request.endpoint and request.endpoint == endpoint %}active{% endif %} ">
+        <a href="{{ url_for(endpoint, **kwargs) }}">{{ text }}</a>
+    </a>
+{% endmacro %}

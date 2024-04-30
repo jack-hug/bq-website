@@ -73,7 +73,7 @@
     --bs-border-radius-2xl: 2rem;
     --bs-border-radius-pill: 50rem;
     --bs-link-color: #950101;
-    --bs-link-hover-color: #ff0000;
+    --bs-link-hover-color: #5e0000;
     --bs-code-color: #d63384;
     --bs-highlight-bg: #fff3cd;
 
@@ -109,7 +109,7 @@ hr {
     margin: 1rem 0;
     color: inherit;
     border: 0;
-    border-top: 0.125rem solid;
+    border-top: 0.1rem solid;
     opacity: 0.25;
 }
 
@@ -257,7 +257,6 @@ a {
 
 a:hover {
     color: var(--bs-link-hover-color);
-    text-decoration: underline;
 }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
@@ -4058,6 +4057,9 @@ textarea.form-control-lg {
 .nav-link:hover, .nav-link:focus {
     color: var(--bs-nav-link-hover-color);
 }
+#product-category .nav .nav-item .nav-link:hover {
+    text-decoration: underline;
+}
 
 .nav-link.disabled {
     color: var(--bs-nav-link-disabled-color);
@@ -5026,6 +5028,10 @@ textarea.form-control-lg {
 
 .breadcrumb-item.active {
     color: var(--bs-breadcrumb-item-active-color);
+}
+
+.breadcrumb .breadcrumb-item a:hover{
+    text-decoration: underline;
 }
 
 .pagination {
@@ -12401,7 +12407,7 @@ html {
 }
 
 .page-section {
-    padding: 6rem 0;
+    padding: 5rem 0 2rem 0;
 }
 
 .page-section .page-section-heading {
@@ -12787,4 +12793,109 @@ ol, ul {
 .hover-effect:hover {
     transform: translateY(-.2rem);
     box-shadow: 0 0 15px rgba(248, 167, 167, 0.5);
+}
+
+.product_hover_effect {
+    width: 100%;
+    height: 100%;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    cursor: default;
+    border-radius: 0.5rem;
+    transition: all .3s ease;
+}
+
+.product_hover_effect .overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out
+
+}
+
+.product_hover_effect img {
+    display: block;
+    position: relative;
+    -webkit-transition: all .4s linear;
+    transition: all .4s linear;
+
+}
+
+.product_hover_effect h2 {
+    text-transform: uppercase;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    font-size: 24px;
+    background: rgba(0, 0, 0, 0.5);
+    -ms-transform: translatey(-100px);
+    transform: translatey(-100px);
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    padding: 10px;
+}
+
+.product_hover_effect p {
+    color: #fff;
+    text-align: center;
+    position: relative;
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    padding: 5px;
+}
+
+.product_hover_effect a.info {
+    text-decoration: none;
+    display: inline-block;
+    text-transform: uppercase;
+    color: #fff;
+    border: 1px solid #fff;
+    background-color: transparent;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    padding: 7px 14px;
+}
+
+.product_hover_effect:hover {
+    box-shadow: 0 0 15px rgba(248, 167, 167, 0.5);
+}
+
+.product_hover_effect a.info:hover {
+    box-shadow: 0 0 5px #fff;
+}
+
+.product_hover_effect:hover img {
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+
+}
+
+.product_hover_effect:hover .overlay {
+    opacity: 1;
+    filter: alpha(opacity=100);
+
+}
+
+.product_hover_effect:hover h2, .product_hover_effect:hover a.info {
+    opacity: 1;
+    filter: alpha(opacity=100);
+    -ms-transform: translatey(0);
+    transform: translatey(0);
+}
+
+.product_hover_effect:hover a.info {
+    -webkit-transition-delay: .1s;
+    transition-delay: .1s;
 }

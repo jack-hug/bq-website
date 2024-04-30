@@ -12,6 +12,7 @@ else:
 
 class BaseConfig:
     BQ_ADMIN_EMAIL = os.getenv('BQ_ADMIN', '46361381@qq.com')
+    BQ_NEWS_PER_PAGE = 12
     BQ_PHOTO_PER_PAGE = 12
     BQ_NOTIFICATION_PER_PAGE = 20
     BQ_MANAGE_PHOTO_PER_PAGE = 20
