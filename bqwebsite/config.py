@@ -28,12 +28,15 @@ class BaseConfig:
         BQ_PHOTO_SIZE['medium']: '_m'
     }
 
-    SECRET_KEY = os.getenv('SECRET_KEY')
+    SECRET_KEY = os.getenv('SECRET_KEY', 'jackhunghuangbqwebguangwang')
+    MAX_CONTENT_LENGTH = 3 * 1024 * 1024
 
     DROPZONE_MAX_FILE_SIZE = 3
     DROPZONE_MAX_FILES = 30
     DROPZONE_ALLOWED_FILE_TYPE = 'image'
     DROPZONE_ENABLE_CSRF = True
+    DROPZONE_INVALID_FILE_TYPE = '文件类型错误，请使用.jpg或者.png格式'
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'bq-data-dev.db')

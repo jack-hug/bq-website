@@ -25,13 +25,13 @@ class Product(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
     clicks = db.Column(db.Integer, default=0)  # 点击数
 
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))  # 按剂型分类
     category = db.relationship('Category', back_populates='products')
 
-    brand_id = db.Column(db.Integer, db.ForeignKey('brand.id'))
+    brand_id = db.Column(db.Integer, db.ForeignKey('brand.id'))  # 按商标分类
     brand = db.relationship('Brand', back_populates='products')
 
-    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))  # 按功能分类
     subject = db.relationship('Subject', back_populates='products')
 
     photos = db.relationship('Photo', back_populates='product')

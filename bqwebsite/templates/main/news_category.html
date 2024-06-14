@@ -4,6 +4,7 @@
 {% block title %}
     {{ news_category.name }}
 {% endblock %}
+{% block nav_news %}active{% endblock %}
 {% set active_page = news_category.name %}
 {% block content %}
     <header class="masthead bg-primary text-white text-center">

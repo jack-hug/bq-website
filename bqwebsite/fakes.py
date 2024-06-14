@@ -118,13 +118,13 @@ def intro_category():
     except InterruptedError:
         db.session.rollback()
 
-def fake_intro(count=30):
+def fake_intro(count=5):
     for i in range(count):
         intro = Introduce(
             title=fake.sentence(),
             introduce_content=fake.text(200),
             timestamp=fake.date_time_this_year(),
-            introduce_category=IntroduceCategory.query.get(random.randint(1, IntroduceCategory.query.count()))
+            introduce_category=IntroduceCategory.query.get(i+1)
         )
         db.session.add(intro)
     db.session.commit()
@@ -140,14 +140,16 @@ def contact_categories():
     except InterruptedError:
         db.session.rollback()
 
-# def fake_contact(count=3):
-#     for i in range(3):
-#         contact = Contact(
-#             title=fake.sentence(),
-#             content=fake.text(200),
-#             timestamp=fake.date_time_this_year(),
-#             contact_category=IntroduceCategory.query.get(random.randint(1, IntroduceCategory.query.count()))
-#         )
+def fake_contact(count=3):
+    for i in range(count):
+        contact = Contact(
+            title=fake.sentence(),
+            content=fake.text(200),
+            timestamp=fake.date_time_this_year(),
+            contact_category=ContactCategory.query.get(i+1)
+        )
+        db.session.add(contact)
+    db.session.commit()
 
 
 

@@ -1,30 +1,61 @@
-from flask import render_template, request, redirect, url_for, Blueprint, current_app
-from bqwebsite.models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, IntroduceCategory
-
+from flask import render_template, request, redirect, url_for, Blueprint, current_app, flash
+from bqwebsite.models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
+    IntroduceCategory, Contact, ContactCategory
 
 main_bp = Blueprint('main', __name__)
 
 
 @main_bp.route('/')
+# 主页
 def index():
     return render_template('main/index.html')
 
+
 @main_bp.route('/news-category/<int:news_category_id>')
+# 新闻分类页面
 def show_news_category(news_category_id):
     news_category = NewsCategory.query.get_or_404(news_category_id)
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_NEWS_PER_PAGE']
-    pagination = News.query.with_parent(news_category).order_by(News.timestamp.desc()).paginate(page=page, per_page=per_page)
+    pagination = News.query.with_parent(news_category).order_by(News.timestamp.desc()).paginate(page=page,
+                                                                                                per_page=per_page)
     news_list = pagination.items
 
-    return render_template('main/news_category.html', news_category=news_category, news_list=news_list, pagination=pagination)
+    return render_template('main/news_category.html', news_category=news_category, news_list=news_list,
+                           pagination=pagination)
+
 
 @main_bp.route('/news/<int:news_id>')
+# 新闻详细页面
 def show_news(news_id):
-    news_content = News.query.get_or_404(news_id)
-    return render_template('main/news_detail.html', news_content=news_content)
+    news_detail = News.query.get_or_404(news_id)
+    return render_template('main/news_detail.html', news_detail=news_detail)
+
+
+@main_bp.route('/news/n/<int:news_id>')
+# 下一篇文章
+def news_next(news_id):
+    news_n_detail = News.query.get_or_404(news_id)
+    news_n = News.query.with_parent(news_n_detail.newscategory).filter(News.timestamp < news_n_detail.timestamp).order_by(News.timestamp.desc()).first()
+
+    if news_n is None:
+        flash('已经是最后一篇文章', 'info')
+        return redirect(url_for('main.show_news', news_id=news_id))
+    return redirect(url_for('main.show_news', news_id=news_n.id))
+
+@main_bp.route('/news/p/<int:news_id>')
+# 上一篇文章
+def news_previous(news_id):
+    news_p_detail = News.query.get_or_404(news_id)
+    news_p = News.query.with_parent(news_p_detail.newscategory).filter(News.timestamp > news_p_detail.timestamp).order_by(News.timestamp.asc()).first()
+
+    if news_p is None:
+        flash('已经是最新一篇文章', 'info')
+        return redirect(url_for('main.show_news', news_id=news_id))
+    return redirect(url_for('main.show_news', news_id=news_p.id))
 
 @main_bp.route('/news')
+# 全部新闻页面
 def news():
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_NEWS_PER_PAGE']
@@ -32,47 +63,32 @@ def news():
     all_news = pagination.items
     return render_template('main/news.html', all_news=all_news, pagination=pagination)
 
-@main_bp.route('/news_detail')
-def news_detail():
-    return render_template('main/news_detail.html')
-
 
 @main_bp.route('/product')
 def product():
     return render_template('main/product.html')
 
+
 @main_bp.route('/product_categories')
 def product_categories():
     return render_template('main/product_categories.html')
+
 
 @main_bp.route('/product_detail')
 def product_detail():
     return render_template('main/product_detail.html')
 
 
-@main_bp.route('/introduce')
-def introduce():
-    return render_template('main/introduce.html')
+# @main_bp.route('/introduce-category/<int:intro_category_id>')
+# def show_introduce_category(intro_category_id):
+#     intro_category = IntroduceCategory.query.get_or_404(intro_category_id)
+#     return render_template('main/introduce_detail.html', intro_category=intro_category)
 
 
-@main_bp.route('/introduce_company')
-def introduce_company():
-    return render_template('main/introduce_company.html')
-
-
-@main_bp.route('/introduce_quality')
-def introduce_quality():
-    return render_template('main/introduce_quality.html')
-
-
-@main_bp.route('/introduce_structure')
-def introduce_structure():
-    return render_template('main/introduce_structure.html')
-
-
-@main_bp.route('/introduce_responsibility')
-def introduce_responsibility():
-    return render_template('main/introduce_responsibility.html')
+@main_bp.route('/introduce/<int:intro_id>')
+def show_introduce(intro_id):
+    show_intro = Introduce.query.get_or_404(intro_id)
+    return render_template('main/introduce_detail.html', show_intro=show_intro)
 
 
 @main_bp.route('/honor')
@@ -80,9 +96,10 @@ def honor():
     return render_template('main/honor.html')
 
 
-@main_bp.route('/contact')
-def contact():
-    return render_template('main/contact.html')
+@main_bp.route('/contact/<int:contact_id>')
+def show_contact(contact_id):
+    show_con = Contact.query.get_or_404(contact_id)
+    return render_template('main/contact_detail.html', show_con=show_con)
 
 
 @main_bp.route('/contact_cooperate')

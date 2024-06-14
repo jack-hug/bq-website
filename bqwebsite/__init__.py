@@ -6,7 +6,7 @@ from flask import Flask, render_template
 from bqwebsite.blueprints.main import main_bp
 from bqwebsite.blueprints.admin import admin_bp
 from bqwebsite.config import config
-from bqwebsite.extensions import bootstrap, db, csrf
+from bqwebsite.extensions import bootstrap, db, csrf, dropzone
 from bqwebsite.models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
     IntroduceCategory, Admin, Subject, ContactCategory
 
@@ -33,6 +33,7 @@ def register_extensions(app):
     bootstrap.init_app(app)
     db.init_app(app)
     csrf.init_app(app)
+    dropzone.init_app(app)
 
 
 def register_blueprints(app):
@@ -98,10 +99,11 @@ def register_commands(app):
     @app.cli.command()
     @click.option('--product', default=50, help='Quantity of products, default is 50.')
     @click.option('--news', default=80, help='Quantity of products, default is 50.')
-    @click.option('--introduce', default=30, help='Quantity of products, default is 50.')
-    def forge(product, news, introduce):
+    @click.option('--introduce', default=5, help='Quantity of introduce, default is 5.')
+    @click.option('--contact', default=3, help='Quantity of contact, default is 3.')
+    def forge(product, news, introduce, contact):
         from bqwebsite.fakes import categories, admin, fake_products, news_categories, fake_news, intro_category, \
-            fake_intro, brand, subject, contact_categories
+            fake_intro, brand, subject, contact_categories, fake_contact
 
         click.echo('Drop tables....')
         db.drop_all()
@@ -125,8 +127,9 @@ def register_commands(app):
         brand()
         subject()
 
-        click.echo('Generating contact_category')
+        click.echo('Generating contact_category and %d contact' % contact)
         contact_categories()
+        fake_contact(contact)
 
         click.echo('Generating intro_categories and %d introduce...' % introduce)
         intro_category()

@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% if contact_categories %}
+    <div class="col-lg-3 col-md-3 col-sm-12">
+        <div class="list-group mb-3 mx-auto">
+            <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
+                公司介绍
+            </div>
+            {% for contact_category in contact_categories %}
+                <a href="{{ url_for('main.show_contact', contact_id=contact_category.id) }}"
+                   class="list-group-item list-group-item-action {% if contact_category.name == active_page %}active{% endif %} ">{{ contact_category.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
