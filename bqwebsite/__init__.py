@@ -6,7 +6,7 @@ from flask import Flask, render_template
 from bqwebsite.blueprints.main import main_bp
 from bqwebsite.blueprints.admin import admin_bp
 from bqwebsite.config import config
-from bqwebsite.extensions import bootstrap, db, csrf, dropzone
+from bqwebsite.extensions import bootstrap, db, csrf, dropzone, login_manager
 from bqwebsite.models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
     IntroduceCategory, Admin, Subject, ContactCategory
 
@@ -34,6 +34,7 @@ def register_extensions(app):
     db.init_app(app)
     csrf.init_app(app)
     dropzone.init_app(app)
+    login_manager.init_app(app)
 
 
 def register_blueprints(app):

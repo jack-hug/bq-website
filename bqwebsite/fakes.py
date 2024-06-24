@@ -11,9 +11,10 @@ fake = Faker('zh_CN')
 
 def admin():
     admin = Admin(
-        username='admin',
-        name='Hung'
+        email='46361381@qq.com',
+        name='Admin',
     )
+    admin.set_password('123456')
     db.session.add(admin)
     db.session.commit()
 

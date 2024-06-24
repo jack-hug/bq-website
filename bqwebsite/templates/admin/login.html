@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block title %}
+    登 录
+{% endblock %}
+{% block content %}
+        <header class="masthead bg-primary text-white text-center">
+        <div class="news_bg_img01"></div>
+    </header>
+    <section class="page-section portfolio bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4 align-self-center">
+                    <h1 class="text-center">登 录</h1>
+                    <div>
+                        {{ render_form(form) }}
+                        <hr>
+                        <p class="small text-end"><a href="{{ url_for('admin.forget_password') }}" class="text-decoration-none">忘记密码？</a></p>
+                    </div>
+                </div>
+                <div class="col-md-4"></div>
+                </div>
+            </div>
+    </section>
+{% endblock %}

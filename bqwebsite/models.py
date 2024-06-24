@@ -1,5 +1,5 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_login import UserMixin
 from bqwebsite.extensions import db
 from datetime import datetime
 
@@ -34,7 +34,7 @@ class Product(db.Model):
     subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))  # 按功能分类
     subject = db.relationship('Subject', back_populates='products')
 
-    photos = db.relationship('Photo', back_populates='product')
+    photos = db.relationship('Photo', back_populates='product', cascade='all')
 
 
 class Photo(db.Model):
@@ -129,12 +129,12 @@ class Subject(db.Model):
 
     products = db.relationship('Product', back_populates='subject')
 
-class Admin(db.Model):
+class Admin(db.Model, UserMixin):
     # 管理员
     __tablename__ = 'admin'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    email = db.Column(db.String(128), unique=True)
     name = db.Column(db.String(50))
-    username = db.Column(db.String(50))
     password_hash = db.Column(db.String(128))
 
     def set_password(self, password):
