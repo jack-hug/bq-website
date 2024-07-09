@@ -8,7 +8,7 @@ class Category(db.Model):
     # 产品剂型分类
     __tablename__ = 'category'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    product_category = db.Column(db.String(100), nullable=False, unique=True)  # 产品分类名称
+    name = db.Column(db.String(100), nullable=False, unique=True)  # 产品分类名称
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
 
     products = db.relationship('Product', back_populates='category')
@@ -18,7 +18,7 @@ class Product(db.Model):
     # 产品
     __tablename__ = 'product'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    product_name = db.Column(db.String(100), unique=True)  # 品名
+    name = db.Column(db.String(100), unique=True)  # 品名
     product_indication = db.Column(db.String(200))  # 功能主治
     product_manual = db.Column(db.Text)  # 说明书
     product_content = db.Column(db.Text)  # 产品页内容
@@ -41,9 +41,9 @@ class Photo(db.Model):
     # 图片
     __tablename__ = 'photo'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    filename = db.Column(db.String(128))
-    filename_s = db.Column(db.String(128))
-    filename_m = db.Column(db.String(128))
+    filename = db.Column(db.String(128))   # 600*800 上传图片裁剪后尺寸
+    filename_s = db.Column(db.String(128))  # 300*400 产品中心缩略图
+    filename_m = db.Column(db.String(128))  # 450*600 首页分类及缩略图
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
 
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))

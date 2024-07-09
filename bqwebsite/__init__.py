@@ -103,8 +103,8 @@ def register_commands(app):
     @click.option('--introduce', default=5, help='Quantity of introduce, default is 5.')
     @click.option('--contact', default=3, help='Quantity of contact, default is 3.')
     def forge(product, news, introduce, contact):
-        from bqwebsite.fakes import categories, admin, fake_products, news_categories, fake_news, intro_category, \
-            fake_intro, brand, subject, contact_categories, fake_contact
+        from bqwebsite.fakes import fake_categories, admin, fake_products, news_categories, fake_news, intro_category, \
+            fake_intro, fake_brand, fake_subject, contact_categories, fake_contact
 
         click.echo('Drop tables....')
         db.drop_all()
@@ -115,7 +115,11 @@ def register_commands(app):
         admin()
 
         click.echo('Generating product_categories...')
-        categories()
+        fake_categories()
+
+        click.echo('Generating brand and subject...')
+        fake_brand()
+        fake_subject()
 
         click.echo('Generating %d products...' % product)
         fake_products(product)
@@ -123,10 +127,6 @@ def register_commands(app):
         click.echo('Generating news_categories and %d news...' % news)
         news_categories()
         fake_news(news)
-
-        click.echo('Generating brand and subject...')
-        brand()
-        subject()
 
         click.echo('Generating contact_category and %d contact' % contact)
         contact_categories()

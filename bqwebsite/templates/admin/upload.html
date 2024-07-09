@@ -4,24 +4,33 @@
 {% block title %}
     上传图片
 {% endblock %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone.min.css') }}"
+          type="text/css">
+    {{ dropzone.style('margin:20px 0; border:2px dashed #0087f7; min-height:400px;') }}
+{% endblock %}
 {% block content %}
-        <header class="masthead bg-primary text-white text-center">
+    <header class="masthead bg-primary text-white text-center">
         <div class="news_bg_img01"></div>
     </header>
     <section class="page-section portfolio bg-light">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4 align-self-center">
-                    <h1 class="text-center">登 录</h1>
-                    <div>
-                        {{ render_form(form) }}
-                        <hr>
-                        <p class="small text-end"><a href="{{ url_for('admin.forget_password') }}" class="text-decoration-none">忘记密码？</a></p>
+                <div class="card-header">
+                    <h1>上传图片</h1>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 card-body">
+                        {{ dropzone.create(action='admin.upload') }}
+                        <a href="{{ url_for('admin.index') }}"
+                           class="btn btn-secondary float-start">完 成</a>
                     </div>
                 </div>
-                <div class="col-md-4"></div>
-                </div>
-            </div>
+        </div>
     </section>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/dropzone.min.js') }}"></script>
+    {{ dropzone.config() }}
 {% endblock %}

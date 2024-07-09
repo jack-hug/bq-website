@@ -1,8 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap5
-from flask_wtf import CSRFProtect
 from flask_dropzone import Dropzone
 from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect
 
 
 bootstrap = Bootstrap5()

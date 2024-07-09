@@ -12,6 +12,7 @@ else:
 
 class BaseConfig:
     BQ_ADMIN_EMAIL = os.getenv('BQ_ADMIN', '46361381@qq.com')
+    BQ_PRODUCT_PER_PAGE = 12
     BQ_NEWS_PER_PAGE = 12
     BQ_PHOTO_PER_PAGE = 12
     BQ_NOTIFICATION_PER_PAGE = 20
@@ -20,8 +21,8 @@ class BaseConfig:
     BQ_SEARCH_RESULT_PER_PAGE = 30
     BQ_UPLOAD_PATH = os.path.join(basedir, 'uploads')
     BQ_PHOTO_SIZE = {
-        'small': 400,
-        'medium': 800
+        'small': 300,
+        'medium': 450
     }
     BQ_PHOTO_SUFFIX = {
         BQ_PHOTO_SIZE['small']: '_s',
@@ -36,6 +37,8 @@ class BaseConfig:
     DROPZONE_ALLOWED_FILE_TYPE = 'image'
     DROPZONE_ENABLE_CSRF = True
     DROPZONE_INVALID_FILE_TYPE = '文件类型错误，请使用.jpg或者.png格式'
+    DROPZONE_FILE_TOO_BIG = '文件过大 {{ filesize }}，文件最大尺寸不得超过{{ maxFilesize }}M'
+    DROPZONE_DEFAULT_MESSAGE = '将文件拖动到这里或者点击上传，文件大小不得超过3M，文件数量不得超过30个'
 
 
 class DevelopmentConfig(BaseConfig):

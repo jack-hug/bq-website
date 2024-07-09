@@ -19,25 +19,20 @@ def admin():
     db.session.commit()
 
 
-def categories():
-    category = Category(product_category='Default')
-    db.session.add(category)
-
-    jixing = ['膏剂', '散剂', '片剂', '胶囊', '搽剂', '颗粒剂', '糖浆', '酊剂']
+def fake_categories():
+    jixing = ['膏剂', '散剂', '片剂', '胶囊', '搽剂', '颗粒剂', '糖浆', '酊剂', '其他']
 
     for i in jixing:
-        category = Category(product_category=i)
+        category = Category(name=i)
         db.session.add(category)
     try:
         db.session.commit()
     except InterruptedError:
         db.session.rollback()
 
-def subject():
-    subject = Subject(name='Default')
-    db.session.add(subject)
+def fake_subject():
 
-    sub = ['补益类', '儿童用药', '妇科用药', '感冒咳嗽', '护理保健']
+    sub = ['补益类', '儿童用药', '妇科用药', '感冒咳嗽', '护理保健', '其他功能']
 
     for i in sub:
         subject = Subject(name=i)
@@ -47,11 +42,9 @@ def subject():
     except InterruptedError:
         db.session.rollback()
 
-def brand():
-    brand = Brand(name='Default')
-    db.session.add(brand)
+def fake_brand():
 
-    bra = ['葛洪', '邦琪', '原方', '金鸡', '汉森元', '康司臣', '其他']
+    bra = ['邦琪', '葛洪', '原方', '金鸡', '汉森元', '康司臣', '多通葆', '比愈通', '其他']
 
     for i in bra:
         brand = Brand(name=i)
@@ -64,11 +57,13 @@ def brand():
 def fake_products(count=50):
     for i in range(count):
         product = Product(
-            product_name=fake.sentence(3),
+            name=fake.sentence(3),
             product_indication=fake.text(50),
             product_manual=fake.text(50),
             product_content=fake.text(50),
             category=Category.query.get(random.randint(1, Category.query.count())),
+            brand=Brand.query.get(random.randint(1, Brand.query.count())),
+            subject=Subject.query.get(random.randint(1, Subject.query.count())),
             timestamp=fake.date_time_this_year()
         )
         db.session.add(product)

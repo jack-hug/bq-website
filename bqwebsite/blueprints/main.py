@@ -64,19 +64,42 @@ def news():
     return render_template('main/news.html', all_news=all_news, pagination=pagination)
 
 
-@main_bp.route('/product')
+@main_bp.route('/products')  # 所有产品
 def product():
-    return render_template('main/product.html')
+    page = request.args.get('page', 1, type=int)
+    per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
+    pagination = Product.query.order_by(Product.timestamp.desc()).paginate(page=page, per_page=per_page)
+    products = pagination.items
+    return render_template('main/products.html', products=products, pagination=pagination)
+
+
+@main_bp.route('/<category>')  # 按剂型分类
+def product_category(category):
+    category = Category.query.filter(name=category).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
+    pagination = Product.query.with_parent(category).order_by(Product.timestamp.desc()).paginate(page=page, per_page=per_page)
+    products = pagination.items
+    return render_template('main/product_category.html', category=category, pagination=pagination, products=products)
+
+@main_bp.route('/<brand>')  # 按商标分类
+def product_brand(brand):
+    return render_template('main/product_brand.html')
+
+@main_bp.route('/<subject>')  # 按功能主治分类
+def product_brand(brand):
+    return render_template('main/product_subject.html')
 
 
 @main_bp.route('/product_categories')
 def product_categories():
-    return render_template('main/product_categories.html')
+    return render_template('main/product_hot.html')
 
 
-@main_bp.route('/product_detail')
-def product_detail():
-    return render_template('main/product_detail.html')
+@main_bp.route('/product_detail/<int:product_id>')
+def product_detail(product_id):
+    product_id = Product.query.get_or_404(product_id)
+    return render_template('main/product_detail.html', product_id=product_id)
 
 
 # @main_bp.route('/introduce-category/<int:intro_category_id>')

@@ -54,6 +54,12 @@
                 </ul>
             </div>
         </div>
+        {% for message in get_flashed_messages(with_categories = True) %}
+            <div class="alert alert-{{ message[0] }}" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                {{ message[1] }}
+            </div>
+        {% endfor %}
     </nav>
 {% endblock %}
 
@@ -108,7 +114,7 @@
     </div>
 </div>
 
-{% block script %}
+{% block scripts %}
     <script src="https://cdn.staticfile.net/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename = 'js/scripts.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/anim-cards.min.js') }}"></script>
