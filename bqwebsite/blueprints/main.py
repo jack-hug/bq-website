@@ -1,6 +1,6 @@
-from flask import render_template, request, redirect, url_for, Blueprint, current_app, flash
+from flask import render_template, request, redirect, url_for, Blueprint, current_app, flash, send_from_directory
 from bqwebsite.models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
-    IntroduceCategory, Contact, ContactCategory
+    IntroduceCategory, Contact, ContactCategory, Subject
 
 main_bp = Blueprint('main', __name__)
 
@@ -73,33 +73,62 @@ def product():
     return render_template('main/products.html', products=products, pagination=pagination)
 
 
-@main_bp.route('/<category>')  # 按剂型分类
+@main_bp.route('/category/<category>')  # 按剂型分类
 def product_category(category):
-    category = Category.query.filter(name=category).first_or_404()
+    category = Category.query.filter_by(name=category).first_or_404()
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
     pagination = Product.query.with_parent(category).order_by(Product.timestamp.desc()).paginate(page=page, per_page=per_page)
     products = pagination.items
     return render_template('main/product_category.html', category=category, pagination=pagination, products=products)
 
-@main_bp.route('/<brand>')  # 按商标分类
+@main_bp.route('/brand/<brand>')  # 按商标分类
 def product_brand(brand):
-    return render_template('main/product_brand.html')
-
-@main_bp.route('/<subject>')  # 按功能主治分类
-def product_brand(brand):
-    return render_template('main/product_subject.html')
-
-
-@main_bp.route('/product_categories')
-def product_categories():
-    return render_template('main/product_hot.html')
+    brand = Brand.query.filter_by(name=brand).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
+    pagination = Product.query.with_parent(brand).order_by(Product.timestamp.desc()).paginate(page=page, per_page=per_page)
+    products = pagination.items
+    return render_template('main/product_brand.html', brand=brand, pagination=pagination, products=products)
 
 
-@main_bp.route('/product_detail/<int:product_id>')
-def product_detail(product_id):
-    product_id = Product.query.get_or_404(product_id)
-    return render_template('main/product_detail.html', product_id=product_id)
+@main_bp.route('/subject/<subject>')  # 按功能主治分类
+def product_subject(subject):
+    subject = Subject.query.filter_by(name=subject).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
+    pagination = Product.query.with_parent(subject).order_by(Product.timestamp.desc()).paginate(page=page, per_page=per_page)
+    products = pagination.items
+    return render_template('main/product_subject.html', subject=subject, pagination=pagination, products=products)
+
+
+@main_bp.route('/products/n/<int:product_id>')
+# 下一个品种
+def product_next(product_id):
+    product_n_detail = Product.query.get_or_404(product_id)
+    product_n = Product.query.with_parent(product_n_detail.category).filter(Product.timestamp < product_n_detail.timestamp).order_by(Product.timestamp.desc()).first()
+
+    if product_n is None:
+        flash('已经是第一个', 'info')
+        return redirect(url_for('main.show_product', product_id=product_id))
+    return redirect(url_for('main.show_product', product_id=product_n.id))
+
+@main_bp.route('/product/p/<int:product_id>')
+# 上一个品种
+def product_previous(product_id):
+    product_p_detail = Product.query.get_or_404(product_id)
+    product_p = Product.query.with_parent(product_p_detail.category).filter(Product.timestamp > product_p_detail.timestamp).order_by(Product.timestamp.asc()).first()
+
+    if product_p is None:
+        flash('已经是最新一篇文章', 'info')
+        return redirect(url_for('main.show_product', product_id=product_id))
+    return redirect(url_for('main.show_product', product_id=product_p.id))
+
+
+@main_bp.route('/product_detail/<int:product_id>')  # 产品详细页面
+def show_product(product_id):
+    product = Product.query.get_or_404(product_id)
+    return render_template('main/product_detail.html', product=product)
 
 
 # @main_bp.route('/introduce-category/<int:intro_category_id>')
@@ -133,3 +162,7 @@ def contact_cooperate():
 @main_bp.route('/contact_recruit')
 def contact_recruit():
     return render_template('main/contact_recruit.html')
+
+@main_bp.route('/uploads/<int:filename>')  # 获得图片链接
+def get_image(filename):
+    return send_from_directory(current_app.config['BQ_UPLOAD_PATH'], filename)

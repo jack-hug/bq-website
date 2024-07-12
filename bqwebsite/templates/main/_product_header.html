@@ -18,7 +18,7 @@
 
                 {% for brand in brands %}
                     <li class="nav-item">
-                        <a href="#" class="nav-link">{{ brand.name }}</a>
+                        <a href="{{ url_for('main.product_brand', brand=brand.name) }}" class="nav-link">{{ brand.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -40,7 +40,7 @@
                 </li>
                 {% for subject in subjects %}
                     <li class="nav-item">
-                        <a href="#" class="nav-link">{{ subject.name }}</a>
+                        <a href="{{ url_for('main.product_subject', subject=subject.name) }}" class="nav-link">{{ subject.name }}</a>
                     </li>
                 {% endfor %}
 

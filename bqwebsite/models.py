@@ -18,7 +18,7 @@ class Product(db.Model):
     # 产品
     __tablename__ = 'product'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), unique=True)  # 品名
+    name = db.Column(db.String(100))  # 品名
     product_indication = db.Column(db.String(200))  # 功能主治
     product_manual = db.Column(db.Text)  # 说明书
     product_content = db.Column(db.Text)  # 产品页内容
@@ -96,6 +96,7 @@ class Brand(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))
     filename = db.Column(db.String(100))
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
 
     products = db.relationship('Product', back_populates='brand')
 
@@ -126,6 +127,7 @@ class Subject(db.Model):
     __tablename__ = 'subject'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
 
     products = db.relationship('Product', back_populates='subject')
 

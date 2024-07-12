@@ -34,10 +34,14 @@
                                         <p class="">
                                             {{ product.product_indication }}
                                         </p>
-                                        <a href="{{ url_for('main.product_detail', product_id=product.id) }}"
+                                        <a href="{{ url_for('main.show_product', product_id=product.id) }}"
                                            class="info">点击查看</a>
                                     </div>
                                 </div>
+                            </div>
+                            {% else %}
+                            <div class="text-center">
+                            <h5>No Products</h5>
                             </div>
                         {% endfor %}
                     {% endif %}

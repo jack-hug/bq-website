@@ -2,53 +2,10 @@
 {% from 'bootstrap5/pagination.html' import render_pagination %}
 
 {% block title %}
-    产品中心
+    {{ category.name }}-产品中心
 {% endblock %}
 {% block nav_products %}active{% endblock %}
 {% block content %}
     {% include 'main/_product_header.html' %}
-    <section class="portfolio">
-        <div class="container">
-            <div class="text-center mt-3 mb-3">
-                <div class="row">
-                    <div class="col-md-3 col-sm-6 mb-5">
-                        <div class="product_hover_effect">
-                            <img class="img-fluid rounded"
-                                 src="{{ url_for('static', filename = 'assets/img/portfolio/gaoji.png') }}" alt="">
-                            <div class="overlay">
-                                <h2 class="mt-5">桂龙药膏</h2>
-                                <p class="">
-                                    祛风除湿，舒筋活络，温肾补血。用于风湿骨痛，慢性腰腿痛，肾阳不足及气血亏虚引起的贫血，失眠多梦，气短，心悸，多汗，厌食，腹胀，尿频。</p>
-                                <a class="info" href="#">点击查看</a>
-                            </div>
-                        </div>
-                    </div>
-                    {% if products %}
-                        {% for product in products %}
-                            <div class="col-md-3 col-sm-6 mb-5">
-                                <div class="product_hover_effect">
-                                    <img src="{{ url_for('static', filename = 'assets/img/portfolio/gaoji.png') }}"
-                                         alt="" class="img-fluid rounded">
-                                    <div class="overlay">
-                                        <h2 class="mt-5">{{ product.name }}</h2>
-                                        <p class="">
-                                            {{ product.product_indication }}
-                                        </p>
-                                        <a href="{{ url_for('main.product_detail', product_id=product.id) }}"
-                                           class="info">点击查看</a>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    {% if products %}
-                        <div class="pt-2">
-                            {{ render_pagination(pagination, align='center', prev='上一页', next='下一页') }}
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        </div>
-    </section>
+    {% include 'main/_products.html' %}
 {% endblock %}

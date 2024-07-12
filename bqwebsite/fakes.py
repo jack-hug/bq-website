@@ -1,12 +1,52 @@
 import random
 
 from faker import Faker
+from faker.providers import DynamicProvider
 
 from bqwebsite.models import Admin, Category, Product, NewsCategory, News, IntroduceCategory, Introduce, Subject, Brand, \
     Contact, ContactCategory
 from bqwebsite.extensions import db
 
 fake = Faker('zh_CN')
+
+fake_products = DynamicProvider(
+    provider_name='products',
+    elements=[
+        '桂龙药膏',
+        '止咳平喘膏',
+        '麻杏止咳膏',
+        '咳喘停膏',
+        '感冒灵冲剂(块状)',
+        '三参益气口服液',
+        '小儿化痰止咳糖浆',
+        '抗宫炎颗粒',
+        '百咳静糖浆',
+        '感冒灵颗粒',
+        '川贝止咳露',
+        '健儿消食口服液',
+        '安乐片',
+        '安胎益母丸',
+        '八珍益母膏',
+        '百梅止咳颗粒',
+        '半夏糖浆',
+        '参芪首乌补汁',
+        '陈香露白露片',
+        '跌打扭伤灵酊',
+        '复方丹参片',
+        '桂龙药酒',
+        '复方鱼腥草颗粒',
+        '复方鱼腥草颗粒',
+        '复方双花藤止痒搽剂',
+        '藿香正气合剂',
+        '穿金益肝片',
+        '复方愈创木酚磺酸钾口服溶液',
+        '清感穿心莲片',
+        '止咳枇杷颗粒',
+        '桂圆琼玉冲剂',
+    ],  # 31 products
+)
+
+fake.add_provider(fake_products)
 
 
 def admin():
@@ -30,8 +70,8 @@ def fake_categories():
     except InterruptedError:
         db.session.rollback()
 
-def fake_subject():
 
+def fake_subject():
     sub = ['补益类', '儿童用药', '妇科用药', '感冒咳嗽', '护理保健', '其他功能']
 
     for i in sub:
@@ -42,8 +82,8 @@ def fake_subject():
     except InterruptedError:
         db.session.rollback()
 
-def fake_brand():
 
+def fake_brand():
     bra = ['邦琪', '葛洪', '原方', '金鸡', '汉森元', '康司臣', '多通葆', '比愈通', '其他']
 
     for i in bra:
@@ -54,20 +94,23 @@ def fake_brand():
     except InterruptedError:
         db.session.rollback()
 
+
 def fake_products(count=50):
     for i in range(count):
         product = Product(
-            name=fake.sentence(3),
+            name=fake.products(),
             product_indication=fake.text(50),
-            product_manual=fake.text(50),
-            product_content=fake.text(50),
+            product_manual=fake.text(100),
+            product_content=fake.text(100),
             category=Category.query.get(random.randint(1, Category.query.count())),
             brand=Brand.query.get(random.randint(1, Brand.query.count())),
             subject=Subject.query.get(random.randint(1, Subject.query.count())),
+            clicks=random.randint(1, 5000),
             timestamp=fake.date_time_this_year()
         )
         db.session.add(product)
     db.session.commit()
+
 
 def news_categories():
     news_cate = ['公司新闻', '行业资讯', '家庭护理', '商标展示']
@@ -76,13 +119,14 @@ def news_categories():
         category = NewsCategory(
             name=i,
             timestamp=fake.date_time_this_year()
-            )
+        )
 
         db.session.add(category)
     try:
         db.session.commit()
     except InterruptedError:
         db.session.rollback()
+
 
 def fake_news(count=80):
     for i in range(count):
@@ -99,6 +143,7 @@ def fake_news(count=80):
     except InterruptedError:
         db.session.rollback()
 
+
 def intro_category():
     intro_cate = ['公司介绍', '质量机构', '企业架构', '社会责任', '企业荣誉']
 
@@ -106,7 +151,7 @@ def intro_category():
         category = IntroduceCategory(
             name=i,
             timestamp=fake.date_time_this_year()
-            )
+        )
 
         db.session.add(category)
     try:
@@ -114,16 +159,18 @@ def intro_category():
     except InterruptedError:
         db.session.rollback()
 
+
 def fake_intro(count=5):
     for i in range(count):
         intro = Introduce(
             title=fake.sentence(),
             introduce_content=fake.text(200),
             timestamp=fake.date_time_this_year(),
-            introduce_category=IntroduceCategory.query.get(i+1)
+            introduce_category=IntroduceCategory.query.get(i + 1)
         )
         db.session.add(intro)
     db.session.commit()
+
 
 def contact_categories():
     cont_cat = ['联系方式', '商业合作', '企业招聘']
@@ -136,16 +183,14 @@ def contact_categories():
     except InterruptedError:
         db.session.rollback()
 
+
 def fake_contact(count=3):
     for i in range(count):
         contact = Contact(
             title=fake.sentence(),
             content=fake.text(200),
             timestamp=fake.date_time_this_year(),
-            contact_category=ContactCategory.query.get(i+1)
+            contact_category=ContactCategory.query.get(i + 1)
         )
         db.session.add(contact)
     db.session.commit()
-
-
-

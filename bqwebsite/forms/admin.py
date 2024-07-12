@@ -9,3 +9,6 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('记住我')
     submit = SubmitField('登 录')
 
+# class UploadForm(FlaskForm):
+#
+#

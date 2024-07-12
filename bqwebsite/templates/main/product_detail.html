@@ -11,111 +11,37 @@
     <section class="page-section portfolio bg-light">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-12">
-                    <div class="list-group mb-3">
-                        <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
-                            产品中心
-                        </div>
-                        <a href="#"
-                           class="list-group-item list-group-item-action active">膏 剂</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">颗粒剂</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">糖浆剂</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">胶 囊</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">片 剂</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">酊 剂</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">散 剂</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">搽 剂</a>
-                    </div>
-                    <div class="list-group mb-3">
-                        <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
-                            热门产品
-                        </div>
-                        <a href="#"
-                           class="list-group-item list-group-item-action"><span class=""></span>桂龙药膏</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">感冒灵颗粒</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">抗宫炎颗粒</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">复方鱼腥草颗粒</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">小儿化痰止咳糖浆</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">强力枇杷露</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">藿香正气合剂</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">小儿氨酚黄那敏颗粒</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">百咳静糖浆</a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action">川贝清肺糖浆</a>
-                    </div>
-                </div>
+                {% include 'main/_sidebar_product.html' %}
                 <div class="col-lg-9 col-md-9 col-sm-12 bg-white rounded">
-                    <h3 class="text-center text-secondary mt-3">桂龙药膏</h3>
-                    <p class="text-muted text-center"><small>发布时间：datestamp</small></p>
+                    {% for message in get_flashed_messages(with_categories = True) %}
+                        <div class="alert alert-{{ message[0] }}" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            {{ message[1] }}
+                        </div>
+                    {% endfor %}
+                    <h3 class="text-center text-secondary mt-3">{{ product.name }}</h3>
+                    <p class="text-muted text-center"><small>发布时间：{{ product.timestamp }}</small></p>
                     <hr class="divider-custom">
                     <img src="{{ url_for('static', filename='assets/img/portfolio/gaoji.png') }}" alt=""
                          class="justify-content-center rounded mx-auto d-block" style="width: 500px;height: auto">
                     <p class="lh-lg text-start p-5">
-                        桂龙药膏说明书 <br>
+                        {{ product.name }}说明书 <br>
                         请仔细阅读说明书并按说明使<br>
                         用或在药师指导下购买和使用<br>
-                        【药品名称】<br>
-                        通用名称：桂龙药膏<br>
-                        汉语拼音：Guilong Yaogao<br>
-                        【成
-                        份】肉桂叶、土茯苓、红药、过岗龙、红杜仲、玉郎伞、土生地、三爪龙、白芷、老鸦嘴、千斤拔、砂仁、黄精、牛大力、高山龙、川芎、大芦、土甘草、青藤、五爪龙、万筋藤、首乌藤、当归藤、四方藤、温姜、狮子尾、九牛力、黑老虎根。辅料为蔗糖、苯甲酸钠。<br>
-                        【性 状】本品为深黑棕色至黑色稠厚的半流体；气香，味甘、微苦。<br>
-                        【功能主治】祛风除湿，舒筋活络，温肾补血。用于风湿骨痛，慢性腰腿痛，肾阳不足及气血亏虚引起的贫血，失眠多梦，气短，心悸，多汗，厌食，腹胀，尿频。<br>
-                        【用法用量】口服。一次10克，一日2次。冲酒或开水溶解后服用。<br>
-                        【不良反应】尚不明确。<br>
-                        【禁 忌】孕妇和小儿忌用。<br>
-                        【注意事项】<br>
-                        1.忌辛辣、生冷、油腻食物。<br>
-                        2.凡脾胃虚弱，食入难化，呕吐泄泻，腹胀便溏，咳嗽痰多者不宜服用。<br>
-                        3.不宜和感冒类药同时服用。感冒发热勿服。<br>
-                        4.高血压、糖尿病患者或正在接受其他药物治疗的患者应在医师指导下服用。<br>
-                        5.按照用法用量服用，年老者应在医师指导下服用。<br>
-                        6.服药期间出现食欲不振、恶心呕吐、腹胀便溏者应去医院就诊。<br>
-                        7.对本品过敏者禁用，过敏体质者慎用。<br>
-                        8.本品性状发生改变时禁止使用。<br>
-                        9.儿童必须在成人的监护下使用。<br>
-                        10.请将本品放在儿童不能接触的地方。<br>
-                        11.如正在使用其他药品，使用本品前请咨询医师或药师。<br>
-                        【药物相互作用】如与其他药物同时使用可能会发生药物相互作用，详情请咨询医师或药师。<br>
-                        【贮 藏】密封，置阴凉干燥处（不超过20℃）。<br>
-                        【包 装】钠钙玻璃模制药瓶，每瓶装205克(相当于总药材1117.25克)。<br>
-                        【有 效 期】暂定24个月<br>
-                        【执行标准】国家食品药品监督管理局标准(试行)YBZ22432005。<br>
-                        【批准文号】国药准字Z45022017<br>
-                        【说明书修订日期】<br>
-                        上市许可持有人：广西邦琪药业集团有限公司<br>
-                        注册地址：钦州市皇马工业园<br>
-                        生产企业：广西邦琪药业集团有限公司<br>
-                        生产地址：钦州市钦北区大井工业园<br>
-                        邮政编码：535038<br>
-                        电话号码：0777-3883090<br>
-                        传真号码：0777-3880879<br>
-                        网 址：www．bangqiyaoye．com<br>
+                        {{ product.product_manual }}
                     </p>
-                    <hr>
-                    <div class="">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-between">
-                                <li class="page-item"><a class="page-link" href="#">上一篇</a></li>
-                                <li class="page-item"><a class="page-link" href="#">下一篇</a></li>
-                            </ul>
-                        </nav>
-                    </div>
+                    <hr class="mt-5">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination navbar">
+                            <li class="page-item">
+                                <a href="{{ url_for('main.product_previous', product_id=product.id) }}"
+                                   class="page-link">上一个品种</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="{{ url_for('main.product_next', product_id=product.id) }}" class="page-link">下一个品种</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
