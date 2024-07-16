@@ -212,16 +212,16 @@
     <!-- index banner section -->
     <section class="page-section mb-0">
         <div class="container-fluid">
-            <div class="bg-light" style="height: 800px;"></div>
-            <div class="bg-info" style="height: 800px;"></div>
+            <div class="bg-light" style="height: 800px;">预留宣传区域</div>
+            <div class="bg-info" style="height: 800px;">预留宣传区域</div>
         </div>
     </section>
 {% endblock %}
 
-{% block script %}
+{% block scripts %}
     {{ super() }}
     <script>window.jQuery || document.write('<script src="{{ url_for('static', filename = 'js/jquery-1.11.0.min.js') }}"><\/script>')</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script src="https://cdn.staticfile.net/waypoints/4.0.1/jquery.waypoints.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.countup.js') }}"></script>
     <script type="text/javascript">
         $('.counter').countUp();
