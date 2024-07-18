@@ -13,6 +13,8 @@ admin_bp = Blueprint('admin', __name__)
 
 @admin_bp.route('/')
 def index():
+    if not current_user.is_authenticated:
+        return redirect(url_for('main.index'))
     return render_template('admin/index.html')
 
 

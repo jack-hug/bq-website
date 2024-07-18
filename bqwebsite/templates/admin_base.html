@@ -33,17 +33,19 @@
                     <a class="nav-link px-0 rounded" href="{{ url_for('admin.index') }}">Admin</a>
                 </li>
                 <li class="nav-item mx-1 mx-lg-2">
-                    <a class="nav-link" href="{{ url_for('admin.logout') }}">退出登录</a>
+                    {% if current_user.is_authenticated %}
+                        <a class="nav-link" href="{{ url_for('admin.logout') }}">退出登录</a>
+                    {% endif %}
                 </li>
             </ul>
         </div>
-        {% for message in get_flashed_messages(with_categories = True) %}
-            <div class="alert alert-{{ message[0] }}" role="alert">
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                {{ message[1] }}
-            </div>
-        {% endfor %}
     </nav>
+    {% for message in get_flashed_messages(with_categories = True) %}
+        <div class="alert alert-{{ message[0] }}" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            {{ message[1] }}
+        </div>
+    {% endfor %}
 {% endblock %}
 
 {% block content %}
@@ -51,14 +53,14 @@
 
 <!-- Footer-->
 {% block footer %}
-<!-- Copyright Section-->
-<div class="copyright py-4 text-center bg-dark text-white">
-    <div class="container"><small>Copyright ©2023 广西邦琪药业集团有限公司 All Rights Reserved</small></div>
-    <div class="container"><small>互联网药品信息服务资格证书：（桂）-非经营性-2023-0020号 <a
-            href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded"
-            style="color: #fff; text-decoration: none">桂ICP备14001107号-1</a></small>
+    <!-- Copyright Section-->
+    <div class="copyright py-4 text-center bg-dark text-white">
+        <div class="container"><small>Copyright ©2023 广西邦琪药业集团有限公司 All Rights Reserved</small></div>
+        <div class="container"><small>互联网药品信息服务资格证书：（桂）-非经营性-2023-0020号 <a
+                href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded"
+                style="color: #fff; text-decoration: none">桂ICP备14001107号-1</a></small>
+        </div>
     </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
