@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content="bangqi"/>
+    <meta name="author" content="bangqi"/>
+    {% block head %}
+        <title>{% block title %}base{% endblock %}- 广西邦琪药业集团有限公司</title>
+        {% block styles %}
+            <!-- 集团logo -->
+            <link rel="icon" type="image/x-icon" href="{{ url_for('static',filename = 'assets/fav.ico') }}"/>
+            <!-- Font Awesome icons (free version)-->
+            <script src="https://cdn.staticfile.net/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"></script>
+            <!-- Core theme CSS (includes Bootstrap)-->
+            <link href="{{ url_for('static',filename = 'admin/css/styles.css') }}" rel="stylesheet"/>
+            <link href="https://cdn.staticfile.net/bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet"/>
+        {% endblock %}
+    {% endblock %}
+</head>
+
+<body id="page-top">
+{% block navbar %}
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}" target="_blank">邦琪后台管理系统</a>
+            <ul class="navbar-nav"></ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item mx-1 mx-lg-2">
+                    <span class="nav-link px-0 rounded">超级管理员</span>
+                </li>
+                <li class="nav-item mx-1 mx-lg-2">
+                    <a class="nav-link px-0 rounded" href="{{ url_for('admin.index') }}">Admin</a>
+                </li>
+                <li class="nav-item mx-1 mx-lg-2">
+                    <a class="nav-link" href="{{ url_for('admin.logout') }}">退出登录</a>
+                </li>
+            </ul>
+        </div>
+        {% for message in get_flashed_messages(with_categories = True) %}
+            <div class="alert alert-{{ message[0] }}" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                {{ message[1] }}
+            </div>
+        {% endfor %}
+    </nav>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+<!-- Footer-->
+{% block footer %}
+<!-- Copyright Section-->
+<div class="copyright py-4 text-center bg-dark text-white">
+    <div class="container"><small>Copyright ©2023 广西邦琪药业集团有限公司 All Rights Reserved</small></div>
+    <div class="container"><small>互联网药品信息服务资格证书：（桂）-非经营性-2023-0020号 <a
+            href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded"
+            style="color: #fff; text-decoration: none">桂ICP备14001107号-1</a></small>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.staticfile.net/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static',filename = 'js/sb-forms-0.4.1.js') }}"></script>
+{% endblock %}
+</body>
+</html>

@@ -137,7 +137,7 @@ class Admin(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(128), unique=True)
     name = db.Column(db.String(50))
-    last_login = db.Column(db.DateTime)
+    last_login_time = db.Column(db.DateTime)  # 最后一次登录时间
     password_hash = db.Column(db.String(128))
 
     def set_password(self, password):

@@ -1,0 +1,11 @@
+.list-group-item.has-submenu::after {
+    content: ' \25BE'; /* Unicode for down arrow */
+}
+
+.list-group-item.has-submenu.collapsed::after {
+    content: ' \25BE'; /* Unicode for down arrow */
+}
+
+.list-group-item.has-submenu:not(.collapsed)::after {
+    content: ' \25B4'; /* Unicode for up arrow */
+}

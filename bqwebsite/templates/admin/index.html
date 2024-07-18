@@ -1,19 +1,172 @@
-{% extends 'base.html' %}
+{% extends 'admin_base.html' %}
 
 {% block title %}
     后台管理面板-首页
 {% endblock %}
 {% block content %}
-        <header class="masthead bg-primary text-white text-center">
-        <div class="news_bg_img01"></div>
-    </header>
-    <section class="page-section portfolio bg-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 align-self-center">
-                    <h1 class="text-center">首页</h1>
+    <div class="container-fluid mt-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">首页</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">后台管理面板</li>
+                    </ol>
+                </nav>
+                <h2 class="text-center mb-3 mt-3">邦琪后台管理系统</h2>
+                <h6>上次登录时间：{{ current_user.last_login_time }}</h6>
+                <hr>
+                <div class="p-2">
+                    <table class="table table-hover text-center table-bordered">
+                        <thead>
+                        <tr>
+                            <th colspan="6" scope="col" class="bg-light text-start">信息统计</th>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr>
+                            <th scope="col">统计</th>
+                            <th scope="col">产品库</th>
+                            <th scope="col">新闻库</th>
+                            <th scope="col">图片库</th>
+                            <th scope="col">商标库</th>
+                            <th scope="col">荣誉库</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>总数</td>
+                            <td>50</td>
+                            <td>100</td>
+                            <td>200</td>
+                            <td>500</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td>本月</td>
+                            <td>50</td>
+                            <td>100</td>
+                            <td>200</td>
+                            <td>500</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td>本年</td>
+                            <td>50</td>
+                            <td>100</td>
+                            <td>200</td>
+                            <td>500</td>
+                            <td>50</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
+                <hr>
+                <div class="p-2">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <th colspan="2" scope="col" class="bg-light">服务器信息</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>服务器计算机名</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>服务器IP地址</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>服务器域名</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>服务器端口</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>服务器IIS版本</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>本文件所在文件夹</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>服务器操作系统</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>系统所在文件夹</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>服务器脚本超时时间</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>服务器的语言种类</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>.NET Framework 版本</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>服务器当前时间</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>服务器IE版本</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>服务器上次启动到现在已运行</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>逻辑驱动器</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>CPU 总数</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>CPU 类型</td>
+                            <td>x86 Family 6 Model 42 Stepping 1, GenuineIntel</td>
+                        </tr>
+                        <tr>
+                            <td>虚拟内存</td>
+                            <td>52480M</td>
+                        </tr>
+                        <tr>
+                            <td>当前程序占用内存</td>
+                            <td>3.29M</td>
+                        </tr>
+                        <tr>
+                            <td>Asp.net所占内存</td>
+                            <td>51.46M</td>
+                        </tr>
+                        <tr>
+                            <td>当前Session数量</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>当前SessionID</td>
+                            <td>gznhpwmp34004345jz2q3l45</td>
+                        </tr>
+                        <tr>
+                            <td>当前系统用户名</td>
+                            <td>NETWORK SERVICE</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-    </section>
+        </div>
+    </div>
 {% endblock %}
