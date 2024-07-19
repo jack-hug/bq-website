@@ -1,0 +1,118 @@
+{% extends 'admin_base.html' %}
+{% from 'bootstrap5/pagination.html' import render_pagination %}
+
+{% block title %}
+    后台管理面板-产品列表
+{% endblock %}
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">首页</a></li>
+                        <li class="breadcrumb-item" aria-current="page">产品管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">产品列表</li>
+                    </ol>
+                </nav>
+                <h4 class="text-center mb-3 mt-3">产品列表</h4>
+                <hr>
+                <div class="p-3 bg-light border rounded d-flex justify-content-between align-items-center">
+                    <div class="row">
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> 添加产品</button>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-danger"><i class="fa-solid fa-trash"></i> 批量删除</button>
+                        </div>
+                        <form class="col-auto row" role="search">
+                            <div class="col-md-auto">
+                                <input class="form-control me-2" type="search" placeholder="输入产品名称"
+                                       aria-label="Search">
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-outline-secondary" type="submit">搜 索</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <span>共有<strong> {{ products_length }} </strong>条产品数据</span>
+                    </div>
+                </div>
+                {% if products %}
+                    <table class="table table-striped border mt-3">
+                        <thead>
+                        <tr>
+                            <th>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="all_products_check">
+                                </div>
+                            </th>
+                            <th>ID</th>
+                            <th>缩略图</th>
+                            <th>产品名称</th>
+                            <th>功能主治</th>
+                            <th>剂型</th>
+                            <th>商标</th>
+                            <th>功能类别</th>
+                            <th>发布状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="all_products_check">
+                                    </div>
+                                </td>
+                                <td>{{ product.id }}</td>
+                                <td>缩略图</td>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.product_indication }}</td>
+                                <td>{{ product.category.name }}</td>
+                                <td>{{ product.brand.name }}</td>
+                                <td>{{ product.subject.name }}</td>
+                                <td><small>
+                                    {% if product.status %}
+                                        已发布
+                                        {% else %}
+                                        已下架
+                                    {% endif %}
+                                </small></td>
+                                <td>
+                                    <a href="" class="btn btn-sm btn-secondary">
+                                        <i class="fa-solid fa-pen-to-square" title="编辑"></i>
+                                    </a>
+                                    {% if product.status %}
+                                        <a href="" class="btn btn-sm btn-secondary">
+                                            <i class="fa-solid fa-arrow-down" title="撤销"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="" class="btn btn-sm btn-secondary">
+                                            <i class="fa-solid fa-arrow-up" title="发布"></i>
+                                        </a>
+                                    {% endif %}
+                                    <a href="" class="btn btn-sm btn-danger">
+                                        <i class="fa-regular fa-trash-can" title="删除"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <h3>没有产品数据</h3>
+                {% endif %}
+                {% if products %}
+                    <div class="pt-2">
+                        {{ render_pagination(pagination, align='center', prev='上一页', next='下一页') }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

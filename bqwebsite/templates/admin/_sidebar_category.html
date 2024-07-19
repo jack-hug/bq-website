@@ -1,30 +1,36 @@
-<div class="col-md-2  bg-light">
+<div class="col-md-2  bg-light py-2">
     <ul class="list-group">
-        <a class="list-group-item active" href="{{ url_for('admin.index') }}"><i class="fa-solid fa-house"></i> 首
+        <a class="list-group-item {% if request.endpoint == 'admin.index' %}active{% endif %}"
+           href="{{ url_for('admin.index') }}"><i class="fa-solid fa-house"></i> 首
             页</a>
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#product-collapse"
            role="button"
            aria-expanded="false" aria-controls="product-collapse"><i class="fa-solid fa-briefcase"></i> 产品管理</a>
-        <div class="collapse" id="product-collapse">
+        <div class="collapse{% if request.endpoint == 'admin.product_list' or request.endpoint == 'admin.category_list' %}show{% endif %}"
+             id="product-collapse">
             <a class="list-group">
-                <a class="list-group-item" href="#">&nbsp;&nbsp;&nbsp;添加产品</a>
-                <a class="list-group-item" href="#">&nbsp;&nbsp;&nbsp;产品列表</a>
-                <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#product-category"
-                   role="button"
-                   aria-expanded="false" aria-controls="product-category">&nbsp;&nbsp;&nbsp;产品分类</a>
-                <div class="collapse" id="product-category">
-                    <a class="list-group">
-                        <a class="list-group-item" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按剂型分类</a>
-                        <a class="list-group-item" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp按商标分类</a>
-                        <a class="list-group-item" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按功能分类</a>
-                    </a>
-                </div>
+                <a class="list-group-item {% if request.endpoint == 'admin.product_list' %}active{% endif %}"
+                   href="{{ url_for('admin.product_list') }}">&nbsp;&nbsp;&nbsp;产品列表</a>
+                <a class="list-group-item {% if request.endpoint == 'admin.category_list' %}active{% endif %}"
+                   href="{{ url_for('admin.category_list') }}">&nbsp;&nbsp;&nbsp;产品分类</a>
             </a>
         </div>
-        <a class="list-group-item" href="#"><i class="fa-solid fa-globe"></i> 新闻管理</a>
+        <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#news-collapse"
+           role="button"
+           aria-expanded="false" aria-controls="news-collapse"><i class="fa-solid fa-globe"></i> 新闻管理</a>
+        <div class="collapse{% if request.endpoint == 'admin.news_list' or request.endpoint == 'admin.news_category_list' %}show{% endif %}"
+             id="news-collapse">
+            <a class="list-group">
+                <a class="list-group-item {% if request.endpoint == 'admin.news_list' %}active{% endif %}"
+                   href="{{ url_for('admin.news_list') }}">&nbsp;&nbsp;&nbsp;新闻列表</a>
+                <a class="list-group-item {% if request.endpoint == 'admin.news_category_list' %}active{% endif %}"
+                   href="{{ url_for('admin.news_category_list') }}">&nbsp;&nbsp;&nbsp;新闻分类</a>
+            </a>
+        </div>
         <a class="list-group-item" href="#"><i class="fa-solid fa-image"></i> 图片管理</a>
         <a class="list-group-item" href="#"><i class="fa-solid fa-barcode"></i> 商标管理</a>
         <a class="list-group-item" href="#"><i class="fa-solid fa-compass"></i> 荣誉管理</a>
+        <a class="list-group-item" href="#"><i class="fa-solid fa-user"></i> 管理员设置</a>
         <a class="list-group-item" href="#"><i class="fa-solid fa-gear"></i> 网站设置</a>
     </ul>
 </div>

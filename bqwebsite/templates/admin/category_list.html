@@ -1,0 +1,226 @@
+{% extends 'admin_base.html' %}
+{% from 'bootstrap5/pagination.html' import render_pagination %}
+
+{% block title %}
+    后台管理面板-产品列表
+{% endblock %}
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">首页</a></li>
+                        <li class="breadcrumb-item" aria-current="page">产品管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">分类管理</li>
+                    </ol>
+                </nav>
+                <h4 class="text-center mb-3 mt-3">分类管理</h4>
+                <hr>
+                <div class="p-3 bg-light border rounded d-flex justify-content-between align-items-center">
+                    <div class="row">
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> 添加分类
+                            </button>
+                        </div>
+                        <form class="col-auto row" role="search">
+                            <div class="col-md-auto">
+                                <input class="form-control me-2" type="search" placeholder="商标、剂型、功能类别"
+                                       aria-label="Search">
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-outline-secondary" type="submit">搜 索</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        {% if brands %}
+                            <table class="table table-striped table-hover border mt-3">
+                                <thead>
+                                <tr>
+                                    <th colspan="5" scope="col" class="bg-light text-start">
+                                        <span>按商标分类：</span>
+                                        <span class="float-end">共有 {{ brands|length }} 条商标数据</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tr class="text-center">
+                                    <th>ID</th>
+                                    <th>商标名称</th>
+                                    <th>产品数量</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                {% for brand in brands %}
+                                    <tbody>
+                                    <tr class="text-center">
+                                        <td>{{ brand.id }}</td>
+                                        <td>{{ brand.name }}</td>
+                                        <td>{{ brand.products|length }}</td>
+                                        <td>
+                                            <small>
+                                                {% if brand.status %}
+                                                    已发布
+                                                {% else %}
+                                                    已下架
+                                                {% endif %}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <a href="{{ url_for('admin.brand_edit', brand_id=brand.id) }}"
+                                               class="btn btn-sm btn-primary">
+                                                <i class="fa-solid fa-pen-to-square" title="编辑"></i>
+                                            </a>
+                                            {% if brand.status %}
+                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                    <i class="fa-solid fa-arrow-down" title="撤销"></i>
+                                                </a>
+                                            {% else %}
+                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                    <i class="fa-solid fa-arrow-up" title="发布"></i>
+                                                </a>
+                                            {% endif %}
+                                            <a href="#" class="btn btn-sm btn-danger">
+                                                <i class="fa-regular fa-trash-can" title="删除"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            <div class="alert alert-warning" role="alert">
+                                没有商标数据
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        {% if categories %}
+                            <table class="table table-striped table-hover border mt-3">
+                                <thead>
+                                <tr>
+                                    <th colspan="5" scope="col" class="bg-light text-start">
+                                        <span>按剂型分类：</span>
+                                        <span class="float-end">共有 {{ categories|length }} 条剂型数据</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tr class="text-center">
+                                    <th>ID</th>
+                                    <th>剂型</th>
+                                    <th>产品数量</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                {% for category in categories %}
+                                    <tbody>
+                                    <tr class="text-center">
+                                        <td>{{ category.id }}</td>
+                                        <td>{{ category.name }}</td>
+                                        <td>{{ category.products|length }}</td>
+                                        <td>
+                                            <small>
+                                                {% if category.status %}
+                                                    已发布
+                                                {% else %}
+                                                    已下架
+                                                {% endif %}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <a href="{{ url_for('admin.category_edit', category_id=category.id) }}"
+                                               class="btn btn-sm btn-primary">
+                                                <i class="fa-solid fa-pen-to-square" title="编辑"></i>
+                                            </a>
+                                            {% if category.status %}
+                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                    <i class="fa-solid fa-arrow-down" title="撤销"></i>
+                                                </a>
+                                            {% else %}
+                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                    <i class="fa-solid fa-arrow-up" title="发布"></i>
+                                                </a>
+                                            {% endif %}
+                                            <a href="#" class="btn btn-sm btn-danger">
+                                                <i class="fa-regular fa-trash-can" title="删除"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            <div class="alert alert-warning" role="alert">
+                                没有剂型数据
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        {% if subjects %}
+                            <table class="table table-striped table-hover border mt-3">
+                                <thead>
+                                <tr>
+                                    <th colspan="5" scope="col" class="bg-light text-start">
+                                        <span>按功能分类：</span>
+                                        <span class="float-end">共有 {{ subjects|length }} 条功能分类数据</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tr class="text-center">
+                                    <th>ID</th>
+                                    <th>功能分类</th>
+                                    <th>产品数量</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                {% for subject in subjects %}
+                                    <tbody>
+                                    <tr class="text-center">
+                                        <td>{{ subject.id }}</td>
+                                        <td>{{ subject.name }}</td>
+                                        <td>{{ subject.products|length }}</td>
+                                        <td>
+                                            <small>
+                                                {% if subject.status %}
+                                                    已发布
+                                                {% else %}
+                                                    已下架
+                                                {% endif %}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <a href="{{ url_for('admin.subject_edit', subject_id=subject.id) }}"
+                                               class="btn btn-sm btn-primary">
+                                                <i class="fa-solid fa-pen-to-square" title="编辑"></i>
+                                            </a>
+                                            {% if subject.status %}
+                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                    <i class="fa-solid fa-arrow-down" title="撤销"></i>
+                                                </a>
+                                            {% else %}
+                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                    <i class="fa-solid fa-arrow-up" title="发布"></i>
+                                                </a>
+                                            {% endif %}
+                                            <a href="#" class="btn btn-sm btn-danger">
+                                                <i class="fa-regular fa-trash-can" title="删除"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            <div class="alert alert-warning" role="alert">
+                                没有功能分类数据
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

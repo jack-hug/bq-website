@@ -9,6 +9,7 @@ class Category(db.Model):
     __tablename__ = 'category'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False, unique=True)  # 产品分类名称
+    status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
 
     products = db.relationship('Product', back_populates='category')
@@ -24,6 +25,7 @@ class Product(db.Model):
     product_content = db.Column(db.Text)  # 产品页内容
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
     clicks = db.Column(db.Integer, default=0)  # 点击数
+    status = db.Column(db.Boolean, default=True)
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))  # 按剂型分类
     category = db.relationship('Category', back_populates='products')
@@ -56,6 +58,7 @@ class News(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100))
     content = db.Column(db.Text)
+    status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
     clicks = db.Column(db.Integer, default=0)  # 点击数
 
@@ -68,6 +71,7 @@ class NewsCategory(db.Model):
     __tablename__ = 'newscategory'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), unique=True)
+    status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
 
     news = db.relationship('News', back_populates='newscategory')
@@ -78,6 +82,7 @@ class Banner(db.Model):
     __tablename__ = 'banner'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     filename = db.Column(db.String(100))
+    status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
 
 
@@ -96,6 +101,7 @@ class Brand(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))
     filename = db.Column(db.String(100))
+    status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
 
     products = db.relationship('Product', back_populates='brand')
@@ -127,6 +133,7 @@ class Subject(db.Model):
     __tablename__ = 'subject'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))
+    status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
 
     products = db.relationship('Product', back_populates='subject')
