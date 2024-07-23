@@ -12,23 +12,23 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">首页</a></li>
-                        <li class="breadcrumb-item" aria-current="page">新闻管理</li>
-                        <li class="breadcrumb-item active" aria-current="page">新闻列表</li>
+                        <li class="breadcrumb-item" aria-current="page">文章管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">文章列表</li>
                     </ol>
                 </nav>
-                <h4 class="text-center mb-3 mt-3">新闻列表</h4>
+                <h4 class="text-center mb-3 mt-3">文章列表</h4>
                 <hr>
                 <div class="p-3 bg-light border rounded d-flex justify-content-between align-items-center">
                     <div class="row">
                         <div class="col-auto">
-                            <button type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> 添加新闻</button>
+                            <button type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> 添加文章</button>
                         </div>
                         <div class="col-auto">
                             <button type="button" class="btn btn-danger"><i class="fa-solid fa-trash"></i> 批量删除</button>
                         </div>
                         <form class="col-auto row" role="search">
                             <div class="col-md-auto">
-                                <input class="form-control me-2" type="search" placeholder="输入新闻关键字"
+                                <input class="form-control me-2" type="search" placeholder="输入文章关键字"
                                        aria-label="Search">
                             </div>
                             <div class="col-auto">
@@ -37,7 +37,7 @@
                         </form>
                     </div>
                     <div>
-                        <span>共有<strong> {{ news_length }} </strong>条新闻数据</span>
+                        <span>共有<strong> {{ news_length }} </strong>条文章数据</span>
                     </div>
                 </div>
                 {% if news %}
@@ -52,7 +52,7 @@
                             <th>ID</th>
                             <th>标题</th>
                             <th>内容</th>
-                            <th>分类</th>
+                            <th>文章分类</th>
                             <th>发布时间</th>
                             <th>点击数</th>
                             <th>发布状态</th>
@@ -103,7 +103,7 @@
                         </tbody>
                     </table>
                 {% else %}
-                    <h3>没有新闻数据</h3>
+                    <h3>没有文章数据</h3>
                 {% endif %}
                 {% if news %}
                     <div class="pt-2">

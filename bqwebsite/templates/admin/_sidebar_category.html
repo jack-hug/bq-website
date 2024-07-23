@@ -17,14 +17,14 @@
         </div>
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#news-collapse"
            role="button"
-           aria-expanded="false" aria-controls="news-collapse"><i class="fa-solid fa-globe"></i> 新闻管理</a>
+           aria-expanded="false" aria-controls="news-collapse"><i class="fa-solid fa-globe"></i> 文章管理</a>
         <div class="collapse{% if request.endpoint == 'admin.news_list' or request.endpoint == 'admin.news_category_list' %}show{% endif %}"
              id="news-collapse">
             <a class="list-group">
                 <a class="list-group-item {% if request.endpoint == 'admin.news_list' %}active{% endif %}"
-                   href="{{ url_for('admin.news_list') }}">&nbsp;&nbsp;&nbsp;新闻列表</a>
+                   href="{{ url_for('admin.news_list') }}">&nbsp;&nbsp;&nbsp;文章列表</a>
                 <a class="list-group-item {% if request.endpoint == 'admin.news_category_list' %}active{% endif %}"
-                   href="{{ url_for('admin.news_category_list') }}">&nbsp;&nbsp;&nbsp;新闻分类</a>
+                   href="{{ url_for('admin.news_category_list') }}">&nbsp;&nbsp;&nbsp;文章分类</a>
             </a>
         </div>
         <a class="list-group-item" href="#"><i class="fa-solid fa-image"></i> 图片管理</a>
