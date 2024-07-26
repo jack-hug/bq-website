@@ -82,65 +82,65 @@
 
 {% block scripts %}
     {{ super() }}
-    <script type="text/javascript" src="{{ url_for('static', filename='admin/ckeditor/ckeditor.js') }}"></script>
+    <script src="https://cdn.staticfile.net/ckeditor/4.23.0/ckeditor.min.js"></script>
     <script src="https://cdn.staticfile.net/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.staticfile.net/dropzone/5.9.3/dropzone.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            var productId = null;
-            var csrfToken = "{{ csrf_token() }}";
-
-            $('#productForm').on('submit', function (event) {
-                event.preventDefault();
-                var formData = new FormData(this);
-
-                $.ajax({
-                    url: "{{ url_for('admin.product_add') }}",
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        'X-CSRFToken': csrfToken
-                    },
-                    success: function (response) {
-                        productId = response.product_id;
-                        if (productId) {
-                            alert('产品创建成功');
-                            setupDropzone(productId);
-                        } else {
-                            alert('产品创建失败');
-                        }
-                    },
-                    error: function (error) {
-                        alert('产品创建失败: ' + error.responseJSON.msg);
-                    }
-                });
-            });
-
-            function setupDropzone(productId) {
-                var myDropzone = new Dropzone("#myDropzone", {
-                    url: "{{ url_for('admin.upload', product_id='') }}" + productId,
-                    paramName: "file",
-                    maxFilesize: 3, // MB
-                    maxFiles: 10,
-                    acceptedFiles: "image/*",
-                    addRemoveLinks: true,
-                    dictRemoveFile: "删除",
-                    dictDefaultMessage: "将文件拖动到这里或者点击上传，文件大小不得超过3M，文件数量不得超过30个",
-                    headers: {
-                        'X-CSRFToken': csrfToken
-                    },
-                    init: function () {
-                        this.on("success", function (file, response) {
-                            alert(response.msg);
-                        });
-                        this.on("error", function (file, response) {
-                            alert('文件上传失败: ' + response.msg);
-                        });
-                    }
-                });
-            }
-        });
-    </script>
+{#    <script>#}
+{#        $(document).ready(function () {#}
+{#            var productId = null;#}
+{#            var csrfToken = "{{ csrf_token() }}";#}
+{##}
+{#            $('#productForm').on('submit', function (event) {#}
+{#                event.preventDefault();#}
+{#                var formData = new FormData(this);#}
+{##}
+{#                $.ajax({#}
+{#                    url: "{{ url_for('admin.product_add') }}",#}
+{#                    type: 'POST',#}
+{#                    data: formData,#}
+{#                    processData: false,#}
+{#                    contentType: false,#}
+{#                    headers: {#}
+{#                        'X-CSRFToken': csrfToken#}
+{#                    },#}
+{#                    success: function (response) {#}
+{#                        productId = response.product_id;#}
+{#                        if (productId) {#}
+{#                            alert('产品创建成功');#}
+{#                            setupDropzone(productId);#}
+{#                        } else {#}
+{#                            alert('产品创建失败');#}
+{#                        }#}
+{#                    },#}
+{#                    error: function (error) {#}
+{#                        alert('产品创建失败: ' + error.responseJSON.msg);#}
+{#                    }#}
+{#                });#}
+{#            });#}
+{##}
+{#            function setupDropzone(productId) {#}
+{#                var myDropzone = new Dropzone("#myDropzone", {#}
+{#                    url: "{{ url_for('admin.upload', product_id='') }}" + productId,#}
+{#                    paramName: "file",#}
+{#                    maxFilesize: 3, // MB#}
+{#                    maxFiles: 10,#}
+{#                    acceptedFiles: "image/*",#}
+{#                    addRemoveLinks: true,#}
+{#                    dictRemoveFile: "删除",#}
+{#                    dictDefaultMessage: "将文件拖动到这里或者点击上传，文件大小不得超过3M，文件数量不得超过30个",#}
+{#                    headers: {#}
+{#                        'X-CSRFToken': csrfToken#}
+{#                    },#}
+{#                    init: function () {#}
+{#                        this.on("success", function (file, response) {#}
+{#                            alert(response.msg);#}
+{#                        });#}
+{#                        this.on("error", function (file, response) {#}
+{#                            alert('文件上传失败: ' + response.msg);#}
+{#                        });#}
+{#                    }#}
+{#                });#}
+{#            }#}
+{#        });#}
+{#    </script>#}
 {% endblock %}
