@@ -1,5 +1,6 @@
 import random
 
+import click
 from faker import Faker
 from faker.providers import DynamicProvider
 
@@ -35,7 +36,6 @@ fake_products = DynamicProvider(
         '复方丹参片',
         '桂龙药酒',
         '复方鱼腥草颗粒',
-        '复方鱼腥草颗粒',
         '复方双花藤止痒搽剂',
         '藿香正气合剂',
         '穿金益肝片',
@@ -43,7 +43,12 @@ fake_products = DynamicProvider(
         '清感穿心莲片',
         '止咳枇杷颗粒',
         '桂圆琼玉冲剂',
-    ],  # 31 products
+        '伤痛酊',
+        '复方羊角颗粒',
+        '三维葡磷钙咀嚼片',
+        '橘红痰咳颗粒'
+
+    ],  # 34 products
 )
 
 fake.add_provider(fake_products)
@@ -95,13 +100,20 @@ def fake_brand():
         db.session.rollback()
 
 
-def fake_products(count=50):
+def fake_products(count=30):
+    unique_product = set()
     for i in range(count):
+        while True:
+            product_name = fake.products()
+            if product_name not in unique_product:
+                unique_product.add(product_name)
+                click.echo('Generated unique product name: %s' % product_name)
+                break
+
         product = Product(
-            name=fake.products(),
+            name=product_name,
             product_indication=fake.text(50),
-            product_manual=fake.text(100),
-            product_content=fake.text(100),
+            product_content=fake.text(300),
             category=Category.query.get(random.randint(1, Category.query.count())),
             brand=Brand.query.get(random.randint(1, Brand.query.count())),
             subject=Subject.query.get(random.randint(1, Subject.query.count())),

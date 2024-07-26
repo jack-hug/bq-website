@@ -14,7 +14,7 @@
             <script src="https://cdn.staticfile.net/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"></script>
             <!-- Core theme CSS (includes Bootstrap)-->
             <link href="{{ url_for('static',filename = 'admin/css/styles.css') }}" rel="stylesheet"/>
-            <link href="https://cdn.staticfile.net/bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet"/>
+            <link href="https://cdn.staticfile.net/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
         {% endblock %}
     {% endblock %}
 </head>
@@ -66,6 +66,7 @@
 {% block scripts %}
     <script src="https://cdn.staticfile.net/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static',filename = 'js/sb-forms-0.4.1.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'admin/js/scripts.js') }}"></script>
 {% endblock %}
 </body>
 </html>

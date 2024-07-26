@@ -40,6 +40,9 @@ class BaseConfig:
     DROPZONE_FILE_TOO_BIG = '文件过大 {{ filesize }}，文件最大尺寸不得超过{{ maxFilesize }}M'
     DROPZONE_DEFAULT_MESSAGE = '将文件拖动到这里或者点击上传，文件大小不得超过3M，文件数量不得超过30个'
 
+    CKEDITOR_SERVE_LOCAL = True
+    CKEDITOR_HEIGHT = 1500
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'bq-data-dev.db')

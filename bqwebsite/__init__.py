@@ -2,11 +2,12 @@ import click
 import os
 
 from flask import Flask, render_template
+from flask_wtf.csrf import CSRFError
 
 from bqwebsite.blueprints.main import main_bp
 from bqwebsite.blueprints.admin import admin_bp
 from bqwebsite.config import config
-from bqwebsite.extensions import bootstrap, db, csrf, dropzone, login_manager
+from bqwebsite.extensions import bootstrap, db, csrf, dropzone, login_manager, ckeditor
 from bqwebsite.models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
     IntroduceCategory, Admin, Subject, ContactCategory
 
@@ -35,6 +36,7 @@ def register_extensions(app):
     csrf.init_app(app)
     dropzone.init_app(app)
     login_manager.init_app(app)
+    ckeditor.init_app(app)
 
 
 def register_blueprints(app):
@@ -86,6 +88,10 @@ def register_errorhandlers(app):
     def internal_server_error(e):
         return render_template('errors/500.html'), 500
 
+    @app.errorhandler(CSRFError)
+    def handle_csrf_error(e):
+        return render_template('errors/400.html', description=e.description), 400
+
 
 def register_commands(app):
     @app.cli.command()
@@ -99,7 +105,7 @@ def register_commands(app):
         click.echo('Initialized database...')
 
     @app.cli.command()
-    @click.option('--product', default=50, help='Quantity of products, default is 50.')
+    @click.option('--product', default=30, help='Quantity of products, default is 30.')
     @click.option('--news', default=80, help='Quantity of products, default is 50.')
     @click.option('--introduce', default=5, help='Quantity of introduce, default is 5.')
     @click.option('--contact', default=3, help='Quantity of contact, default is 3.')

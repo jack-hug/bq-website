@@ -10,7 +10,7 @@
             <div class="col-md-10">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">首页</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}" class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页</a></li>
                         <li class="breadcrumb-item active" aria-current="page">后台管理面板</li>
                     </ol>
                 </nav>
@@ -21,43 +21,87 @@
                     <table class="table table-hover text-center table-bordered">
                         <thead>
                         <tr>
-                            <th colspan="6" scope="col" class="bg-light text-start">信息统计</th>
+                            <th colspan="5" scope="col" class="bg-light text-start">信息统计</th>
                         </tr>
                         </thead>
                         <thead>
                         <tr>
                             <th scope="col">统计</th>
                             <th scope="col">产品库</th>
-                            <th scope="col">新闻库</th>
+                            <th scope="col">资讯库</th>
                             <th scope="col">图片库</th>
                             <th scope="col">商标库</th>
-                            <th scope="col">荣誉库</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>总数</td>
-                            <td>50</td>
-                            <td>100</td>
-                            <td>200</td>
-                            <td>500</td>
-                            <td>50</td>
+                            <td>
+                                <a href="{{ url_for('admin.product_list') }}"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ product_length }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin.news_list') }}"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ news_length }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ photo_length }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin.category_list') }}"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ brand_length }}
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <td>本月</td>
-                            <td>50</td>
-                            <td>100</td>
-                            <td>200</td>
-                            <td>500</td>
-                            <td>50</td>
+                            <td>
+                                <a href="{{ url_for('admin.product_list') }}"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ product_length }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin.news_list') }}"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ news_length }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ photo_length }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin.category_list') }}"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ brand_length }}
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <td>本年</td>
-                            <td>50</td>
-                            <td>100</td>
-                            <td>200</td>
-                            <td>500</td>
-                            <td>50</td>
+                            <td>
+                                <a href="{{ url_for('admin.product_list') }}"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ product_length }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin.news_list') }}"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ news_length }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ photo_length }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin.category_list') }}"
+                                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ brand_length }}
+                                </a>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

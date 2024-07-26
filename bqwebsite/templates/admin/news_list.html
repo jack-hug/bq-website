@@ -11,7 +11,7 @@
             <div class="col-md-10">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">首页</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}" class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页</a></li>
                         <li class="breadcrumb-item" aria-current="page">文章管理</li>
                         <li class="breadcrumb-item active" aria-current="page">文章列表</li>
                     </ol>
@@ -21,10 +21,12 @@
                 <div class="p-3 bg-light border rounded d-flex justify-content-between align-items-center">
                     <div class="row">
                         <div class="col-auto">
-                            <button type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> 添加文章</button>
+                            <button type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> 添加文章
+                            </button>
                         </div>
                         <div class="col-auto">
-                            <button type="button" class="btn btn-danger"><i class="fa-solid fa-trash"></i> 批量删除</button>
+                            <button type="button" class="btn btn-danger"><i class="fa-solid fa-trash"></i> 批量删除
+                            </button>
                         </div>
                         <form class="col-auto row" role="search">
                             <div class="col-md-auto">
@@ -74,15 +76,15 @@
                                 <td>{{ new.newscategory.name }}</td>
                                 <td>{{ new.timestamp }}</td>
                                 <td>{{ new.clicks }}</td>
-                                <td><small>
-                                    {% if new.status %}
-                                        已发布
-                                        {% else %}
-                                        已下架
-                                    {% endif %}
-                                </small></td>
                                 <td>
-                                    <a href="" class="btn btn-sm btn-secondary">
+                                    {% if new.status %}
+                                        <small class="text-bg-primary p-1 rounded">已发布</small>
+                                    {% else %}
+                                        <small class="text-bg-secondary p-1 rounded">已下架</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="" class="btn btn-sm btn-primary">
                                         <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                     </a>
                                     {% if new.status %}

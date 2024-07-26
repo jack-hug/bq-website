@@ -17,7 +17,7 @@
         </div>
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#news-collapse"
            role="button"
-           aria-expanded="false" aria-controls="news-collapse"><i class="fa-solid fa-globe"></i> 文章管理</a>
+           aria-expanded="false" aria-controls="news-collapse"><i class="fa-solid fa-globe"></i> 邦资讯管理</a>
         <div class="collapse{% if request.endpoint == 'admin.news_list' or request.endpoint == 'admin.news_category_list' %}show{% endif %}"
              id="news-collapse">
             <a class="list-group">
@@ -27,9 +27,24 @@
                    href="{{ url_for('admin.news_category_list') }}">&nbsp;&nbsp;&nbsp;文章分类</a>
             </a>
         </div>
-        <a class="list-group-item" href="#"><i class="fa-solid fa-image"></i> 图片管理</a>
-        <a class="list-group-item" href="#"><i class="fa-solid fa-barcode"></i> 商标管理</a>
-        <a class="list-group-item" href="#"><i class="fa-solid fa-compass"></i> 荣誉管理</a>
+        <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#photos-collapse"
+           role="button"
+           aria-expanded="false" aria-controls="news-collapse"><i class="fa-solid fa-image"></i> 图片管理</a>
+        <div class="collapse{% if request.endpoint == 'admin.banner_photo_list' or request.endpoint == 'admin.scroll_photo_list' or request.endpoint == 'admin.category_photo_list' %}show{% endif %}"
+             id="photos-collapse">
+            <a class="list-group">
+                <a class="list-group-item {% if request.endpoint == 'admin.banner_photo_list' %}active{% endif %}"
+                   href="{{ url_for('admin.banner_photo_list') }}">&nbsp;&nbsp;&nbsp;Banner轮播图片</a>
+                <a class="list-group-item {% if request.endpoint == 'admin.scroll_photo_list' %}active{% endif %}"
+                   href="{{ url_for('admin.scroll_photo_list') }}">&nbsp;&nbsp;&nbsp;首页滚动图片</a>
+                <a class="list-group-item {% if request.endpoint == 'admin.category_photo_list' %}active{% endif %}"
+                   href="{{ url_for('admin.category_photo_list') }}">&nbsp;&nbsp;&nbsp;首页剂型图片</a>
+                <a class="list-group-item {% if request.endpoint == 'admin.index_photo_list' %}active{% endif %}"
+                   href="{{ url_for('admin.index_photo_list') }}">&nbsp;&nbsp;&nbsp;首页其他图片</a>
+            </a>
+        </div>
+        <a class="list-group-item" href="{{ url_for('admin.introduce_list') }}"><i class="fa-solid fa-building-user"></i> 公司介绍设置</a>
+        <a class="list-group-item" href="#"><i class="fa-solid fa-phone"></i>  联系我们设置</a>
         <a class="list-group-item" href="#"><i class="fa-solid fa-user"></i> 管理员设置</a>
         <a class="list-group-item" href="#"><i class="fa-solid fa-gear"></i> 网站设置</a>
     </ul>

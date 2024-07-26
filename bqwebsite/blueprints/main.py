@@ -68,7 +68,7 @@ def news():
 def product():
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
-    pagination = Product.query.order_by(Product.timestamp.desc()).paginate(page=page, per_page=per_page)
+    pagination = Product.query.filter(Product.status == True).order_by(Product.timestamp.desc()).paginate(page=page, per_page=per_page)
     products = pagination.items
     return render_template('main/products.html', products=products, pagination=pagination)
 

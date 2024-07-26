@@ -21,7 +21,7 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))  # 品名
     product_indication = db.Column(db.String(200))  # 功能主治
-    product_manual = db.Column(db.Text)  # 说明书
+    # product_manual = db.Column(db.Text)  # 说明书
     product_content = db.Column(db.Text)  # 产品页内容
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
     clicks = db.Column(db.Integer, default=0)  # 点击数
@@ -46,7 +46,7 @@ class Photo(db.Model):
     filename = db.Column(db.String(128))   # 600*800 上传图片裁剪后尺寸
     filename_s = db.Column(db.String(128))  # 300*400 产品中心缩略图
     filename_m = db.Column(db.String(128))  # 450*600 首页分类及缩略图
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
     product = db.relationship('Product', back_populates='photos')

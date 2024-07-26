@@ -11,7 +11,7 @@
             <div class="col-md-10">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">首页</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}"class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页</a></li>
                         <li class="breadcrumb-item" aria-current="page">文章管理</li>
                         <li class="breadcrumb-item active" aria-current="page">文章分类</li>
                     </ol>
@@ -44,13 +44,11 @@
                                         <td>{{ news_category.name }}</td>
                                         <td>{{ news_category.news|length }}</td>
                                         <td>
-                                            <small>
-                                                {% if news_category.status %}
-                                                    已发布
-                                                {% else %}
-                                                    已下架
-                                                {% endif %}
-                                            </small>
+                                            {% if news_category.status %}
+                                                <small class="text-bg-primary p-1 rounded">已发布</small>
+                                            {% else %}
+                                                <small class="text-bg-secondary p-1 rounded">已下架</small>
+                                            {% endif %}
                                         </td>
                                         <td>
                                             <a href="{{ url_for('admin.news_category_edit', news_category_id=news_category.id) }}"

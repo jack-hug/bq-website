@@ -11,7 +11,7 @@
             <div class="col-md-10">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">首页</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}" class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页</a></li>
                         <li class="breadcrumb-item" aria-current="page">产品管理</li>
                         <li class="breadcrumb-item active" aria-current="page">产品分类管理</li>
                     </ol>
@@ -61,13 +61,11 @@
                                         <td>{{ brand.name }}</td>
                                         <td>{{ brand.products|length }}</td>
                                         <td>
-                                            <small>
-                                                {% if brand.status %}
-                                                    已发布
-                                                {% else %}
-                                                    已下架
-                                                {% endif %}
-                                            </small>
+                                    {% if brand.status %}
+                                        <small class="text-bg-primary p-1 rounded">已发布</small>
+                                    {% else %}
+                                        <small class="text-bg-secondary p-1 rounded">已下架</small>
+                                    {% endif %}
                                         </td>
                                         <td>
                                             <a href="{{ url_for('admin.brand_edit', brand_id=brand.id) }}"

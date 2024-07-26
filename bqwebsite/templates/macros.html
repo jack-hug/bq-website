@@ -6,3 +6,18 @@
         <a href="{{ url_for(endpoint, **kwargs) }}">{{ text }}</a>
     </a>
 {% endmacro %}
+
+{# 表单渲染宏 #}
+{% macro render_field(field) -%}
+    <div class="form-group">
+        {{ field.label }}
+        {{ field(class='form-control', **kwargs) }}
+        {% if field.errors %}
+            <ul class="alert-error">
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endmacro %}

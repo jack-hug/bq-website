@@ -1,6 +1,7 @@
 import os
 import uuid
 from urllib.parse import urlparse, urljoin
+from bqwebsite.models import Photo
 
 import PIL
 from PIL import Image
@@ -12,6 +13,7 @@ def is_safe_url(target):
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
+
 def redirect_back(default='main.index', **kwargs):
     for target in request.args.get('next'), request.referrer:
         if not target:
@@ -20,10 +22,12 @@ def redirect_back(default='main.index', **kwargs):
             return redirect(target)
         return redirect(url_for(default, **kwargs))
 
+
 def random_filename(filename):
     ext = os.path.splitext(filename)[1]
     new_filename = uuid.uuid4().hex + ext
     return new_filename
+
 
 def resize_image(image, filename, base_width):
     filename, ext = os.path.splitext(filename)
@@ -37,3 +41,20 @@ def resize_image(image, filename, base_width):
     filename += current_app.config['BQ_PHOTO_SUFFIX'][base_width] + ext
     img.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
     return filename
+
+
+def save_uploaded_files(request_files, product_id):  # 封装上传图片函数
+    photos = []
+    for f in request_files.getlist('file'):
+        filename = random_filename(f.filename)
+        f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
+        filename_s = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['small'])
+        filename_m = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['medium'])
+        photo = Photo(
+            filename=filename,
+            filename_s=filename_s,
+            filename_m=filename_m,
+            product_id=product_id
+        )
+        photos.append(photo)
+    return photos
