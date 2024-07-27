@@ -32,16 +32,13 @@ class BaseConfig:
     SECRET_KEY = os.getenv('SECRET_KEY', 'jackhunghuangbqwebguangwang')
     MAX_CONTENT_LENGTH = 3 * 1024 * 1024
 
-    DROPZONE_MAX_FILE_SIZE = 3
-    DROPZONE_MAX_FILES = 30
-    DROPZONE_ALLOWED_FILE_TYPE = 'image'
-    DROPZONE_ENABLE_CSRF = True
-    DROPZONE_INVALID_FILE_TYPE = '文件类型错误，请使用.jpg或者.png格式'
-    DROPZONE_FILE_TOO_BIG = '文件过大 {{ filesize }}，文件最大尺寸不得超过{{ maxFilesize }}M'
-    DROPZONE_DEFAULT_MESSAGE = '将文件拖动到这里或者点击上传，文件大小不得超过3M，文件数量不得超过30个'
-
-    CKEDITOR_SERVE_LOCAL = True
-    CKEDITOR_HEIGHT = 1500
+    # DROPZONE_MAX_FILE_SIZE = 3
+    # DROPZONE_MAX_FILES = 30
+    # DROPZONE_ALLOWED_FILE_TYPE = 'image'
+    # DROPZONE_ENABLE_CSRF = True
+    # DROPZONE_INVALID_FILE_TYPE = '文件类型错误，请使用.jpg或者.png格式'
+    # DROPZONE_FILE_TOO_BIG = '文件过大 {{ filesize }}，文件最大尺寸不得超过{{ maxFilesize }}M'
+    # DROPZONE_DEFAULT_MESSAGE = '将文件拖动到这里或者点击上传，文件大小不得超过3M，文件数量不得超过30个'
 
 
 class DevelopmentConfig(BaseConfig):
