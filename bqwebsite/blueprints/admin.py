@@ -86,8 +86,12 @@ def product_add():
         db.session.add(product)
         db.session.commit()
 
-        product_id = product.id
-        return jsonify({'product_id': product_id}), 200
+        if 'file' in request.files:
+            photos = save_uploaded_files(request.files, product.id)
+            db.session.add_all(photos)
+            db.session.commit()
+        flash('添加成功.', 'success')
+        return redirect(url_for('admin.product_list'))
     return render_template('admin/product_add.html', form=form)
 
 

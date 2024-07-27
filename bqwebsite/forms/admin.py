@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, FileField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
 from bqwebsite.models import Category, Brand, Subject, Product
 from flask_ckeditor import CKEditorField
@@ -19,6 +19,7 @@ class ProductForm(FlaskForm):
     subject = SelectField('功能主治:', coerce=int, default=1)
     product_indication = StringField('功能主治:', validators=[DataRequired(), Length(1, 1024)])
     product_content = CKEditorField('产品内容:', validators=[DataRequired()])
+    photos = FileField('产品图片:', validators=[DataRequired()])
     submit = SubmitField('提交')
 
     def __init__(self, *args, **kwargs):
