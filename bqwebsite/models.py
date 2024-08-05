@@ -1,3 +1,7 @@
+import os
+
+from flask import current_app
+from sqlalchemy import event
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from bqwebsite.extensions import db
@@ -36,20 +40,28 @@ class Product(db.Model):
     subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))  # 按功能分类
     subject = db.relationship('Subject', back_populates='products')
 
-    photos = db.relationship('Photo', back_populates='product', cascade='all')
+    photos = db.relationship('Photo', back_populates='product', lazy='dynamic', cascade='all, delete-orphan')
 
 
 class Photo(db.Model):
     # 图片
     __tablename__ = 'photo'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    filename = db.Column(db.String(128))   # 600*800 上传图片裁剪后尺寸
-    filename_s = db.Column(db.String(128))  # 300*400 产品中心缩略图
-    filename_m = db.Column(db.String(128))  # 450*600 首页分类及缩略图
+    filename = db.Column(db.String(256), unique=True)   # 600*800 上传图片裁剪后尺寸
+    filename_s = db.Column(db.String(256), unique=True)  # 300*400 产品中心缩略图
+    filename_m = db.Column(db.String(256), unique=True)  # 450*600 首页分类及缩略图
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
     product = db.relationship('Product', back_populates='photos')
+
+    def delete_photos(self):
+        upload_path = current_app.config['BQ_UPLOAD_PATH']
+        for filename in [self.filename, self.filename_s, self.filename_m]:
+            if filename:
+                file_path = os.path.join(upload_path, filename)
+                if os.path.exists(file_path):
+                    os.remove(file_path)
 
 
 class News(db.Model):
@@ -171,5 +183,10 @@ class ContactCategory(db.Model):
     name = db.Column(db.String(100))
 
     contacts = db.relationship('Contact', back_populates='contact_category')
+
+
+@event.listens_for(Photo, 'after_delete')
+def delete_photo_files(mapper, connection, target):
+    target.delete_photos()
 
 

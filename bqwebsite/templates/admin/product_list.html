@@ -11,8 +11,9 @@
             <div class="col-md-10">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}" class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页</a></li>
-                        <li class="breadcrumb-item" aria-current="page">产品管理</li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}"
+                                                       class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页</a>
+                        </li>
                         <li class="breadcrumb-item active" aria-current="page">产品列表</li>
                     </ol>
                 </nav>
@@ -21,7 +22,8 @@
                 <div class="p-3 bg-light border rounded d-flex justify-content-between align-items-center">
                     <div class="row">
                         <div class="col-auto">
-                            <a type="button" class="btn btn-primary" href="{{ url_for('admin.product_add') }}"><i class="fa-solid fa-plus"></i> 添加产品
+                            <a type="button" class="btn btn-primary" href="{{ url_for('admin.product_add') }}"><i
+                                    class="fa-solid fa-plus"></i> 添加产品
                             </a>
                         </div>
                         <div class="col-auto">
@@ -45,7 +47,7 @@
                 {% if products %}
                     <table class="table table-striped border mt-3 text-center" id="productTable">
                         <thead>
-                        <tr class="">
+                        <tr class="align-middle">
                             <th>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="all_products_check">
@@ -64,7 +66,7 @@
                         </thead>
                         <tbody>
                         {% for product in products %}
-                            <tr>
+                            <tr class="align-middle">
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value=""
@@ -72,12 +74,21 @@
                                     </div>
                                 </td>
                                 <td>{{ loop.index + ((pagination.page - 1) * config.BQ_PRODUCT_PER_PAGE) }}</td>
-                                <td>缩略图</td>
+                                <td>
+                                    {% set photo = product.photos|first %}
+                                    {% if photo %}
+                                        <img src="{{ url_for('admin.get_image', filename=photo.filename_s) }}"
+                                             alt="{{ product.name }}">
+                                    {% else %}
+                                        <p>暂无图片</p>
+                                    {% endif %}
+                                </td>
                                 <td>
                                     <a href="{{ url_for('main.show_product', product_id=product.id) }}"
-                                       class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" target="_blank">{{ product.name }}</a>
+                                       class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                       target="_blank">{{ product.name }}</a>
                                 </td>
-                                <td style="width:600px;">{{ product.product_indication }}</td>
+                                <td style="width:600px;"><p class="text-start">{{ product.product_indication }}</p></td>
                                 <td>{{ product.category.name }}</td>
                                 <td>{{ product.brand.name }}</td>
                                 <td>{{ product.subject.name }}</td>
@@ -94,17 +105,21 @@
                                         <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                     </a>
                                     {% if product.status %}
-                                        <a href="{{ url_for('admin.product_status', product_id=product.id, next=request.full_path) }}" class="btn btn-sm btn-secondary">
+                                        <a href="{{ url_for('admin.product_status', product_id=product.id, next=request.full_path) }}"
+                                           class="btn btn-sm btn-secondary">
                                             <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                         </a>
                                     {% else %}
-                                        <a href="{{ url_for('admin.product_status', product_id=product.id, next=request.full_path) }}" class="btn btn-sm btn-warning">
+                                        <a href="{{ url_for('admin.product_status', product_id=product.id, next=request.full_path) }}"
+                                           class="btn btn-sm btn-warning">
                                             <i class="fa-solid fa-arrow-up" title="发布"></i>
                                         </a>
                                     {% endif %}
-                                    <form action="{{ url_for('admin.product_delete', product_id=product.id, next=request.full_path) }}" class="d-inline" method="post">
+                                    <form action="{{ url_for('admin.product_delete', product_id=product.id, next=request.full_path) }}"
+                                          class="d-inline" method="post">
                                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('确定要删除吗？')">
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('确定要删除吗？')">
                                             <i class="fa-regular fa-trash-can" title="删除"></i>
                                         </button>
                                     </form>

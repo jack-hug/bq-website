@@ -86,8 +86,8 @@ def product_add():
         db.session.add(product)
         db.session.commit()
 
-        if 'file' in request.files:
-            photos = save_uploaded_files(request.files, product.id)
+        if 'photos' in request.files and request.files['photos'].filename != '':
+            photos = save_uploaded_files(request.files, product)
             db.session.add_all(photos)
             db.session.commit()
         flash('添加成功.', 'success')
@@ -95,22 +95,8 @@ def product_add():
     return render_template('admin/product_add.html', form=form)
 
 
-@admin_bp.route('/product/<int:product_id>/upload', methods=['POST'])  # 上传图片
-@login_required
-def upload(product_id):
-    if 'file' in request.files:
-        try:
-            photos = save_uploaded_files(request.files, product_id)
-            db.session.add_all(photos)
-            db.session.commit()
-            return jsonify({'msg': '文件上传成功'}), 200
-        except Exception as e:
-            return jsonify({'msg': f'文件上传失败: {str(e)}'}), 500
-    else:
-        return jsonify({'msg': '没有图片上传'}), 400
 
-
-@admin_bp.route('/uploads/<int:filename>')  # 获得上传图片
+@admin_bp.route('/uploads/<path:filename>')  # 获得上传图片
 @login_required
 def get_image(filename):
     return send_from_directory(current_app.config['BQ_UPLOAD_PATH'], filename)

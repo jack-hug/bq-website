@@ -21,8 +21,8 @@ class BaseConfig:
     BQ_SEARCH_RESULT_PER_PAGE = 30
     BQ_UPLOAD_PATH = os.path.join(basedir, 'uploads')
     BQ_PHOTO_SIZE = {
-        'small': 300,
-        'medium': 450
+        'small': 100,
+        'medium': 800
     }
     BQ_PHOTO_SUFFIX = {
         BQ_PHOTO_SIZE['small']: '_s',
@@ -31,6 +31,8 @@ class BaseConfig:
 
     SECRET_KEY = os.getenv('SECRET_KEY', 'jackhunghuangbqwebguangwang')
     MAX_CONTENT_LENGTH = 3 * 1024 * 1024
+
+    CKEDITOR_SERVE_LOCAL = True
 
     # DROPZONE_MAX_FILE_SIZE = 3
     # DROPZONE_MAX_FILES = 30

@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, FileField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
 from bqwebsite.models import Category, Brand, Subject, Product
 from flask_ckeditor import CKEditorField
@@ -13,13 +14,13 @@ class LoginForm(FlaskForm):
 
 
 class ProductForm(FlaskForm):
-    name = StringField('产品名称:', validators=[DataRequired(), Length(1, 128)])
+    name = StringField('产品名称:', validators=[DataRequired(), Length(1, 128)], render_kw={'placeholder': '请输入产品名称'})
     category = SelectField('产品分类:', coerce=int, default=1)
     brand = SelectField('商标:', coerce=int, default=1)
     subject = SelectField('功能主治:', coerce=int, default=1)
     product_indication = StringField('功能主治:', validators=[DataRequired(), Length(1, 1024)])
     product_content = CKEditorField('产品内容:', validators=[DataRequired()])
-    photos = FileField('产品图片:', validators=[DataRequired()])
+    photos = FileField('产品图片:', validators=[FileAllowed(['jpg', 'png', 'gif'], '只能上传图片')])
     submit = SubmitField('提交')
 
     def __init__(self, *args, **kwargs):
@@ -30,7 +31,7 @@ class ProductForm(FlaskForm):
 
     def validate_name(self, field):
         if Product.query.filter_by(name=field.data).first():
-            raise ValidationError('该产品已存在')
+            raise ValidationError('该产品已存在，可以在产品后添加规格以作区分')
 
 class CategoryForm(FlaskForm):
     name = StringField('剂型名称', validators=[DataRequired(), Length(1, 128)])
