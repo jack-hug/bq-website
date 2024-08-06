@@ -1,13 +1,7 @@
 {% extends 'admin_base.html' %}
-{% from 'macros.html' import render_field %}
-{% from 'bootstrap5/form.html' import render_form %}
 
 {% block title %}
     后台管理面板-添加产品
-{% endblock %}
-
-{% block styles %}
-    {{ super() }}
 {% endblock %}
 
 {% block content %}
@@ -32,8 +26,6 @@
                 </nav>
                 <h4 class="text-center mb-3 mt-3">添加产品</h4>
                 <hr>
-                {#                {{ render_form(form) }}#}
-                {#                {{ ckeditor.load() }}#}
                 <form method="POST" enctype="multipart/form-data" class="form" id="productForm">
                     {{ form.hidden_tag() }}
                     <div class="mb-3">
@@ -56,11 +48,12 @@
                         {{ form.product_indication.label(class="form-label") }}
                         {{ form.product_indication(class="form-control") }}
                     </div>
-                    <div class="mb-3">
+                    <p class="mb-3">
                         {{ form.product_content.label(class="form-label") }}
                         {{ form.product_content(class="form-control") }}
-                        {{ ckeditor.load() }}
-                    </div>
+                        {{ ckeditor.load(custom_url=url_for('static', filename='admin/ckeditor/ckeditor.js')) }}
+                        {{ ckeditor.config(name='product_content') }}
+                    </p>
                     <div class="mb-3">
                         {{ form.photos.label(class="form-label") }}
                         {{ form.photos(class="form-control", multiple=True, onchange="validateFiles(this)") }}
@@ -69,12 +62,8 @@
                         {{ form.submit(class="btn btn-primary btn-md") }}
                     </div>
                 </form>
+                {{ ckeditor.config(name='product_content') }}
             </div>
-        </div>
-    </div>
-    <div class="row mb-5">
-        <div class="col-md-6 offset-md-3">
-
         </div>
     </div>
 {% endblock %}

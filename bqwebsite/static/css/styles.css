@@ -12899,3 +12899,7 @@ ol, ul {
     -webkit-transition-delay: .1s;
     transition-delay: .1s;
 }
+
+.nav-link.active {
+    font-weight: bold;
+}

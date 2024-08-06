@@ -7,7 +7,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 
 from bqwebsite.extensions import db
 from bqwebsite.models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
-from bqwebsite.forms.admin import LoginForm, ProductForm
+from bqwebsite.forms.admin import LoginForm, ProductForm, EditProductForm
 from bqwebsite.utils import random_filename, resize_image, redirect_back, save_uploaded_files
 
 admin_bp = Blueprint('admin', __name__)
@@ -95,6 +95,35 @@ def product_add():
     return render_template('admin/product_add.html', form=form)
 
 
+@admin_bp.route('/product_edit/<int:product_id>', methods=['GET', 'POST'])  # 编辑产品
+@login_required
+def product_edit(product_id):
+    product = Product.query.get_or_404(product_id)
+    form = EditProductForm(product=product)
+    if form.validate_on_submit():
+        product.name = form.name.data
+        product.product_content = form.product_content.data
+        product.product_indication = form.product_indication.data
+        product.category_id = form.category.data
+        product.brand_id = form.brand.data
+        product.subject_id = form.subject.data
+        if 'photos' in request.files and request.files['photos'].filename != '':
+            photos = save_uploaded_files(request.files, product)
+            db.session.add_all(photos)
+            db.session.commit()
+        db.session.commit()
+        flash('修改成功.', 'success')
+        return redirect(url_for('admin.product_list'))
+    elif form.cancel.data:
+        return redirect(url_for('admin.product_list'))
+    form.name.data = product.name
+    form.product_content.data = product.product_content
+    form.product_indication.data = product.product_indication
+    form.category.data = product.category_id
+    form.brand.data = product.brand_id
+    form.subject.data = product.subject_id
+    return render_template('admin/product_edit.html', product=product, form=form)
+
 
 @admin_bp.route('/uploads/<path:filename>')  # 获得上传图片
 @login_required
@@ -107,13 +136,6 @@ def check_product_name():
     name = request.args.get('name')
     exists = Product.query.filter_by(name=name).first() is not None
     return jsonify(exists=exists)
-
-
-@admin_bp.route('/product_edit/<int:product_id>', methods=['GET', 'POST'])  # 编辑产品
-@login_required
-def product_edit(product_id):
-    product_id = Product.query.get_or_404(product_id)
-    return render_template('admin/product_edit.html', product_id=product_id)
 
 
 @admin_bp.route('/product_delete/<int:product_id>', methods=['POST'])  # 删除产品

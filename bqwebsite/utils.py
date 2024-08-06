@@ -3,8 +3,8 @@ import uuid
 from urllib.parse import urlparse, urljoin
 from bqwebsite.models import Photo
 
-import PIL
-from PIL import Image
+from PIL import Image, ImageDraw
+import random
 from flask import request, redirect, url_for, current_app, flash
 
 
@@ -78,8 +78,10 @@ def save_uploaded_files(request_files, product):  # 封装上传图片函数
         f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
         # filename_s = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['small'])
         # filename_m = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['medium'])
-        filename_s = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['small'], current_app.config['BQ_PHOTO_SIZE']['small'])
-        filename_m = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['medium'], current_app.config['BQ_PHOTO_SIZE']['medium'])
+        filename_s = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['small'],
+                                  current_app.config['BQ_PHOTO_SIZE']['small'])
+        filename_m = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['medium'],
+                                  current_app.config['BQ_PHOTO_SIZE']['medium'])
         photo = Photo(
             filename=filename,
             filename_s=filename_s,
@@ -88,3 +90,21 @@ def save_uploaded_files(request_files, product):  # 封装上传图片函数
         )
         photos.append(photo)
     return photos
+
+
+def generate_gradient_image(width, height, filename):  # 生成随机渐变图片
+    img = Image.new(mode='RGB', size=(width, height), color=(0, 0, 0))
+    draw = ImageDraw.Draw(img)
+
+    # Define the gradient colors
+    start_color = (random.randint(128, 255), random.randint(128, 255), random.randint(128, 255))
+    end_color = (random.randint(128, 255), random.randint(128, 255), random.randint(128, 255))
+
+    for y in range(height):
+        r = int(start_color[0] + (end_color[0] - start_color[0]) * (y / height))
+        g = int(start_color[1] + (end_color[1] - start_color[1]) * (y / height))
+        b = int(start_color[2] + (end_color[2] - start_color[2]) * (y / height))
+        draw.line([(0, y), (width, y)], fill=(r, g, b))
+
+    upload_path = current_app.config['BQ_UPLOAD_PATH']
+    img.save(os.path.join(upload_path, filename))

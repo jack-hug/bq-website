@@ -9,3 +9,4 @@
 .list-group-item.has-submenu:not(.collapsed)::after {
     content: ' \25B4'; /* Unicode for up arrow */
 }
+

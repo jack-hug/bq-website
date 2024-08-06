@@ -1,10 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'admin_base.html' %}
 
-</body>
-</html>
+{% block title %}
+    后台管理面板-编辑产品
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('admin.index') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a href="{{ url_for('admin.product_list') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">产品列表
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">编辑产品</li>
+                    </ol>
+                </nav>
+                <h4 class="text-center mb-3 mt-3">编辑产品</h4>
+                <hr>
+                <form method="POST" enctype="multipart/form-data" class="form" id="productForm">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.category.label(class="form-label") }}
+                        {{ form.category(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.brand.label(class="form-label") }}
+                        {{ form.brand(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.subject.label(class="form-label") }}
+                        {{ form.subject(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.product_indication.label(class="form-label") }}
+                        {{ form.product_indication(class="form-control") }}
+                    </div>
+
+                        {{ form.product_content.label(class="form-label") }}
+                        {{ form.product_content(class="form-control") }}
+                        {{ ckeditor.load(custom_url=url_for('static', filename='admin/ckeditor/ckeditor.js')) }}
+                        {{ ckeditor.config(name='product_content') }}
+
+                    <div class="mb-3">
+                        {{ form.photos.label(class="form-label") }}
+                        {{ form.photos(class="form-control", multiple=True, onchange="validateFiles(this)") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.submit(class="btn btn-primary btn-md") }}
+                        {{ form.cancel(class="btn btn-secondary btn-md") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        function validateFiles(input) {
+            const maxSize = 3 * 1024 * 1024; // 3MB
+            const files = input.files;
+            for (let i = 0; i < files.length; i++) {
+                if (files[i].size > maxSize) {
+                    alert(`文件 ${files[i].name} 过大，上传的文件大小不能超过3MB`);
+                    input.value = ""; // Clear the input
+                    return;
+                }
+            }
+        }
+    </script>
+{% endblock %}
+

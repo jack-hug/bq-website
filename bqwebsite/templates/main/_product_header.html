@@ -6,7 +6,23 @@
     <div class="container">
         <nav aria-label="breadcrumb" class="mb-2 mt-2 bg-light fw-bolder">
             <ol class="breadcrumb p-1">
-                <li class="breadcrumb-item active" aria-current="page">产品中心</li>
+
+                {% if request.view_args.get('brand') %}
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}">产品中心</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ request.view_args.get('brand') }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">全部产品</li>
+                {% elif request.view_args.get('category') %}
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}">产品中心</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ request.view_args.get('category') }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">全部产品</li>
+                {% elif request.view_args.get('subject') %}
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}">产品中心</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ request.view_args.get('subject') }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">全部产品</li>
+                {% else %}
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}">产品中心</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">全部产品</li>
+                {% endif %}
             </ol>
         </nav>
         <div class="border-1" id="product-category">
@@ -18,7 +34,8 @@
 
                 {% for brand in brands %}
                     <li class="nav-item">
-                        <a href="{{ url_for('main.product_brand', brand=brand.name) }}" class="nav-link">{{ brand.name }}</a>
+                        <a href="{{ url_for('main.product_brand', brand=brand.name) }}"
+                           class="nav-link {% if request.view_args.get('brand') == brand.name %}active{% endif %}">{{ brand.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -29,7 +46,8 @@
                 </li>
                 {% for category in categories %}
                     <li class="nav-item">
-                        <a href="{{ url_for('main.product_category', category=category.name) }}" class="nav-link">{{ category.name }}</a>
+                        <a href="{{ url_for('main.product_category', category=category.name) }}"
+                           class="nav-link {% if request.view_args.get('category') == category.name %}active{% endif %}">{{ category.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -40,7 +58,8 @@
                 </li>
                 {% for subject in subjects %}
                     <li class="nav-item">
-                        <a href="{{ url_for('main.product_subject', subject=subject.name) }}" class="nav-link">{{ subject.name }}</a>
+                        <a href="{{ url_for('main.product_subject', subject=subject.name) }}"
+                           class="nav-link {% if request.view_args.get('subject') == subject.name %}active{% endif %}">{{ subject.name }}</a>
                     </li>
                 {% endfor %}
 

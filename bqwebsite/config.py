@@ -22,7 +22,7 @@ class BaseConfig:
     BQ_UPLOAD_PATH = os.path.join(basedir, 'uploads')
     BQ_PHOTO_SIZE = {
         'small': 100,
-        'medium': 800
+        'medium': 400
     }
     BQ_PHOTO_SUFFIX = {
         BQ_PHOTO_SIZE['small']: '_s',
@@ -32,7 +32,11 @@ class BaseConfig:
     SECRET_KEY = os.getenv('SECRET_KEY', 'jackhunghuangbqwebguangwang')
     MAX_CONTENT_LENGTH = 3 * 1024 * 1024
 
+    CKEDITOR_ENABLE_CSRF = True
     CKEDITOR_SERVE_LOCAL = True
+    CKEDITOR_PKG_TYPE = 'standard'
+    CKEDITOR_HEIGHT = 400
+    # CKEDITOR_FILE_UPLOADER = 'admin.upload_image'
 
     # DROPZONE_MAX_FILE_SIZE = 3
     # DROPZONE_MAX_FILES = 30

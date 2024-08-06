@@ -120,7 +120,7 @@ def product_previous(product_id):
     product_p = Product.query.with_parent(product_p_detail.category).filter(Product.timestamp > product_p_detail.timestamp).order_by(Product.timestamp.asc()).first()
 
     if product_p is None:
-        flash('已经是最新一篇文章', 'info')
+        flash('已经是最后一个', 'info')
         return redirect(url_for('main.show_product', product_id=product_id))
     return redirect(url_for('main.show_product', product_id=product_p.id))
 
@@ -128,7 +128,11 @@ def product_previous(product_id):
 @main_bp.route('/product_detail/<int:product_id>')  # 产品详细页面
 def show_product(product_id):
     product = Product.query.get_or_404(product_id)
-    return render_template('main/product_detail.html', product=product)
+    # 获取上一个品种
+    product_p = Product.query.with_parent(product.category).filter(Product.timestamp < product.timestamp).order_by(Product.timestamp.desc()).first()
+    # 获取下一个品种
+    product_n = Product.query.with_parent(product.category).filter(Product.timestamp > product.timestamp).order_by(Product.timestamp.asc()).first()
+    return render_template('main/product_detail.html', product=product, product_p=product_p, product_n=product_n)
 
 
 # @main_bp.route('/introduce-category/<int:intro_category_id>')

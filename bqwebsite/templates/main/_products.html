@@ -6,8 +6,14 @@
                     {% for product in products %}
                         <div class="col-md-3 col-sm-6 mb-5">
                             <div class="product_hover_effect">
-                                <img src="{{ url_for('static', filename = 'assets/img/portfolio/gaoji.png') }}"
-                                     alt="" class="img-fluid rounded">
+                                {% set photo = product.photos|first %}
+                                {% if photo %}
+                                    <img src="{{ url_for('admin.get_image', filename=photo.filename_m) }}"
+                                         alt="{{ product.name }}" class="img-fluid rounded">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename = 'assets/default.jpg') }}"
+                                         alt="No photos." class="img-fluid rounded">
+                                {% endif %}
                                 <div class="overlay">
                                     <h2 class="mt-5">{{ product.name }}</h2>
                                     <p class="">

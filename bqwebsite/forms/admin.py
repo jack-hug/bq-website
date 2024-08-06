@@ -14,7 +14,8 @@ class LoginForm(FlaskForm):
 
 
 class ProductForm(FlaskForm):
-    name = StringField('产品名称:', validators=[DataRequired(), Length(1, 128)], render_kw={'placeholder': '请输入产品名称'})
+    name = StringField('产品名称:', validators=[DataRequired(), Length(1, 128)],
+                       render_kw={'placeholder': '请输入产品名称'})
     category = SelectField('产品分类:', coerce=int, default=1)
     brand = SelectField('商标:', coerce=int, default=1)
     subject = SelectField('功能主治:', coerce=int, default=1)
@@ -32,6 +33,25 @@ class ProductForm(FlaskForm):
     def validate_name(self, field):
         if Product.query.filter_by(name=field.data).first():
             raise ValidationError('该产品已存在，可以在产品后添加规格以作区分')
+
+
+class EditProductForm(FlaskForm):
+    name = StringField('产品名称:', validators=[DataRequired(), Length(1, 128)])
+    category = SelectField('产品分类:', coerce=int, default=1)
+    brand = SelectField('商标:', coerce=int, default=1)
+    subject = SelectField('功能主治:', coerce=int, default=1)
+    product_indication = StringField('功能主治:', validators=[DataRequired(), Length(1, 1024)])
+    product_content = CKEditorField('产品内容:', validators=[DataRequired()])
+    photos = FileField('产品图片:', validators=[FileAllowed(['jpg', 'png', 'gif'], '只能上传图片')])
+    submit = SubmitField('确认修改')
+    cancel = SubmitField('取消')
+
+    def __init__(self, *args, **kwargs):
+        super(EditProductForm, self).__init__(*args, **kwargs)
+        self.category.choices = [(category.id, category.name) for category in Category.query.all()]
+        self.brand.choices = [(brand.id, brand.name) for brand in Brand.query.all()]
+        self.subject.choices = [(subject.id, subject.name) for subject in Subject.query.all()]
+
 
 class CategoryForm(FlaskForm):
     name = StringField('剂型名称', validators=[DataRequired(), Length(1, 128)])
@@ -61,4 +81,3 @@ class SubjectForm(FlaskForm):
 
 # class UploadForm(FlaskForm):
 #
-

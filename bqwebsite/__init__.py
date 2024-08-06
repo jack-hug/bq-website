@@ -109,9 +109,10 @@ def register_commands(app):
     @click.option('--news', default=80, help='Quantity of products, default is 50.')
     @click.option('--introduce', default=5, help='Quantity of introduce, default is 5.')
     @click.option('--contact', default=3, help='Quantity of contact, default is 3.')
-    def forge(product, news, introduce, contact):
+    @click.option('--photo', default=50, help='Quantity of photos, default is 50.')
+    def forge(product, news, introduce, contact, photo):
         from bqwebsite.fakes import fake_categories, admin, fake_products, news_categories, fake_news, intro_category, \
-            fake_intro, fake_brand, fake_subject, contact_categories, fake_contact
+            fake_intro, fake_brand, fake_subject, contact_categories, fake_contact, fake_photo
 
         click.echo('Drop tables....')
         db.drop_all()
@@ -130,6 +131,9 @@ def register_commands(app):
 
         click.echo('Generating %d products...' % product)
         fake_products(product)
+
+        click.echo('Generating %d photos...' % photo)
+        fake_photo(photo)
 
         click.echo('Generating news_categories and %d news...' % news)
         news_categories()

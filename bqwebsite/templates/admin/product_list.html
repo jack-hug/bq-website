@@ -78,7 +78,7 @@
                                     {% set photo = product.photos|first %}
                                     {% if photo %}
                                         <img src="{{ url_for('admin.get_image', filename=photo.filename_s) }}"
-                                             alt="{{ product.name }}">
+                                             alt="{{ product.name }}" style="width:100px">
                                     {% else %}
                                         <p>暂无图片</p>
                                     {% endif %}

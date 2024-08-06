@@ -1,12 +1,16 @@
+import os
 import random
 
 import click
+from PIL import Image
 from faker import Faker
 from faker.providers import DynamicProvider
+from flask import current_app
 
 from bqwebsite.models import Admin, Category, Product, NewsCategory, News, IntroduceCategory, Introduce, Subject, Brand, \
-    Contact, ContactCategory
+    Contact, ContactCategory, Photo
 from bqwebsite.extensions import db
+from bqwebsite.utils import generate_gradient_image
 
 fake = Faker('zh_CN')
 
@@ -121,6 +125,22 @@ def fake_products(count=30):
             timestamp=fake.date_time_this_year()
         )
         db.session.add(product)
+    db.session.commit()
+
+
+def fake_photo(count=50):
+    for i in range(count):
+        filename = 'random_%d.jpg' % i
+        generate_gradient_image(400, 500, filename)
+
+        photo = Photo(
+            filename_s=filename,
+            filename_m=filename,
+            filename=filename,
+            product=Product.query.get(random.randint(1, Product.query.count())),
+            timestamp=fake.date_time_this_year()
+        )
+        db.session.add(photo)
     db.session.commit()
 
 
