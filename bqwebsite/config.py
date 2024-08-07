@@ -22,7 +22,7 @@ class BaseConfig:
     BQ_UPLOAD_PATH = os.path.join(basedir, 'uploads')
     BQ_PHOTO_SIZE = {
         'small': 100,
-        'medium': 400
+        'medium': 600
     }
     BQ_PHOTO_SUFFIX = {
         BQ_PHOTO_SIZE['small']: '_s',

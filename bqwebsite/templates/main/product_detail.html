@@ -24,34 +24,37 @@
                     <hr class="divider-custom">
                     <div class="row">
                         <div class="col-md-6 col-sm-12">
-                            {# 图片轮播 #}
-                            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-                                <div class="carousel-inner">
-                                    {% for photo in product.photos %}
-                                        <div class="carousel-item {% if loop.first %}active{% endif %}">
-                                            <img src="{{ url_for('admin.get_image', filename=photo.filename_m) }}"
-                                                 alt="{{ product.name }}" class="d-block w-100 img-fluid rounded"
-                                                 style="width: 400px; height: 500px; object-fit: cover;">
-                                        </div>
-                                    {% else %}
-                                        <div class="carousel-item active">
-                                            <img src="{{ url_for('static', filename='assets/default.jpg') }}"
-                                                 alt="No photos." class="d-block w-100 img-fluid rounded"
-                                                 style="width: 400px; height: 500px; object-fit: cover;">
-                                        </div>
-                                    {% endfor %}
+                            {% if product.photos.count() %}
+                                {# 图片轮播 #}
+                                <div id="productCarousel" class="carousel slide carousel-dark " data-bs-ride="carousel">
+                                    <!-- 轮播指示器 -->
+                                    <div class="carousel-indicators">
+                                        {% for photo in product.photos %}
+                                            <button type="button" data-bs-target="#productCarousel"
+                                                    data-bs-slide-to="{{ loop.index0 }}"
+                                                    class="{% if loop.first %}active{% endif %}"
+                                                    aria-current="{% if loop.first %}true{% endif %}"
+                                                    aria-label="Slide {{ loop.index }}"></button>
+                                        {% endfor %}
+                                    </div>
+                                    <!-- 轮播项 -->
+                                    <div class="carousel-inner">
+                                        {% for photo in product.photos %}
+                                            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                                <img src="{{ url_for('admin.get_image', filename=photo.filename_m) }}"
+                                                     alt="{{ product.name }}" class="d-block w-100 img-fluid rounded"
+                                                     style="width: 400px; height: 500px; object-fit: contain;">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel"
-                                        data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel"
-                                        data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            </div>
+                            {% else %}
+                                <div class="">
+                                    <img src="{{ url_for('static', filename='assets/default.jpg') }}"
+                                         alt="No photos." class="d-block w-100 img-fluid rounded"
+                                         style="width: 400px; height: 500px; object-fit: contain;">
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="col-md-6 col-sm-12">
                             <p>产品名称：{{ product.name }}</p>
@@ -59,30 +62,30 @@
                             <p>功能主治：{{ product.product_indication }}</p>
                         </div>
                     </div>
-                    <div class="text-start">
+                    <div class="text-start mt-5">
                         {{ product.product_content|safe }}
                     </div>
                     <hr class="mt-5">
                     <nav aria-label="Page navigation">
                         <ul class="pagination navbar">
-                            <li class="page-item">
+                            <li class="page-item {% if not product_p_name %}disabled{% endif %}">
                                 <a href="{{ url_for('main.product_previous', product_id=product.id) }}"
-                                   class="page-link">
-                                    {% if product_p %}
-                                        上一个：{{ product_p.name }}
+                                   class="btn btn-light page-link">
+                                    {% if product_p_name %}
+                                        上一个：{{ product_p_name }}
                                     {% else %}
-                                        <p>已经是第一个</p>
+                                        已经是第一个
                                     {% endif %}
                                 </a>
                             </li>
-                            <li class="page-item">
+                            <li class="page-item {% if not product_n_name %}disabled{% endif %}">
                                 <a href="{{ url_for('main.product_next', product_id=product.id) }}"
-                                   class="page-link">
-                                    {% if product_n %}
-                                        下一个品种：{{ product_n.name }}
-                                        {% else %}
+                                   class="btn btn-light page-link">
+                                    {% if product_n_name %}
+                                        下一个：{{ product_n_name }}
+                                    {% else %}
                                         已经是最后一个
-                                    {% endif %} 
+                                    {% endif %}
                                 </a>
                             </li>
                         </ul>

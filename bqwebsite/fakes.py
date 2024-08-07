@@ -131,7 +131,7 @@ def fake_products(count=30):
 def fake_photo(count=50):
     for i in range(count):
         filename = 'random_%d.jpg' % i
-        generate_gradient_image(400, 500, filename)
+        generate_gradient_image(600, 700, filename)
 
         photo = Photo(
             filename_s=filename,

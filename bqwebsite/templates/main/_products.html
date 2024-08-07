@@ -4,36 +4,39 @@
             <div class="row">
                 {% if products %}
                     {% for product in products %}
-                        <div class="col-md-3 col-sm-6 mb-5">
-                            <div class="product_hover_effect">
-                                {% set photo = product.photos|first %}
-                                {% if photo %}
-                                    <img src="{{ url_for('admin.get_image', filename=photo.filename_m) }}"
-                                         alt="{{ product.name }}" class="img-fluid rounded">
-                                {% else %}
-                                    <img src="{{ url_for('static', filename = 'assets/default.jpg') }}"
-                                         alt="No photos." class="img-fluid rounded">
-                                {% endif %}
-                                <div class="overlay">
-                                    <h2 class="mt-5">{{ product.name }}</h2>
-                                    <p class="">
-                                        {{ product.product_indication }}
-                                    </p>
-                                    <a href="{{ url_for('main.show_product', product_id=product.id) }}"
-                                       class="info">点击查看</a>
+                        {% if product.status %}
+                            <div class="col-md-3 col-sm-6 mb-5">
+                                <div class="product_hover_effect">
+                                    {% set photo = product.photos|first %}
+                                    {% if photo %}
+                                        <img src="{{ url_for('admin.get_image', filename=photo.filename_m) }}"
+                                             alt="{{ product.name }}" class="img-fluid rounded"
+                                             style="height:357px;object-fit: contain;">
+                                    {% else %}
+                                        <img src="{{ url_for('static', filename = 'assets/default.jpg') }}"
+                                             alt="No photos." class="img-fluid rounded" style="object-fit: contain;">
+                                    {% endif %}
+                                    <div class="overlay">
+                                        <h2 class="mt-5">{{ product.name }}</h2>
+                                        <p class="">
+                                            {{ product.product_indication }}
+                                        </p>
+                                        <a href="{{ url_for('main.show_product', product_id=product.id) }}"
+                                           class="info">点击查看</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% endfor %}
-                {% else %}
-                    <div class="text-center">
-                        <h5>No Products</h5>
-                    </div>
-                {% endif %}
-                {% if products %}
-                    <div class="pt-2">
-                        {{ render_pagination(pagination, align='center', prev='上一页', next='下一页') }}
-                    </div>
+                    {% if products|selectattr('status')|list %}
+                        <div class="pt-2">
+                            {{ render_pagination(pagination, align='center', prev='上一页', next='下一页') }}
+                        </div>
+                    {% else %}
+                        <div class="text-center">
+                            <h3 class="my-5">暂无产品</h3>
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

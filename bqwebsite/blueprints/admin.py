@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import os.path
 
 from flask import render_template, Blueprint, redirect, url_for, flash, request, current_app, send_from_directory, \
@@ -50,7 +50,7 @@ def login():
 def logout():
     logout_user()
     flash('Logout success.', 'info')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('admin.login'))
 
 
 @admin_bp.route('/forget-password', methods=['GET', 'POST'])  # 忘记密码
@@ -64,7 +64,7 @@ def product_list():
     products_length = Product.query.count()
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
-    pagination = Product.query.order_by(Product.id.desc()).paginate(page=page, per_page=per_page)
+    pagination = Product.query.order_by(Product.timestamp.desc()).paginate(page=page, per_page=per_page)
     products = pagination.items
     return render_template('admin/product_list.html', products=products, pagination=pagination,
                            products_length=products_length)
@@ -107,6 +107,10 @@ def product_edit(product_id):
         product.category_id = form.category.data
         product.brand_id = form.brand.data
         product.subject_id = form.subject.data
+        utc_now = datetime.utcnow()
+        local_tz = timezone(timedelta(hours=8))  # 设置本地时区为 UTC+8
+        local_now = utc_now.replace(tzinfo=timezone.utc).astimezone(local_tz)
+        product.timestamp = local_now
         if 'photos' in request.files and request.files['photos'].filename != '':
             photos = save_uploaded_files(request.files, product)
             db.session.add_all(photos)
@@ -190,7 +194,7 @@ def news_list():
     news_length = News.query.count()
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
-    pagination = News.query.order_by(News.id.asc()).paginate(page=page, per_page=per_page)
+    pagination = News.query.order_by(News.timestamp.desc()).paginate(page=page, per_page=per_page)
     news = pagination.items
     return render_template('admin/news_list.html', news=news, pagination=pagination, news_length=news_length)
 
