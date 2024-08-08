@@ -27,10 +27,16 @@
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a type="button" class="btn btn-danger" href="#"><i class="fa-solid fa-trash"></i> 批量删除
-                            </a>
+                            <form action="{{ url_for('admin.product_multiple_delete') }}" method="post"
+                                  id="delete-selected-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="button" class="btn btn-danger" id="delete-selected-button"><i
+                                        class="fa-solid fa-trash"></i> 批量删除
+                                </button>
+                            </form>
                         </div>
                         <form class="col-auto row" role="search">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <div class="col-md-auto">
                                 <input class="form-control me-2" type="search" placeholder="输入产品名称"
                                        aria-label="Search">
@@ -50,7 +56,8 @@
                         <tr class="align-middle">
                             <th>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="all_products_check">
+                                    <input class="form-check-input" type="checkbox" value="5555"
+                                           id="all_products_check" name="item_ids">
                                 </div>
                             </th>
                             <th>ID</th>
@@ -70,8 +77,9 @@
                             <tr class="align-middle">
                                 <td>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                               id="all_products_check">
+                                        <input class="form-check-input product-checkbox" type="checkbox"
+                                               value="{{ product.id }}"
+                                               name="item_ids">
                                     </div>
                                 </td>
                                 <td>{{ loop.index + ((pagination.page - 1) * config.BQ_PRODUCT_PER_PAGE) }}</td>

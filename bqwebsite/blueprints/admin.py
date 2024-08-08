@@ -151,6 +151,20 @@ def product_delete(product_id):
     flash('删除成功.', 'success')
     return redirect_back()
 
+@admin_bp.route('/product_multiple_delete', methods=['GET', 'POST'])  # 批量删除
+@login_required
+def product_multiple_delete():
+    if request.method == 'POST':
+        selected_ids = request.form.getlist('item_ids')
+        for product_id in selected_ids:
+            print(product_id)
+            print('br')
+        #     product = Product.query.get(product_id)
+        #     db.session.delete(product)
+        # db.session.commit()
+        flash('批量删除成功.', 'success')
+        return redirect(url_for('admin.product_list'))
+    return redirect(url_for('admin.product_list'))
 
 @admin_bp.route('/product_status/<int:product_id>')  # 发布与撤销
 @login_required
