@@ -6,7 +6,7 @@
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#product-collapse"
            role="button"
            aria-expanded="false" aria-controls="product-collapse"><i class="fa-solid fa-briefcase"></i> 产品管理</a>
-        <div class="collapse{% if request.endpoint == 'admin.product_list' or request.endpoint == 'admin.category_list' %}show{% endif %}"
+        <div class="collapse{% if show_collapse %}show{% endif %}"
              id="product-collapse">
             <a class="list-group">
                 <a class="list-group-item {% if request.endpoint == 'admin.product_list' %}active{% endif %}"

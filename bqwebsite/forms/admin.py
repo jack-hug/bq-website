@@ -42,6 +42,7 @@ class EditProductForm(FlaskForm):
     subject = SelectField('功能主治:', coerce=int, default=1)
     product_indication = StringField('功能主治:', validators=[DataRequired(), Length(1, 1024)])
     product_content = CKEditorField('产品内容:', validators=[DataRequired()])
+    product_format = StringField('产品规格:', validators=[DataRequired()])
     photos = FileField('产品图片:', validators=[FileAllowed(['jpg', 'png', 'gif'], '只能上传图片')])
     submit = SubmitField('确认修改')
     cancel = SubmitField('取消')
@@ -55,16 +56,16 @@ class EditProductForm(FlaskForm):
 
 class CategoryForm(FlaskForm):
     name = StringField('剂型名称', validators=[DataRequired(), Length(1, 128)])
-    submit = SubmitField('提交')
+    category_submit = SubmitField('提交', name='category_submit')
 
     def validate_name(self, field):
         if Category.query.filter_by(name=field.data).first():
-            raise ValidationError('该剂型已存在')
+            raise ValidationError('该剂型已存在',)
 
 
 class BrandForm(FlaskForm):
     name = StringField('商标名称', validators=[DataRequired(), Length(1, 128)])
-    submit = SubmitField('提交')
+    brand_submit = SubmitField('提交', name='brand_submit')
 
     def validate_name(self, field):
         if Brand.query.filter_by(name=field.data).first():
@@ -72,12 +73,9 @@ class BrandForm(FlaskForm):
 
 
 class SubjectForm(FlaskForm):
-    name = StringField('功能主治类型', validators=[DataRequired(), Length(1, 128)])
-    submit = SubmitField('提交')
+    name = StringField('功能主治名称', validators=[DataRequired(), Length(1, 128)])
+    subject_submit = SubmitField('提交', name='subject_submit')
 
     def validate_name(self, field):
         if Subject.query.filter_by(name=field.data).first():
             raise ValidationError('该类型已存在')
-
-# class UploadForm(FlaskForm):
-#

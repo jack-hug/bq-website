@@ -27,6 +27,7 @@ class Product(db.Model):
     product_indication = db.Column(db.String(200))  # 功能主治
     # product_manual = db.Column(db.Text)  # 说明书
     product_content = db.Column(db.Text)  # 产品页内容
+    product_format = db.Column(db.String(100))  # 产品规格
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
     clicks = db.Column(db.Integer, default=0)  # 点击数
     status = db.Column(db.Boolean, default=True)

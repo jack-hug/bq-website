@@ -1,16 +1,20 @@
 from datetime import datetime, timedelta, timezone
-import os.path
 
 from flask import render_template, Blueprint, redirect, url_for, flash, request, current_app, send_from_directory, \
-    jsonify, session
+    jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 
 from bqwebsite.extensions import db
 from bqwebsite.models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
-from bqwebsite.forms.admin import LoginForm, ProductForm, EditProductForm
+from bqwebsite.forms.admin import LoginForm, ProductForm, EditProductForm, CategoryForm, BrandForm, SubjectForm
 from bqwebsite.utils import random_filename, resize_image, redirect_back, save_uploaded_files
 
 admin_bp = Blueprint('admin', __name__)
+
+# 将数据库时间转换为本地时间
+utc_now = datetime.utcnow()
+local_tz = timezone(timedelta(hours=8))  # 设置本地时区为 UTC+8
+local_now = utc_now.replace(tzinfo=timezone.utc).astimezone(local_tz)
 
 
 @admin_bp.route('/')  # 首页
@@ -67,7 +71,7 @@ def product_list():
     pagination = Product.query.order_by(Product.timestamp.desc()).paginate(page=page, per_page=per_page)
     products = pagination.items
     return render_template('admin/product_list.html', products=products, pagination=pagination,
-                           products_length=products_length)
+                           products_length=products_length, show_collapse=True)
 
 
 @admin_bp.route('/product/new', methods=['GET', 'POST'])  # 新建产品
@@ -92,7 +96,7 @@ def product_add():
             db.session.commit()
         flash('添加成功.', 'success')
         return redirect(url_for('admin.product_list'))
-    return render_template('admin/product_add.html', form=form)
+    return render_template('admin/product_add.html', form=form, show_collapse=True)
 
 
 @admin_bp.route('/product_edit/<int:product_id>', methods=['GET', 'POST'])  # 编辑产品
@@ -104,12 +108,10 @@ def product_edit(product_id):
         product.name = form.name.data
         product.product_content = form.product_content.data
         product.product_indication = form.product_indication.data
+        product.product_format = form.product_format.data
         product.category_id = form.category.data
         product.brand_id = form.brand.data
         product.subject_id = form.subject.data
-        utc_now = datetime.utcnow()
-        local_tz = timezone(timedelta(hours=8))  # 设置本地时区为 UTC+8
-        local_now = utc_now.replace(tzinfo=timezone.utc).astimezone(local_tz)
         product.timestamp = local_now
         if 'photos' in request.files and request.files['photos'].filename != '':
             photos = save_uploaded_files(request.files, product)
@@ -123,10 +125,11 @@ def product_edit(product_id):
     form.name.data = product.name
     form.product_content.data = product.product_content
     form.product_indication.data = product.product_indication
+    form.product_format.data = product.product_format
     form.category.data = product.category_id
     form.brand.data = product.brand_id
     form.subject.data = product.subject_id
-    return render_template('admin/product_edit.html', product=product, form=form)
+    return render_template('admin/product_edit.html', product=product, form=form, show_collapse=True)
 
 
 @admin_bp.route('/uploads/<path:filename>')  # 获得上传图片
@@ -151,20 +154,20 @@ def product_delete(product_id):
     flash('删除成功.', 'success')
     return redirect_back()
 
+
 @admin_bp.route('/product_multiple_delete', methods=['GET', 'POST'])  # 批量删除
 @login_required
 def product_multiple_delete():
     if request.method == 'POST':
         selected_ids = request.form.getlist('item_ids')
         for product_id in selected_ids:
-            print(product_id)
-            print('br')
-        #     product = Product.query.get(product_id)
-        #     db.session.delete(product)
-        # db.session.commit()
+            product = Product.query.get(product_id)
+            db.session.delete(product)
+        db.session.commit()
         flash('批量删除成功.', 'success')
         return redirect(url_for('admin.product_list'))
     return redirect(url_for('admin.product_list'))
+
 
 @admin_bp.route('/product_status/<int:product_id>')  # 发布与撤销
 @login_required
@@ -178,7 +181,47 @@ def product_status(product_id):
 @admin_bp.route('/category_list', methods=['GET', 'POST'])  # 分类列表
 @login_required
 def category_list():
-    return render_template('admin/category_list.html')
+    return render_template('admin/category_list.html', show_collapse=True)
+
+
+@admin_bp.route('/category_add', methods=['GET', 'POST'])  # 新建分类
+@login_required
+def category_add():
+    category_form = CategoryForm()
+    brand_form = BrandForm()
+    subject_form = SubjectForm()
+    if request.method == 'POST':
+        if category_form.category_submit.data and category_form.validate():
+            category = Category(
+                name=category_form.name.data,
+                timestamp=local_now
+            )
+            db.session.add(category)
+            db.session.commit()
+            flash('添加成功', 'success')
+            return redirect(url_for('admin.category_list'))
+        if brand_form.brand_submit.data and brand_form.validate():
+            brand = Brand(
+                name=brand_form.name.data,
+                timestamp=local_now
+            )
+            db.session.add(brand)
+            db.session.commit()
+            flash('添加成功', 'success')
+            return redirect(url_for('admin.category_list'))
+        if subject_form.subject_submit.data and subject_form.validate():
+            subject = Subject(
+                name=subject_form.name.data,
+                timestamp=local_now
+            )
+            db.session.add(subject)
+            db.session.commit()
+            flash('添加成功', 'success')
+            return redirect(url_for('admin.category_list'))
+        else:
+            flash('添加失败,名称已经存在', 'info')
+            return redirect(url_for('admin.category_add'))
+    return render_template('admin/category_add.html', category_form=category_form, brand_form=brand_form, subject_form=subject_form, show_collapse=True)
 
 
 @admin_bp.route('/brand_edit/<int:brand_id>', methods=['GET', 'POST'])  # 编辑商标
@@ -261,27 +304,3 @@ def index_photo_list():
 @login_required
 def introduce_list():
     return render_template('admin/introduce_list.html')
-
-# @admin_bp.route('/banner_photo_list/<int:photo_id>', methods=['GET', 'POST'])
-# @login_required
-# def banner_photo_list(photo_id):
-#     photo_id = Photo.query.get_or_404(photo_id)
-#     return render_template('admin/banner_photo_edit.html', photo_id=photo_id)
-#
-# @admin_bp.route('/scroll_photo_list/<int:photo_id>', methods=['GET', 'POST'])
-# @login_required
-# def scroll_photo_list(photo_id):
-#     photo_id = Photo.query.get_or_404(photo_id)
-#     return render_template('admin/scroll_photo_edit.html', photo_id=photo_id)
-#
-# @admin_bp.route('/category_photo_list/<int:photo_id>', methods=['GET', 'POST'])
-# @login_required
-# def category_photo_list(photo_id):
-#     photo_id = Photo.query.get_or_404(photo_id)
-#     return render_template('admin/category_photo_edit.html', photo_id=photo_id)
-#
-# @admin_bp.route('/index_photo_list/<int:photo_id>', methods=['GET', 'POST'])
-# @login_required
-# def index_photo_list(photo_id):
-#     photo_id = Photo.query.get_or_404(photo_id)
-#     return render_template('admin/index_photo_edit.html', photo_id=photo_id)

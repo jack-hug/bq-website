@@ -48,12 +48,16 @@
                         {{ form.product_indication.label(class="form-label") }}
                         {{ form.product_indication(class="form-control") }}
                     </div>
-
+                    <div class="mb-3">
+                        {{ form.product_format.label(class="form-label") }}
+                        {{ form.product_format(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
                         {{ form.product_content.label(class="form-label") }}
                         {{ form.product_content(class="form-control") }}
                         {{ ckeditor.load(custom_url=url_for('static', filename='admin/ckeditor/ckeditor.js')) }}
                         {{ ckeditor.config(name='product_content') }}
-
+                    </div>
                     <div class="mb-3">
                         {{ form.photos.label(class="form-label") }}
                         {{ form.photos(class="form-control", multiple=True, onchange="validateFiles(this)") }}
