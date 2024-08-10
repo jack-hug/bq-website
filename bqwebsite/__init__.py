@@ -4,11 +4,11 @@ import os
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFError
 
-from bqwebsite.blueprints.main import main_bp
-from bqwebsite.blueprints.admin import admin_bp
-from bqwebsite.config import config
-from bqwebsite.extensions import bootstrap, db, csrf, dropzone, login_manager, ckeditor
-from bqwebsite.models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
+from blueprints.main import main_bp
+from blueprints.admin import admin_bp
+from config import config
+from extensions import bootstrap, db, csrf, dropzone, login_manager, ckeditor
+from models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
     IntroduceCategory, Admin, Subject, ContactCategory
 
 
@@ -111,7 +111,7 @@ def register_commands(app):
     @click.option('--contact', default=3, help='Quantity of contact, default is 3.')
     @click.option('--photo', default=50, help='Quantity of photos, default is 50.')
     def forge(product, news, introduce, contact, photo):
-        from bqwebsite.fakes import fake_categories, admin, fake_products, news_categories, fake_news, intro_category, \
+        from fakes import fake_categories, admin, fake_products, news_categories, fake_news, intro_category, \
             fake_intro, fake_brand, fake_subject, contact_categories, fake_contact, fake_photo
 
         click.echo('Drop tables....')

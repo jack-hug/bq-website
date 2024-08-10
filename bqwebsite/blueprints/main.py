@@ -1,7 +1,7 @@
 import os
 
 from flask import render_template, request, redirect, url_for, Blueprint, current_app, flash, send_from_directory
-from bqwebsite.models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
+from models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
     IntroduceCategory, Contact, ContactCategory, Subject
 
 main_bp = Blueprint('main', __name__)

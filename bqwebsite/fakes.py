@@ -7,10 +7,10 @@ from faker import Faker
 from faker.providers import DynamicProvider
 from flask import current_app
 
-from bqwebsite.models import Admin, Category, Product, NewsCategory, News, IntroduceCategory, Introduce, Subject, Brand, \
+from models import Admin, Category, Product, NewsCategory, News, IntroduceCategory, Introduce, Subject, Brand, \
     Contact, ContactCategory, Photo
-from bqwebsite.extensions import db
-from bqwebsite.utils import generate_gradient_image
+from extensions import db
+from utils import generate_gradient_image
 
 fake = Faker('zh_CN')
 
@@ -118,7 +118,7 @@ def fake_products(count=30):
             name=product_name,
             product_indication=fake.text(50),
             product_content=fake.text(300),
-            product_format=fake.text(4),
+            product_format=fake.text(5),
             category=Category.query.get(random.randint(1, Category.query.count())),
             brand=Brand.query.get(random.randint(1, Brand.query.count())),
             subject=Subject.query.get(random.randint(1, Subject.query.count())),

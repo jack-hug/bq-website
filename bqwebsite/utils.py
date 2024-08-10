@@ -1,7 +1,7 @@
 import os
 import uuid
 from urllib.parse import urlparse, urljoin
-from bqwebsite.models import Photo
+from models import Photo
 
 from PIL import Image, ImageDraw
 import random

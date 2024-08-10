@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
-from bqwebsite.models import Category, Brand, Subject, Product
+from models import Category, Brand, Subject, Product
 from flask_ckeditor import CKEditorField
 
 
@@ -60,7 +60,7 @@ class CategoryForm(FlaskForm):
 
     def validate_name(self, field):
         if Category.query.filter_by(name=field.data).first():
-            raise ValidationError('该剂型已存在',)
+            raise ValidationError('该剂型已存在', )
 
 
 class BrandForm(FlaskForm):
@@ -79,3 +79,30 @@ class SubjectForm(FlaskForm):
     def validate_name(self, field):
         if Subject.query.filter_by(name=field.data).first():
             raise ValidationError('该类型已存在')
+
+
+class EditCategoryForm(FlaskForm):
+    name = StringField('剂型名称', validators=[DataRequired(), Length(1, 128)])
+    submit = SubmitField('修改')
+
+    def validate_name(self, field):
+        if Category.query.filter_by(name=field.data).first():
+            raise ValidationError('该剂型已存在')
+
+
+class EditBrandForm(FlaskForm):
+    name = StringField('商标名称', validators=[DataRequired(), Length(1, 128)])
+    submit = SubmitField('修改')
+
+    def validate_name(self, field):
+        if Brand.query.filter_by(name=field.data).first():
+            raise ValidationError('该商标已存在')
+
+
+class EditSubjectForm(FlaskForm):
+    name = StringField('功能名称', validators=[DataRequired(), Length(1, 128)])
+    submit = SubmitField('修改')
+
+    def validate_name(self, field):
+        if Subject.query.filter_by(name=field.data).first():
+            raise ValidationError('该功能分类已存在')

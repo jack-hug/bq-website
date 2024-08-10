@@ -4,10 +4,11 @@ from flask import render_template, Blueprint, redirect, url_for, flash, request,
     jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 
-from bqwebsite.extensions import db
-from bqwebsite.models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
-from bqwebsite.forms.admin import LoginForm, ProductForm, EditProductForm, CategoryForm, BrandForm, SubjectForm
-from bqwebsite.utils import random_filename, resize_image, redirect_back, save_uploaded_files
+from extensions import db
+from models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
+from forms.admin import LoginForm, ProductForm, EditProductForm, CategoryForm, BrandForm, SubjectForm
+from utils import random_filename, resize_image, redirect_back, save_uploaded_files
+
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -234,7 +235,15 @@ def brand_edit(brand_id):
 @admin_bp.route('/category_edit/<int:category_id>', methods=['GET', 'POST'])  # 编辑分类
 @login_required
 def category_edit(category_id):
-    category_id = Category.query.get_or_404(category_id)
+    category = Category.query.get_or_404(category_id)
+    form = EditCategoryForm()
+    if form.validate_on_submit():
+        category.name = Category.query.get_or_404(category_id)
+        category.timestamp = local_now
+        db.session.commit()
+        flash('修改成功.', 'success')
+        return redirect(url_for('admin.category_list'))
+    form.name.data = category.name
     return render_template('admin/category_edit.html', category_id=category_id)
 
 
