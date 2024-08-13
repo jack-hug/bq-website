@@ -29,13 +29,13 @@
                 <div class="row">
                     <div class="col-md-4 col-sm-12">
                         <form class="form" method="post">
-                            {{ category_form.hidden_tag() }}
+                            {{ form.hidden_tag() }}
                             <div class="mb-3">
                                 {{ form.name.label(class="form-label") }}
                                 {{ form.name(class="form-control") }}
                             </div>
                             <div class="mb-3">
-                                {{ form.category_submit(class="btn btn-primary btn-md") }}
+                                {{ form.submit(class="btn btn-primary btn-md") }}
                             </div>
                         </form>
                     </div>

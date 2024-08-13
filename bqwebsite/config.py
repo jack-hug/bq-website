@@ -20,6 +20,8 @@ class BaseConfig:
     BQ_MANAGE_CATEGORY_PER_PAGE = 20
     BQ_SEARCH_RESULT_PER_PAGE = 30
     BQ_UPLOAD_PATH = os.path.join(basedir, 'uploads')
+    if not os.path.exists(BQ_UPLOAD_PATH):
+        os.mkdir(BQ_UPLOAD_PATH)
     BQ_PHOTO_SIZE = {
         'small': 100,
         'medium': 600
@@ -66,4 +68,3 @@ config = {
     'testing': TestingConfig,
     'production': ProductionConfig
 }
-

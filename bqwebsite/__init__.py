@@ -4,11 +4,11 @@ import os
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFError
 
-from blueprints.main import main_bp
-from blueprints.admin import admin_bp
-from config import config
-from extensions import bootstrap, db, csrf, dropzone, login_manager, ckeditor
-from models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
+from .blueprints.main import main_bp
+from .blueprints.admin import admin_bp
+from .config import config
+from .extensions import bootstrap, db, csrf, dropzone, login_manager, ckeditor
+from .models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
     IntroduceCategory, Admin, Subject, ContactCategory
 
 

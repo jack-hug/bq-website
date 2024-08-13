@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
-from models import Category, Brand, Subject, Product
+from ..models import Category, Brand, Subject, Product
 from flask_ckeditor import CKEditorField
 
 

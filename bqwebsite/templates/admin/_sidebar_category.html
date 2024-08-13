@@ -16,7 +16,7 @@
             </a>
         </div>
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#news-collapse"
-           role="button"
+           role="button"+
            aria-expanded="false" aria-controls="news-collapse"><i class="fa-solid fa-globe"></i> 邦资讯管理</a>
         <div class="collapse{% if request.endpoint == 'admin.news_list' or request.endpoint == 'admin.news_category_list' %}show{% endif %}"
              id="news-collapse">
