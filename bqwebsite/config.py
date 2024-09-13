@@ -11,7 +11,7 @@ else:
 
 
 class BaseConfig:
-    BQ_ADMIN_EMAIL = os.getenv('BQ_ADMIN', '46361381@qq.com')
+    BQ_ADMIN_EMAIL = os.getenv('BQ_ADMIN')
     BQ_PRODUCT_PER_PAGE = 12
     BQ_NEWS_PER_PAGE = 12
     BQ_PHOTO_PER_PAGE = 12
@@ -31,7 +31,7 @@ class BaseConfig:
         BQ_PHOTO_SIZE['medium']: '_m'
     }
 
-    SECRET_KEY = os.getenv('SECRET_KEY', 'jackhunghuangbqwebguangwang')
+    SECRET_KEY = os.getenv('SECRET_KEY')
     MAX_CONTENT_LENGTH = 3 * 1024 * 1024
 
     CKEDITOR_ENABLE_CSRF = True

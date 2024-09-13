@@ -1,2 +1,4 @@
 FLASK_APP=bqwebsite
 FLASK_ENV=development
+BQ_ADMIN=46361381@qq.com
+SECRET_KEY=SECRET_KEY=jackhunghuangbqwebguangwangagdabc123wwwbaiqitaihe

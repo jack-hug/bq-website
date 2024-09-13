@@ -4,6 +4,7 @@ from flask_dropzone import Dropzone
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
 from flask_ckeditor import CKEditor
+from flask_migrate import Migrate
 
 
 bootstrap = Bootstrap5()
@@ -12,6 +13,7 @@ csrf = CSRFProtect()
 dropzone = Dropzone()
 login_manager = LoginManager()
 ckeditor = CKEditor()
+migrate = Migrate()
 
 
 @login_manager.user_loader
