@@ -5,225 +5,83 @@
 {% endblock %}
 {% block nav_index %}active{% endblock %}
 {% block content %}
-    <!-- Masthead-->
-    <header class="masthead bg-primary text-center">
-        <div id="carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="{{ url_for('static', filename = 'assets/img/banner01.png') }}" class="d-block w-100"
-                         alt="banner01">
+    <!-- Swiper Container -->
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            <!-- 首页 Section -->
+            <section id="home" class="swiper-slide text-center bg-white">
+                <div class="container h-100 d-flex flex-column justify-content-center">
+                    <h1 class="display-4 fade-in">欢迎来到企业官网</h1>
+                    <p class="lead fade-in">我们提供高质量的服务和解决方案。</p>
                 </div>
-                <div class="carousel-item">
-                    <img src="{{ url_for('static', filename = 'assets/img/banner02.png') }}" class="d-block w-100"
-                         alt="banner02">
+            </section>
+
+            <!-- 关于我们 Section -->
+            <section id="about" class="swiper-slide text-center bg-white">
+                <div class="container h-100 d-flex flex-column justify-content-center">
+                    <h2 class="text-center mb-4 fade-in">关于我们</h2>
+                    <p class="fade-in">我们是一家专注于创新和技术的企业，致力于为客户提供最佳的解决方案。</p>
                 </div>
-                <div class="carousel-item">
-                    <img src="{{ url_for('static', filename = 'assets/img/banner03.png') }}" class="d-block w-100"
-                         alt="banner03">
+            </section>
+
+            <!-- 服务 Section -->
+            <section id="services" class="swiper-slide bg-light">
+                <div class="container h-100 d-flex flex-column justify-content-center">
+                    <h2 class="text-center mb-4 fade-in">我们的服务</h2>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card fade-in">
+                                <div class="card-body">
+                                    <h5 class="card-title">服务一</h5>
+                                    <p class="card-text">详细描述服务一的内容。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card fade-in">
+                                <div class="card-body">
+                                    <h5 class="card-title">服务二</h5>
+                                    <p class="card-text">详细描述服务二的内容。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card fade-in">
+                                <div class="card-body">
+                                    <h5 class="card-title">服务三</h5>
+                                    <p class="card-text">详细描述服务三的内容。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- 联系我们 Section -->
+            <section id="contact" class="swiper-slide bg-light">
+                <div class="container h-100 d-flex flex-column justify-content-center">
+                    <h2 class="text-center mb-4 fade-in">联系我们</h2>
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label fade-in">姓名</label>
+                            <input type="text" class="form-control fade-in" id="name" placeholder="请输入您的姓名">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label fade-in">邮箱</label>
+                            <input type="email" class="form-control fade-in" id="email" placeholder="请输入您的邮箱">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label fade-in">留言</label>
+                            <textarea class="form-control fade-in" id="message" rows="3"
+                                      placeholder="请输入您的留言"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary fade-in">提交</button>
+                    </form>
+                </div>
+            </section>
         </div>
-    </header>
-    <!-- scroll cards -->
-    <div class="container-fluid">
-        <div id="animated-cards">
-            <div class="anim-cards js-anim-cards">
-                <ul class="anim-cards_list">
-                    <li class="anim-cards_item">
-                        <div class="card-v2 rounded shadow-sm">
-                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/gaoji.png') }}"
-                                 alt="Image description">
-                        </div>
-                    </li>
-                    <li class="anim-cards_item">
-                        <div class="card-v2 rounded shadow-sm">
-                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/dingji.png') }}"
-                                 alt="Image description">
-                        </div>
-                    </li>
-                    <li class="anim-cards_item">
-                        <div class="card-v2 rounded shadow-sm">
-                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/jiaonang.png') }}"
-                                 alt="Image description">
-                        </div>
-                    </li>
-                    <li class="anim-cards_item">
-                        <div class="card-v2 rounded shadow-sm">
-                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/keli.png') }}"
-                                 alt="Image description">
-                        </div>
-                    </li>
-                    <li class="anim-cards_item">
-                        <div class="card-v2 rounded shadow-sm">
-                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/pianji.png') }}"
-                                 alt="Image description">
-                        </div>
-                    </li>
-                    <li class="anim-cards_item">
-                        <div class="card-v2 rounded shadow-sm">
-                            <img src="{{ url_for('static', filename = 'assets/img/portfolio/tangjiang.png') }}"
-                                 alt="Image description">
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <div class="swiper-pagination"></div>
     </div>
-    <!-- Categories Section-->
-    <section class="page-section portfolio">
-        <div class="container">
-            <!-- Categories Section Heading-->
-            <h3 class="page-section-heading text-center text-secondary mb-0">产品分类</h3>
-            <div class="divider-custom">
-                <div class="divider-custom-line"></div>
-                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                <div class="divider-custom-line"></div>
-            </div>
-            <!-- Categories Section body-->
-            <div class="row text-center">
-                <div class="col-md-6 col-lg-4">
-                    <figure class="lift rounded-3 mb-5 hovereffect">
-                        <img
-                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/gaoji.png') }}"
-                                alt="">
-                        <div class="overlay">
-                            <a class="info" href="#">膏 剂</a>
-                        </div>
-                    </figure>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <figure class="lift rounded-3 mb-5 hovereffect">
-                        <img
-                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/tangjiang.png') }}"
-                                alt="">
-                        <div class="overlay">
-                            <a class="info" href="#">糖 浆</a>
-                        </div>
-                    </figure>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <figure class="lift rounded-3 mb-5 hovereffect">
-                        <img
-                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/jiaonang.png') }}"
-                                alt="">
-                        <div class="overlay">
-                            <a class="info" href="#">胶 囊</a>
-                        </div>
-                    </figure>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <figure class="lift rounded-3 mb-5 hovereffect">
-                        <img
-                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/keli.png') }}"
-                                alt="">
-                        <div class="overlay">
-                            <a class="info" href="#">颗 粒</a>
-                        </div>
-                    </figure>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <figure class="lift rounded-3 mb-5 hovereffect">
-                        <img
-                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/pianji.png') }}"
-                                alt="">
-                        <div class="overlay">
-                            <a class="info" href="#">片 剂</a>
-                        </div>
-
-                    </figure>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <figure class="lift rounded-3 mb-5 hovereffect">
-                        <img
-                                src="{{ url_for('static', filename = 'assets/img/portfolio/category/dingji.png') }}"
-                                alt="">
-                        <div class="overlay">
-                            <a class="info" href="#">酊 剂</a>
-                        </div>
-                    </figure>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section-->
-    <section class="page-section mb-0" id="about">
-        <div class="container">
-            <h3 class="page-section-heading text-center text-secondary mb-3">企业优势</h3>
-            <div class="divider-custom">
-                <div class="divider-custom-line"></div>
-                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                <div class="divider-custom-line"></div>
-            </div>
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <h2>生产批文</h2>
-                    <span class="counter font-s text-danger">350</span><span class="font-s text-danger">个</span>
-                </div>
-                <div class="col-md-4">
-                    <h2>独家品种</h2>
-                    <span class="counter font-s text-danger">40</span><span class="font-s text-danger">个</span>
-                </div>
-                <div class="col-md-4">
-                    <h2>煎膏剂年产量</h2>
-                    <span class="counter font-s text-danger">2000</span><span class="font-s text-danger">吨</span>
-                </div>
-            </div>
-            <div class="row mt-5 pt-5 align-items-center">
-                <div class="col-md-7">
-                    <img src="{{ url_for('static', filename='assets/img/effect-img.png') }}" alt="">
-                </div>
-                <div class="col-md-4 ms-auto">
-                    <div class="mb-5">
-                        <h4 class="mb-1">宣传标题01</h4>
-                        <p class="mb-0">宣传内容01</p>
-                    </div>
-                    <div class="mb-5">
-                        <h4 class="mb-1">宣传标题02</h4>
-                        <p class="mb-0">宣传内容02</p>
-                    </div>
-                    <div class="mb-5">
-                        <h4 class="mb-1">宣传标题03</h4>
-                        <p class="mb-0">宣传内容03</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-5 pt-5 align-items-center">
-                <div class="col-md-4 ms-auto">
-                    <div class="mb-5">
-                        <h4 class="mb-1">宣传标题01</h4>
-                        <p class="mb-0">宣传内容01</p>
-                    </div>
-                    <div class="mb-5">
-                        <h4 class="mb-1">宣传标题02</h4>
-                        <p class="mb-0">宣传内容02</p>
-                    </div>
-                    <div class="mb-5">
-                        <h4 class="mb-1">宣传标题03</h4>
-                        <p class="mb-0">宣传内容03</p>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <img src="{{ url_for('static', filename='assets/img/effect-img.png') }}" alt="">
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- index banner section -->
-    <section class="page-section mb-0">
-        <div class="container-fluid">
-            <div class="bg-light" style="height: 800px;">预留宣传区域</div>
-            <div class="bg-info" style="height: 800px;">预留宣传区域</div>
-        </div>
-    </section>
 {% endblock %}
 
-{% block scripts %}
-    {{ super() }}
-    <script>window.jQuery || document.write('<script src="{{ url_for('static', filename = 'js/jquery-1.11.0.min.js') }}"><\/script>')</script>
-    <script src="https://cdn.staticfile.net/waypoints/4.0.1/jquery.waypoints.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.countup.js') }}"></script>
-    <script type="text/javascript">
-        $('.counter').countUp();
-    </script>
-{% endblock %}
+{% set index_page = True %}

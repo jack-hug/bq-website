@@ -10,9 +10,10 @@
         {% block styles %}
             <!-- 集团logo -->
             <link rel="icon" type="image/x-icon" href="{{ url_for('static',filename = 'assets/fav.ico') }}"/>
-            <!-- Font Awesome icons (free version)-->
-            <script src="https://cdn.staticfile.net/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"></script>
             <!-- Core theme CSS (includes Bootstrap)-->
+            <link rel="stylesheet" href="https://cdn.staticfile.net/font-awesome/6.5.1/css/all.min.css">
+            <link rel="stylesheet" href="{{ url_for('static',filename = 'css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
             <link href="{{ url_for('static',filename = 'css/styles.css') }}" rel="stylesheet"/>
         {% endblock %}
     {% endblock %}
@@ -20,37 +21,51 @@
 
 <body id="page-top">
 {% block navbar %}
-    <nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
+    <nav class="navbar navbar-expand-lg bg-white fixed-top bg-opacity-50" id="mainNav">
         <div class="container">
             <a class="navbar-brand p-0 me-0 me-lg-3" href="{{ url_for('main.index') }}" aria-label="邦琪集团">
-                <img src="{{ url_for('static', filename = 'assets/img/logo2.png') }}" width="50" height="47"
-                     class="d-block my-1"
-                     role="img" alt="bangqijituan">
+                <img src="{{ url_for('static', filename = 'assets/img/logo.png') }}"
+                     class="d-block my-1 img-fluid"
+                     role="img" alt="bangqijituan" style="height:50px;width:auto;">
             </a>
-            <a class="navbar-brand" href="#page-top">广西邦琪药业集团有限公司</a>
-            <button class="navbar-toggler font-weight-bold bg-primary text-white rounded" type="button"
+            <button class="navbar-toggler font-weight-bold bg-dark text-white rounded" type="button"
                     data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
                     aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars"></i>
             </button>
-            <div class="collapse navbar-collapse rounded" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item mx-0 mx-lg-1"><a
-                            class="nav-link py-3 px-0 px-lg-4 rounded {% block nav_index %}{% endblock %}"
-                            href="{{ url_for('main.index') }}">主 页</a></li>
-                    <li class="nav-item mx-0 mx-lg-1"><a
-                            class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_news %} {% endblock %}"
-                            href="{{ url_for('main.news') }}">邦资讯</a></li>
-                    <li class="nav-item mx-0 mx-lg-1"><a
-                            class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_products %}{% endblock %}"
-                            href="{{ url_for('main.product') }}">产品中心</a></li>
-                    <li class="nav-item mx-0 mx-lg-1"><a
-                            class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_intro %}{% endblock %}"
-                            href="{{ url_for('main.show_introduce', intro_id=1) }}">公司介绍</a></li>
-                    <li class="nav-item mx-0 mx-lg-1"><a
-                            class="nav-link py-3 px-0 px-lg-3 rounded {% block nav_contact %}{% endblock %}"
-                            href="{{ url_for('main.show_contact', contact_id=1) }}">联系我们</a></li>
+            <div class="collapse navbar-collapse rounded py-4" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto nav-item-hover-effect">
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-1 px-0 px-lg-4 rounded {% block nav_index %}{% endblock %}"
+                           href="{{ url_for('main.index') }}">主 页
+                        </a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1 dropdown">
+                        <a class="nav-link py-1 px-0 px-lg-3 rounded {% block nav_products %}{% endblock %}"
+                           href="{{ url_for('main.product') }}">产品中心
+                        </a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-1 px-0 px-lg-3 rounded {% block nav_news %} {% endblock %}"
+                           href="{{ url_for('main.news') }}">邦资讯
+                        </a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-1 px-0 px-lg-3 rounded {% block nav_intro %}{% endblock %}"
+                           href="{{ url_for('main.show_introduce', intro_id=1) }}">公司介绍
+                        </a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-1 px-0 px-lg-3 rounded"
+                           href="#">研发生产
+                        </a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-1 px-0 px-lg-3 rounded {% block nav_contact %}{% endblock %}"
+                           href="{{ url_for('main.show_contact', contact_id=1) }}">联系我们
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -67,8 +82,8 @@
 {% endblock %}
 
 <!-- Footer-->
-{% block footer %}
-    <footer class="footer text-center">
+{% if not index_page %}
+    <footer class="footer text-center bg-dark text-white pt-5">
         <div class="container">
             <div class="row">
                 <!-- Footer Location-->
@@ -102,23 +117,24 @@
                 </div>
             </div>
         </div>
+        <!-- Copyright Section-->
+        <div class="copyright py-4 text-center text-white bg-dark">
+            <div class="container"><small>Copyright ©2023 广西邦琪药业集团有限公司 All Rights Reserved</small></div>
+            <div class="container"><small>互联网药品信息服务资格证书：（桂）-非经营性-2023-0020号 <a
+                    href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded"
+                    style="color: #fff; text-decoration: none">桂ICP备14001107号-1</a></small>
+            </div>
+        </div>
     </footer>
-{% endblock %}
 
-<!-- Copyright Section-->
-<div class="copyright py-4 text-center text-white">
-    <div class="container"><small>Copyright ©2023 广西邦琪药业集团有限公司 All Rights Reserved</small></div>
-    <div class="container"><small>互联网药品信息服务资格证书：（桂）-非经营性-2023-0020号 <a
-            href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded"
-            style="color: #fff; text-decoration: none">桂ICP备14001107号-1</a></small>
-    </div>
-</div>
+{% endif %}
+
+
 
 {% block scripts %}
-    <script src="https://cdn.staticfile.net/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename = 'js/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script src="{{ url_for('static', filename = 'js/scripts.js') }}"></script>
-    <script src="{{ url_for('static', filename = 'js/anim-cards.min.js') }}"></script>
-    <script src="{{ url_for('static',filename = 'js/sb-forms-0.4.1.js') }}"></script>
 {% endblock %}
 </body>
 </html>
