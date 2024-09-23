@@ -7,10 +7,10 @@ from faker import Faker
 from faker.providers import DynamicProvider
 from flask import current_app
 
-from models import Admin, Category, Product, NewsCategory, News, IntroduceCategory, Introduce, Subject, Brand, \
+from .models import Admin, Category, Product, NewsCategory, News, IntroduceCategory, Introduce, Subject, Brand, \
     Contact, ContactCategory, Photo
-from extensions import db
-from utils import generate_gradient_image
+from .extensions import db
+from .utils import generate_gradient_image
 
 fake = Faker('zh_CN')
 

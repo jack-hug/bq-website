@@ -112,7 +112,7 @@ def register_commands(app):
     @click.option('--contact', default=3, help='Quantity of contact, default is 3.')
     @click.option('--photo', default=50, help='Quantity of photos, default is 50.')
     def forge(product, news, introduce, contact, photo):
-        from fakes import fake_categories, admin, fake_products, news_categories, fake_news, intro_category, \
+        from .fakes import fake_categories, admin, fake_products, news_categories, fake_news, intro_category, \
             fake_intro, fake_brand, fake_subject, contact_categories, fake_contact, fake_photo
 
         click.echo('Drop tables....')
