@@ -71,20 +71,29 @@ body {
 }
 
 /* 淡入动画 */
-.fade-in {
+.fade-in-right {
     opacity: 0;
-    animation: fadeIn 1s ease-in-out forwards;
+    transform: translateX(50%);
+    animation: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
-@keyframes fadeIn {
+.swiper-slide-active .fade-in-right {
+    animation: fadeInRight 2s ease forwards;
+}
+
+@keyframes fadeInRight {
     from {
-        opacity: 0;
-        transform: translateY(20px);
+        opactiy: 0;
+        transform: translateX(50%);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
     }
+}
+
+.fade-in-right:nth-of-type(2) {
+    animation-delay: 2s;
 }
 
 .background-image-style {
@@ -101,4 +110,19 @@ body {
     background-position: left;
     background-repeat: no-repeat;
     min-height: 100vh;
+}
+
+.slide-in {
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.slide-in.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.first-line-indent {
+    text-indent: 2em;
 }

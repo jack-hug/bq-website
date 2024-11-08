@@ -1,3 +1,4 @@
+// 首页效果
 var swiper = new Swiper('.swiper', {
     direction: 'vertical',
     spaceBetween: 0,
@@ -8,3 +9,6 @@ var swiper = new Swiper('.swiper', {
         clickable: true,
     },
 });
+
+// 文字进入效果
+
