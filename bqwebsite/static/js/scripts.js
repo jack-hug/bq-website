@@ -18,7 +18,7 @@ var swiper = new Swiper('.swiper', {
             counters.forEach(counter => {
                 if (counter.textContent === '0') {
                     const target = parseInt(counter.getAttribute('data-bs-target'));
-                    animateCount(counter, target, 2000);
+                    animateCount(counter, target, 1500);
                 }
             })
         }
