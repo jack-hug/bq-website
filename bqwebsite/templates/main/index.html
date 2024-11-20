@@ -9,9 +9,17 @@
     <div class="swiper">
         <div class="swiper-wrapper">
             <!-- 首页 Section -->
-            <section id="home" class="swiper-slide text-center bg-white background-image-style">
-                <div class="container h-100 d-flex flex-column justify-content-center">
-                    <!-- 使用img 文字内容浮动于背景图片上 -->
+            <section id="home" class="swiper-slide swiper-banner">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide scale-image-effect" >
+                        <img src="{{ url_for('static', filename='assets/img/banner01.png') }}" alt="banner-image">
+                    </div>
+                    <div class="swiper-slide scale-image-effect" >
+                         <img src="{{ url_for('static', filename='assets/img/banner02.png') }}" alt="banner-image">
+                    </div>
+                    <div class="swiper-slide scale-image-effect" >
+                         <img src="{{ url_for('static', filename='assets/img/banner03.png') }}" alt="banner-image">
+                    </div>
                 </div>
             </section>
 
@@ -23,11 +31,11 @@
                             <img src="{{ url_for('static', filename='assets/img/index-logo.png') }}" alt="About Us"
                                  class="img-fluid fade-in-left" style="max-width: 70%;height: auto;">
                         </div>
-                        <div class="col-md-6">
-                            <h2 class="text-center mb-4 fade-in-right">邦琪集团</h2>
+                        <div class="col-md-6 fade-in-right">
+                            <h2 class="text-center mb-4">邦琪集团</h2>
                             <p class="fade-in-right lh-lg text-start align-self-center first-line-indent px-5">
                                 广西邦琪药业集团有限公司是一家已有20多年的发展历史的民营制药企业，连续入榜广西民营制造业百强、广西高新技术企业百强行列，是广西优秀企业，是集科研、生产、销售、服务为一体的综合性企业集团。集团公司旗下现有10多家子公司，包括金鸡药业、百琪药业、葛洪堂药业、邦琪医药、泰和制药等多家医药企业。集团公司在药品的生产销售和药品研发方面有较强的特色和优势，产品资源相当丰富，药品生产批文号350多个，独家品种35个（其中10个有新药证书）。主要产品有桂龙药膏、复方鱼腥草颗粒、金鸡胶囊、五参安神口服液、罗汉果止咳膏、黄荆油胶丸、抗宫炎颗粒、三参益气口服液、参芪首乌补汁、咳喘停膏等品种。</p>
-                            <div class="row text-center fade-in-right mt-4">
+                            <div class="row text-center mt-4 px-5">
                                 <div class="col-md-4">
                                     <div class="circle-container">
                                         <h4>生产批文</h4>
@@ -50,7 +58,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-lg btn-outline-danger mt-3">查看更多</button>
+                            <div type="button" class="btn btn-lg btn-outline-danger mt-3">查看更多</div>
                         </div>
                     </div>
                 </div>
@@ -58,12 +66,62 @@
 
             <!-- 产品 Section -->
             <section id="products" class="swiper-slide bg-white">
-                <div class="container-fluid h-100">
+                <div class="container h-100">
                     <div class="row h-100 d-flex align-items-center">
-                        <h2 class="text-center mb-4">产品中心</h2>
-                        <div class="col-md-3">
-                            <div class="card fade-in">
-
+                        <h2 class="text-center mt-5">产品中心</h2>
+                        <div class="col-md-3 fade-in-end">
+                            <div class="hovereffect">
+                                <img class="img-responsive"
+                                     src="{{ url_for('static', filename='assets/img/portfolio/gaoji.png') }}" alt="">
+                                <div class="overlay">
+                                    <a class="info fs-4" href="#">膏 剂</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 fade-in-end">
+                            <div class="hovereffect">
+                                <img class="img-responsive"
+                                     src="{{ url_for('static', filename='assets/img/portfolio/tangjiang.png') }}"
+                                     alt="">
+                                <div class="overlay">
+                                    <a class="info fs-4" href="#">糖 浆</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 fade-in-end">
+                            <div class="hovereffect">
+                                <img class="img-responsive"
+                                     src="{{ url_for('static', filename='assets/img/portfolio/keli.png') }}" alt="">
+                                <div class="overlay">
+                                    <a class="info fs-4" href="#">颗 粒</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 fade-in-end">
+                            <div class="hovereffect">
+                                <img class="img-responsive"
+                                     src="{{ url_for('static', filename='assets/img/portfolio/pianji.png') }}" alt="">
+                                <div class="overlay">
+                                    <a class="info fs-4" href="#">片 剂</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 fade-in-end">
+                            <div class="hovereffect">
+                                <img class="img-responsive"
+                                     src="{{ url_for('static', filename='assets/img/portfolio/jiaonang.png') }}" alt="">
+                                <div class="overlay">
+                                    <a class="info fs-4" href="#">胶 囊</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 fade-in-end">
+                            <div class="hovereffect">
+                                <img class="img-responsive"
+                                     src="{{ url_for('static', filename='assets/img/portfolio/dingji.png') }}" alt="">
+                                <div class="overlay">
+                                    <a class="info fs-4" href="#">酊 剂</a>
+                                </div>
                             </div>
                         </div>
                     </div>
