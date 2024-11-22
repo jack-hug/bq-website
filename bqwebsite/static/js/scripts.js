@@ -31,7 +31,7 @@ var swiper = new Swiper('.swiper', {
     on: {
         slideChangeTransitionEnd: function () {
             // 获取当前活动的滑块
-            const activeSlide = document.querySelector('.swiper-slide-active');
+            const activeSlide = document.querySelector('.swiper-slide-active#about');
 
             // 查找所有的 .counter 元素并触发动画
             const counters = activeSlide.querySelectorAll('.counter');
@@ -59,28 +59,5 @@ var swiper2 = new Swiper('.swiper-banner', {
     loop: true,
 });
 
-// 监听页面滚动事件
-let isBannerVisible = true;
-
-function handleScroll() {
-    const bannerSection = document.getElementById('home');
-    const bannerRect = bannerSection.getBoundingClientRect();
-
-    if (bannerRect.top < window.innerHeight && bannerRect.bottom >= 0) {
-        // Banner section is in view
-        if (!isBannerVisible) {
-            swiper2.autoplay.start();
-            isBannerVisible = true;
-        }
-    } else {
-        // Banner section is out of view
-        if (isBannerVisible) {
-            swiper2.autoplay.stop();
-            isBannerVisible = false;
-        }
-    }
-}
-
-window.addEventListener('scroll', handleScroll);
 
 

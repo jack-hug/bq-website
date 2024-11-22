@@ -118,12 +118,9 @@ body {
     }
 }
 
-/*.fade-in-left:nth-of-type(2) {*/
-/*    animation-delay: 2s;*/
-/*}*/
+
 
 /*下方淡入动画*/
-/* 左边淡入动画 */
 .fade-in-end {
     opacity: 0;
     transform: translateY(50%);
@@ -259,7 +256,7 @@ body {
     transform: scale(1.2);
 }
 
-.swiper-slide-active img {
+.scale-image-effect img {
     animation: scale-image 12s linear;
 }
 
@@ -270,5 +267,10 @@ body {
     100% {
         transform: scale(1);
     }
+}
+
+/* CSS 样式 */
+.swiper-slide.slide-half-bg {
+  background: linear-gradient(to bottom, white 50%, black 50%);
 }
 
