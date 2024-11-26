@@ -11,14 +11,14 @@
             <!-- 首页 Section -->
             <section id="home" class="swiper-slide swiper-banner">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide scale-image-effect" >
+                    <div class="swiper-slide scale-image-effect">
                         <img src="{{ url_for('static', filename='assets/img/banner01.png') }}" alt="banner-image">
                     </div>
-                    <div class="swiper-slide scale-image-effect" >
-                         <img src="{{ url_for('static', filename='assets/img/banner02.png') }}" alt="banner-image">
+                    <div class="swiper-slide scale-image-effect">
+                        <img src="{{ url_for('static', filename='assets/img/banner02.png') }}" alt="banner-image">
                     </div>
-                    <div class="swiper-slide scale-image-effect" >
-                         <img src="{{ url_for('static', filename='assets/img/banner03.png') }}" alt="banner-image">
+                    <div class="swiper-slide scale-image-effect">
+                        <img src="{{ url_for('static', filename='assets/img/banner03.png') }}" alt="banner-image">
                     </div>
                 </div>
             </section>
@@ -128,34 +128,192 @@
                 </div>
             </section>
 
-            <!-- 服务 Section -->
-            <section id="services" class="swiper-slide slide-half-bg">
-                <div class="container h-100 d-flex flex-column justify-content-center">
-                    <h2 class="text-center mb-4 fade-in">我们的服务</h2>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card fade-in">
-                                <div class="card-body">
-                                    <h5 class="card-title">服务一</h5>
-                                    <p class="card-text">详细描述服务一的内容。</p>
-                                </div>
-                            </div>
+            <!-- 品牌文化 Section -->
+            <section id="services" class="swiper-slide slide-half-bg bg-light">
+                <div class="container h-100 d-flex">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-3 fade-in-end mb-1">
+                            <img class="img-responsive"
+                                 src="{{ url_for('static', filename='assets/img/company.jpg') }}" alt="">
                         </div>
-                        <div class="col-md-4">
-                            <div class="card fade-in">
-                                <div class="card-body">
-                                    <h5 class="card-title">服务二</h5>
-                                    <p class="card-text">详细描述服务二的内容。</p>
-                                </div>
-                            </div>
+                        <div class="col-3 fade-in-end mb-1">
+                            <img class="img-responsive"
+                                 src="{{ url_for('static', filename='assets/img/developing.jpg') }}" alt="">
                         </div>
-                        <div class="col-md-4">
-                            <div class="card fade-in">
-                                <div class="card-body">
-                                    <h5 class="card-title">服务三</h5>
-                                    <p class="card-text">详细描述服务三的内容。</p>
+                        <div class="col-3 fade-in-end mb-1">
+                            <img class="img-responsive"
+                                 src="{{ url_for('static', filename='assets/img/culture.jpg') }}" alt="">
+                        </div>
+                        <div class="col-3 fade-in-end mb-1">
+                            <img class="img-responsive"
+                                 src="{{ url_for('static', filename='assets/img/research.jpg') }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 新闻中心 Section -->
+            <section id="news"
+                     class="swiper-slide swiper-news bg-white d-flex flex-column align-items-center justify-content-center pt-5">
+                <h2 class="text-center">新闻中心</h2>
+                <div>
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <a href="#" class="text-decoration-none">
+                                <div class="card mb-3 shadow-sm" style="max-width:550px;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
+                                                 class="img-fluid rounded-start" alt="...">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">news title</h5>
+                                                <p class="card-text">Some quick example text to build on the card title
+                                                    and
+                                                    make
+                                                    up
+                                                    the
+                                                    bulk of the card's content.</p>
+                                                <p class="card-text"><small class="text-muted">Last updated 1 mins
+                                                    ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a href="#" class="text-decoration-none">
+                                <div class="card mb-3 shadow-sm" style="max-width:550px;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
+                                                 class="img-fluid rounded-start" alt="..."></img>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">news title</h5>
+                                                <p class="card-text">Some quick example text to build on the card title
+                                                    and
+                                                    make
+                                                    up
+                                                    the
+                                                    bulk of the card's content.</p>
+                                                <p class="card-text"><small class="text-muted">Last updated 2 mins
+                                                    ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a href="#" class="text-decoration-none">
+                                <div class="card mb-3 shadow-sm" style="max-width:550px;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
+                                                 class="img-fluid rounded-start" alt="..."></img>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">news title</h5>
+                                                <p class="card-text">Some quick example text to build on the card title
+                                                    and
+                                                    make
+                                                    up
+                                                    the
+                                                    bulk of the card's content.</p>
+                                                <p class="card-text"><small class="text-muted">Last updated 3 mins
+                                                    ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- 重复的幻灯片以实现无缝滚动 -->
+                        <div class="swiper-slide">
+                            <a href="#" class="text-decoration-none">
+                                <div class="card mb-3 shadow-sm" style="max-width:550px;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
+                                                 class="img-fluid rounded-start" alt="..."></img>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">news title</h5>
+                                                <p class="card-text">Some quick example text to build on the card title
+                                                    and
+                                                    make
+                                                    up
+                                                    the
+                                                    bulk of the card's content.</p>
+                                                <p class="card-text"><small class="text-muted">Last updated 1 mins
+                                                    ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a href="#" class="text-decoration-none">
+                                <div class="card mb-3 shadow-sm" style="max-width:550px;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
+                                                 class="img-fluid rounded-start" alt="..."></img>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">news title</h5>
+                                                <p class="card-text">Some quick example text to build on the card title
+                                                    and
+                                                    make
+                                                    up
+                                                    the
+                                                    bulk of the card's content.</p>
+                                                <p class="card-text"><small class="text-muted">Last updated 2 mins
+                                                    ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a href="#" class="text-decoration-none">
+                                <div class="card mb-3 shadow-sm" style="max-width:550px;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
+                                                 class="img-fluid rounded-start" alt="..."></img>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">news title</h5>
+                                                <p class="card-text">Some quick example text to build on the card title
+                                                    and
+                                                    make
+                                                    up
+                                                    the
+                                                    bulk of the card's content.</p>
+                                                <p class="card-text"><small class="text-muted">Last updated 3 mins
+                                                    ago</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>

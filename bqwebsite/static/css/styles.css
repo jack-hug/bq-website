@@ -124,7 +124,7 @@ body {
 .fade-in-end {
     opacity: 0;
     transform: translateY(50%);
-    animation: opacity 1s ease, transform 1s ease;
+    animation: opacity 2s ease, transform 2s ease;
 }
 
 .swiper-slide-active .fade-in-end {
@@ -133,8 +133,8 @@ body {
 
 @keyframes fadeInEnd {
     from {
-        opactiy: 0;
-        transform: translateY(50%);
+        opacity: 0;
+        transform: translateY(100%);
     }
     to {
         opacity: 1;
@@ -269,8 +269,11 @@ body {
     }
 }
 
-/* CSS 样式 */
+/* 背景居中变色 */
 .swiper-slide.slide-half-bg {
-  background: linear-gradient(to bottom, white 50%, black 50%);
+  background: linear-gradient(to bottom, white 50%, #260404 50%);
 }
 
+.news-style {
+    margin-top: 50px;
+}

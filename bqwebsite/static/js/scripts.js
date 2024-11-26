@@ -20,30 +20,36 @@ function animateCount(element, target, duration) {
 
 // 首页效果
 var swiper = new Swiper('.swiper', {
-    direction: 'vertical',
-    spaceBetween: 0,
-    mousewheel: true,
-    speed: 1000,
-    pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-    },
-    on: {
-        slideChangeTransitionEnd: function () {
-            // 获取当前活动的滑块
-            const activeSlide = document.querySelector('.swiper-slide-active#about');
+        direction: 'vertical',
+        spaceBetween: 0,
+        mousewheel: true,
+        speed: 1000,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        on: {
+            slideChangeTransitionEnd: function () {
+                // 获取当前活动的滑块
+                const activeSlide = this.slides[this.realIndex];
 
-            // 查找所有的 .counter 元素并触发动画
-            const counters = activeSlide.querySelectorAll('.counter');
-            counters.forEach(counter => {
-                if (counter.textContent === '0') {
-                    const target = parseInt(counter.getAttribute('data-bs-target'));
-                    animateCount(counter, target, 1500);
+                // 检查 activeSlide 是否存在且 ID 为 "about"
+                if (activeSlide && activeSlide.id === 'about') {
+                    // 查找所有的 .counter 元素并触发动画
+                    const counters = activeSlide.querySelectorAll('.counter');
+                    counters.forEach(counter => {
+                        if (counter.textContent === '0') {
+                            const target = parseInt(counter.getAttribute('data-bs-target'));
+                            animateCount(counter, target, 1500);
+                        }
+                    });
+                } else {
+                    console.log('当前活动的 slide 不是 #about');
                 }
-            })
+            }
         }
-    }
-});
+    })
+;
 
 // 首页banner效果
 var swiper2 = new Swiper('.swiper-banner', {
@@ -58,6 +64,21 @@ var swiper2 = new Swiper('.swiper-banner', {
     },
     loop: true,
 });
+
+// 首页news效果
+var swiper3 = new Swiper('.swiper-news', {
+    slidesPerView: 3,
+    freeMode: true,
+    speed: 5000,
+    loop: true,
+    autoplay: {
+        delay: 0,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+    },
+})
+
+
 
 
 
