@@ -67,15 +67,27 @@ var swiper2 = new Swiper('.swiper-banner', {
 
 // 首页news效果
 var swiper3 = new Swiper('.swiper-news', {
-    slidesPerView: 3,
-    freeMode: true,
-    speed: 5000,
+    slidesPerView: 1,
+    effect: 'coverflow',
+    coverflowEffect: {
+        rotate: 50,
+        stretch: 10,
+        depth: 100,
+        modifier: 1,
+        slideShadows: false,
+    },
+    speed: 4000,
     loop: true,
     autoplay: {
         delay: 0,
         disableOnInteraction: false,
         pauseOnMouseEnter: true,
     },
+    breakpoints: {
+        768: {
+            slidesPerView: 3,
+        }
+    }
 })
 
 

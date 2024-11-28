@@ -274,6 +274,6 @@ body {
   background: linear-gradient(to bottom, white 50%, #260404 50%);
 }
 
-.news-style {
-    margin-top: 50px;
+.mt-6 {
+    margin-top: 6rem;
 }
