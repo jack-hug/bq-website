@@ -8,7 +8,7 @@ from faker.providers import DynamicProvider
 from flask import current_app
 
 from .models import Admin, Category, Product, NewsCategory, News, IntroduceCategory, Introduce, Subject, Brand, \
-    Contact, ContactCategory, Photo
+    Contact, ContactCategory, Photo, ResearchCategory, Research
 from .extensions import db
 from .utils import generate_gradient_image
 
@@ -178,7 +178,7 @@ def fake_news(count=80):
 
 
 def intro_category():
-    intro_cate = ['公司介绍', '质量机构', '企业架构', '社会责任', '企业荣誉']
+    intro_cate = ['集团介绍', '质量机构', '企业架构', '社会责任', '企业荣誉']
 
     for i in intro_cate:
         category = IntroduceCategory(
@@ -204,6 +204,27 @@ def fake_intro(count=5):
         db.session.add(intro)
     db.session.commit()
 
+def research_category():
+    res_cat = ['产品研发', '质量机构', '生产车间']
+
+    for i in res_cat:
+        category = ResearchCategory(name=i, timestamp=fake.date_time_this_year())
+        db.session.add(category)
+    try:
+        db.session.commit()
+    except InterruptedError:
+        db.session.rollback()
+
+def fake_research(count=3):
+    for i in range(count):
+        research = Research(
+            title=fake.sentence(),
+            research_content=fake.text(200),
+            timestamp=fake.date_time_this_year(),
+            research_category=ResearchCategory.query.get(i + 1)
+        )
+        db.session.add(research)
+    db.session.commit()
 
 def contact_categories():
     cont_cat = ['联系方式', '商业合作', '企业招聘']

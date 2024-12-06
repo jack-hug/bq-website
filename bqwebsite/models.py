@@ -141,6 +141,27 @@ class IntroduceCategory(db.Model):
 
     introduces = db.relationship('Introduce', back_populates='introduce_category')
 
+class ResearchCategory(db.Model):
+    # 研发生产分类
+    __tablename__ = 'researchcategory'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100))
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+
+    researchs = db.relationship('Research', back_populates='research_category')
+
+
+class Research(db.Model):
+    # 研发生产
+    __tablename__ = 'research'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(100))
+    research_content = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+
+    research_category_id = db.Column(db.Integer, db.ForeignKey('researchcategory.id'))
+    research_category = db.relationship('ResearchCategory', back_populates='researchs')
+
 class Subject(db.Model):
     # 功能分类
     __tablename__ = 'subject'

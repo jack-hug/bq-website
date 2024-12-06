@@ -410,3 +410,15 @@ body {
     -webkit-transition-delay: .1s;
     transition-delay: .1s;
 }
+
+.hover-effect {
+    width: 100%;
+    -webkit-backface-visibility: hidden;
+    transform: translateY(0);
+    transition: all .3s ease;
+}
+
+.hover-effect:hover {
+    transform: translateY(-.2rem);
+    box-shadow: 0 0 15px rgba(248, 167, 167, 0.5);
+}

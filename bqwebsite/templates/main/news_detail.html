@@ -7,7 +7,8 @@
 {% set active_page = news_detail.newscategory.name %}
 {% block content %}
     <header class="masthead bg-primary text-white text-center">
-        <div class="news_bg_img01"></div>
+        <div class="news_bg_img"><img src="{{ url_for('static', filename='assets/img/bg_img01.png') }}"
+                                      class="img-fluid" alt=""></div>
     </header>
     <section class="page-section portfolio bg-light">
         <div class="container">
@@ -22,15 +23,14 @@
                     {% endfor %}
                     <nav aria-label="breadcrumb" class="mt-2 bg-white">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ url_for('main.news') }}">邦资讯</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_for('main.news') }}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">全部新闻</a></li>
                             <li class="breadcrumb-item"><a
-                                    href="{{ url_for('main.show_news_category', news_category_id=news_detail.newscategory.id) }}">{{ news_detail.newscategory.name }}</a>
+                                    href="{{ url_for('main.show_news_category', news_category_id=news_detail.newscategory.id) }}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ news_detail.newscategory.name }}</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">{{ news_detail.title }}</li>
                         </ol>
                     </nav>
-                    <hr>
-                    <h3 class="text-center text-secondary mt-3 ">{{ news_detail.title }}</h3>
+                    <h3 class="text-center text-dark mt-5">{{ news_detail.title }}</h3>
                     <p class="text-muted text-center"><small>发布时间：{{ news_detail.timestamp }}</small></p>
                     <hr>
                     <p class="lh-lg text-start text-indent">{{ news_detail.content }}</p>

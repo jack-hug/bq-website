@@ -7,14 +7,15 @@
 {% set active_page = show_intro.introduce_category.name %}
 {% block content %}
     <header class="masthead bg-primary text-white text-center">
-        <div class="news_bg_img01"></div>
+        <div class="news_bg_img"><img src="{{ url_for('static', filename='assets/img/bg_img01.png') }}"
+                                      class="img-fluid" alt=""></div>
     </header>
     <section class="page-section portfolio bg-light">
-        <div class="container">
+        <div class="container mt-5">
             <div class="row">
                 {% include 'main/_sidebar_introduce.html' %}
                 <div class="col-lg-9 col-md-9 col-sm-12 bg-white rounded">
-                    <h3 class="text-center text-secondary mt-3 ">{{ show_intro.title }}</h3>
+                    <h3 class="text-center text-dark mt-5 ">{{ show_intro.title }}</h3>
                     <p class="text-muted text-center"><small>发布时间：{{ show_intro.timestamp }}</small></p>
                     <hr>
                     <p class="lh-lg text-start text-indent">{{ show_intro.introduce_content }}</p>

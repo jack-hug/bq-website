@@ -9,7 +9,7 @@ from .blueprints.admin import admin_bp
 from .config import config
 from .extensions import bootstrap, db, csrf, dropzone, login_manager, ckeditor, migrate
 from .models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
-    IntroduceCategory, Admin, Subject, ContactCategory
+    IntroduceCategory, Admin, Subject, ContactCategory, ResearchCategory, Research
 
 
 def create_app(config_name=None):
@@ -109,11 +109,12 @@ def register_commands(app):
     @click.option('--product', default=30, help='Quantity of products, default is 30.')
     @click.option('--news', default=80, help='Quantity of products, default is 50.')
     @click.option('--introduce', default=5, help='Quantity of introduce, default is 5.')
+    @click.option('--research', default=3, help='Quantity of research and development, default is 3.')
     @click.option('--contact', default=3, help='Quantity of contact, default is 3.')
     @click.option('--photo', default=50, help='Quantity of photos, default is 50.')
-    def forge(product, news, introduce, contact, photo):
+    def forge(product, news, introduce, contact, photo, research):
         from .fakes import fake_categories, admin, fake_products, news_categories, fake_news, intro_category, \
-            fake_intro, fake_brand, fake_subject, contact_categories, fake_contact, fake_photo
+            fake_intro, fake_brand, fake_subject, contact_categories, fake_contact, fake_photo, research_category, fake_research
 
         click.echo('Drop tables....')
         db.drop_all()
@@ -139,6 +140,8 @@ def register_commands(app):
         click.echo('Generating news_categories and %d news...' % news)
         news_categories()
         fake_news(news)
+
+        click.echo('Generating research_categories and %d research contents...' % research)
 
         click.echo('Generating contact_category and %d contact' % contact)
         contact_categories()
