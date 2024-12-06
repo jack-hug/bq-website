@@ -134,7 +134,6 @@ def product_edit(product_id):
 
 
 @admin_bp.route('/uploads/<path:filename>')  # 获得上传图片
-@login_required
 def get_image(filename):
     return send_from_directory(current_app.config['BQ_UPLOAD_PATH'], filename)
 

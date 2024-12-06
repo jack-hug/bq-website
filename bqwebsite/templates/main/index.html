@@ -321,44 +321,72 @@
                 </div>
             </section>
 
-            <!-- 联系我们 Section -->
-            <section id="contact" class="swiper-slide bg-light">
-                <div class="container h-100 d-flex flex-column justify-content-center">
-                    <h2 class="text-center mb-4 fade-in">联系我们</h2>
-                    <form>
-                        <div class="mb-3">
-                            <label for="name" class="form-label fade-in">姓名</label>
-                            <input type="text" class="form-control fade-in" id="name" placeholder="请输入您的姓名">
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label fade-in">邮箱</label>
-                            <input type="email" class="form-control fade-in" id="email" placeholder="请输入您的邮箱">
-                        </div>
-                        <div class="mb-3">
-                            <label for="message" class="form-label fade-in">留言</label>
-                            <textarea class="form-control fade-in" id="message" rows="3"
-                                      placeholder="请输入您的留言"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary fade-in">提交</button>
-                    </form>
-                </div>
-            </section>
-
+            <!-- 底部footer Section -->
             <section id="footer" class="swiper-slide bg-dark text-white">
                 <div class="container h-100 d-flex flex-column justify-content-center">
-                    <p class="text-center fade-in">Copyright ©2023 广西邦琪药业集团有限公司 All Rights Reserved</p>
-                    <p class="text-center fade-in">
-                        <a href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded"
-                           style="color: #fff; text-decoration: none">桂ICP备14001107号-1</a>
-                    </p>
-                    <p class="text-center fade-in">
-                        <a href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded"
-                           style="color: #fff; text-decoration: none">桂公网安备 45030202000001号</a>
-                    </p>
-                    <p class="text-center fade-in">
-
-                    </p>
-
+                    <div class="row fade-in-end">
+                        <div class="col-2">
+                            <h5 class="mb-2">产品中心</h5>
+                            <ul class="list-unstyled">
+                                <li class="my-2"><a href="#" class="footer-font-style">膏 剂</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">糖 浆</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">颗 粒</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">片 剂</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">胶 囊</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">酊 剂</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">酊 剂</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">酊 剂</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-2">
+                            <h5 class="mb-2">邦资讯</h5>
+                            <ul class="list-unstyled">
+                                <li class="my-2"><a href="#" class="footer-font-style">公司新闻</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">行业资讯</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">家庭护理</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">商标展示</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-2">
+                            <h5 class="mb-2">公司介绍</h5>
+                            <ul class="list-unstyled">
+                                <li class="my-2"><a href="#" class="footer-font-style">公司介绍</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">质量机构</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">企业架构</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">社会责任</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">企业荣誉</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-2">
+                            <h5 class="mb-2">研发中心</h5>
+                            <ul class="list-unstyled">
+                                <li class="my-2"><a href="#" class="footer-font-style">公司介绍</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">质量机构</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">企业架构</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">社会责任</a></li>
+                                <li class="my-2"><a href="#" class="footer-font-style">企业荣誉</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-4">
+                            <h5 class="mb-2">公司信息</h5>
+                            <ul class="list-unstyled">
+                                <li class="my-2">公司地址：广西钦州市钦北区皇马工业园</li>
+                                <li class="my-2">公司电话：0777-3889528</li>
+                                <li class="my-2">邮政编码：535038</li>
+                                <li class="my-2"><img src="{{ url_for('static', filename='assets/img/wechat.svg') }}"
+                                                      alt="公司公众号" style="width:7rem;height:auto;"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="text-center fade-in-end">
+                        <span class="footer-info-style">Copyright ©2024 广西邦琪药业集团有限公司 All Rights Reserved</span>
+                        <span class="footer-info-style">
+                        <a href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded">桂ICP备14001107号-1</a>
+                    </span>
+                        <span class="footer-info-style">
+                        <a href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded">桂公网安备 45030202000001号</a>
+                    </span>
+                    </div>
                 </div>
             </section>
         </div>

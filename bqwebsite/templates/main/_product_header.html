@@ -4,60 +4,59 @@
 </header>
 <section class="product_header mt-2">
     <div class="container">
-        <nav aria-label="breadcrumb" class="mb-2 mt-2 bg-light fw-bolder">
+        <nav aria-label="breadcrumb" class="mb-2 mt-2 bg-light">
             <ol class="breadcrumb p-1">
 
                 {% if request.view_args.get('brand') %}
-                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}">产品中心</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">产品中心</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">按商标分类</li>
                     <li class="breadcrumb-item active" aria-current="page">{{ request.view_args.get('brand') }}</li>
-                    <li class="breadcrumb-item active" aria-current="page">全部产品</li>
                 {% elif request.view_args.get('category') %}
-                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}">产品中心</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">产品中心</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">按剂型分类</li>
                     <li class="breadcrumb-item active" aria-current="page">{{ request.view_args.get('category') }}</li>
-                    <li class="breadcrumb-item active" aria-current="page">全部产品</li>
                 {% elif request.view_args.get('subject') %}
-                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}">产品中心</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">产品中心</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">按功能分类</li>
                     <li class="breadcrumb-item active" aria-current="page">{{ request.view_args.get('subject') }}</li>
-                    <li class="breadcrumb-item active" aria-current="page">全部产品</li>
                 {% else %}
-                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}">产品中心</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">产品中心</a></li>
                     <li class="breadcrumb-item active" aria-current="page">全部产品</li>
                 {% endif %}
             </ol>
         </nav>
         <div class="border-1" id="product-category">
-            <ul class="nav card-header-tabs border-bottom">
+            <ul class="nav border-bottom">
                 <li class="nav-item">
                     <a href="#" class="nav-link disabled bg-light fw-bolder text-dark" tabindex="-1"
                        aria-disabled="true">按商标：</a>
                 </li>
-
                 {% for brand in brands %}
-                    <li class="nav-item">
+                    <li class="nav-item nav-pills">
                         <a href="{{ url_for('main.product_brand', brand=brand.name) }}"
                            class="nav-link {% if request.view_args.get('brand') == brand.name %}active{% endif %}">{{ brand.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
-            <ul class="nav card-header-tabs border-bottom">
+            <ul class="nav border-bottom">
                 <li class="nav-item">
                     <a href="#" class="nav-link disabled bg-light fw-bolder text-dark" tabindex="-1"
                        aria-disabled="true">按剂型：</a>
                 </li>
                 {% for category in categories %}
-                    <li class="nav-item">
+                    <li class="nav-item nav-pills">
                         <a href="{{ url_for('main.product_category', category=category.name) }}"
                            class="nav-link {% if request.view_args.get('category') == category.name %}active{% endif %}">{{ category.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
-            <ul class="nav card-header-tabs border-bottom">
+            <ul class="nav border-bottom">
                 <li class="nav-item">
                     <a href="#" class="nav-link disabled bg-light fw-bolder text-dark" tabindex="-1"
                        aria-disabled="true">按功能：</a>
                 </li>
                 {% for subject in subjects %}
-                    <li class="nav-item">
+                    <li class="nav-item nav-pills">
                         <a href="{{ url_for('main.product_subject', subject=subject.name) }}"
                            class="nav-link {% if request.view_args.get('subject') == subject.name %}active{% endif %}">{{ subject.name }}</a>
                     </li>

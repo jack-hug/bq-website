@@ -83,46 +83,71 @@
 
 <!-- Footer-->
 {% if not index_page %}
-    <footer class="footer text-center bg-dark text-white pt-5">
+    <footer class="footer text-center bg-dark text-white pt-5 pb-2">
         <div class="container">
-            <div class="row">
-                <!-- Footer Location-->
-                <div class="col-lg-4 mb-5 mb-lg-0">
-                    <h4 class="mb-4">企业地址</h4>
-                    <p class="lead mb-0">
-                        广西壮族自治区
-                        <br/>
-                        钦州市钦北区皇马工业园
-                    </p>
-                    <p class="lead mb-0">
-                        邮编：535038
-                    </p>
+            <div class="row py-5">
+                <div class="col-2">
+                    <h5 class="mb-2">产品中心</h5>
+                    <ul class="list-unstyled">
+                        <li class="my-2"><a href="#" class="footer-font-style">膏 剂</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">糖 浆</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">颗 粒</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">片 剂</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">胶 囊</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">酊 剂</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">酊 剂</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">酊 剂</a></li>
+                    </ul>
                 </div>
-                <!-- Footer Social Icons-->
-                <div class="col-lg-4 mb-5 mb-lg-0">
-                    <h4 class="mb-4">集团与分公司</h4>
-                    <p class="lead mb-0 ">广西邦琪药业集团有限公司</p>
-                    <p class="lead mb-0">广西百琪药业有限公司</p>
-                    <p class="lead mb-0">广西葛洪堂药业有限公司</p>
-                    <p class="lead mb-0">广西葛洪堂方略制药有限公司</p>
-                    <p class="lead mb-0">广西泰和制药有限公司</p>
+                <div class="col-2">
+                    <h5 class="mb-2">邦资讯</h5>
+                    <ul class="list-unstyled">
+                        <li class="my-2"><a href="#" class="footer-font-style">公司新闻</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">行业资讯</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">家庭护理</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">商标展示</a></li>
+                    </ul>
                 </div>
-                <!-- Footer About Text-->
-                <div class="col-lg-4">
-                    <h4 class="mb-4">企业公众号</h4>
-                    <p class="lead mb-0">
-                        <img class="img-fluid rounded mb-5"
-                             src="{{ url_for('static', filename = 'assets/img/gongzhonghao.svg') }}" alt="">
-                    </p>
+                <div class="col-2">
+                    <h5 class="mb-2">公司介绍</h5>
+                    <ul class="list-unstyled">
+                        <li class="my-2"><a href="#" class="footer-font-style">公司介绍</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">质量机构</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">企业架构</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">社会责任</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">企业荣誉</a></li>
+                    </ul>
+                </div>
+                <div class="col-2">
+                    <h5 class="mb-2">研发中心</h5>
+                    <ul class="list-unstyled">
+                        <li class="my-2"><a href="#" class="footer-font-style">公司介绍</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">质量机构</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">企业架构</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">社会责任</a></li>
+                        <li class="my-2"><a href="#" class="footer-font-style">企业荣誉</a></li>
+                    </ul>
+                </div>
+                <div class="col-4">
+                    <h5 class="mb-2">公司信息</h5>
+                    <ul class="list-unstyled">
+                        <li class="my-2">公司地址：广西钦州市钦北区皇马工业园</li>
+                        <li class="my-2">公司电话：0777-3889528</li>
+                        <li class="my-2">邮政编码：535038</li>
+                        <li class="my-2"><img src="{{ url_for('static', filename='assets/img/wechat.svg') }}"
+                                              alt="公司公众号" style="width:7rem;height:auto;"></li>
+                    </ul>
                 </div>
             </div>
-        </div>
-        <!-- Copyright Section-->
-        <div class="copyright py-4 text-center text-white bg-dark">
-            <div class="container"><small>Copyright ©2023 广西邦琪药业集团有限公司 All Rights Reserved</small></div>
-            <div class="container"><small>互联网药品信息服务资格证书：（桂）-非经营性-2023-0020号 <a
-                    href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded"
-                    style="color: #fff; text-decoration: none">桂ICP备14001107号-1</a></small>
+            <!-- Copyright Section-->
+            <div class="text-center mt-5">
+                <span class="footer-info-style">Copyright ©2024 广西邦琪药业集团有限公司 All Rights Reserved</span>
+                <span class="footer-info-style">
+                        <a href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded">桂ICP备14001107号-1</a>
+                    </span>
+                <span class="footer-info-style">
+                        <a href="https://beian.miit.gov.cn" target="_blank" class="px-0 px-lg-3 rounded">桂公网安备 45030202000001号</a>
+                    </span>
             </div>
         </div>
     </footer>
