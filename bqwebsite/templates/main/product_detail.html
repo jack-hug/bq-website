@@ -15,13 +15,7 @@
             <div class="row">
                 {% include 'main/_sidebar_product.html' %}
                 <div class="col-lg-9 col-md-9 col-sm-12 bg-white rounded">
-                    {% for message in get_flashed_messages(with_categories = True) %}
-                        <div class="alert alert-{{ message[0] }}" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            {{ message[1] }}
-                        </div>
-                    {% endfor %}
-                    <h3 class="text-center text-secondary mt-3">{{ product.name }}</h3>
+                    <h3 class="text-center text-secondary mt-3 text-dark">{{ product.name }}</h3>
                     <p class="text-muted text-center"><small>发布时间：{{ product.timestamp }}</small></p>
                     <hr class="divider-custom">
                     <div class="row">
@@ -42,7 +36,7 @@
                                     <!-- 轮播项 -->
                                     <div class="carousel-inner">
                                         {% for photo in product.photos %}
-                                            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                            <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="3000">
                                                 <img src="{{ url_for('admin.get_image', filename=photo.filename_m) }}"
                                                      alt="{{ product.name }}" class="d-block w-100 img-fluid rounded"
                                                      style="width: 400px; height: 500px; object-fit: contain;">
@@ -59,14 +53,30 @@
                             {% endif %}
                         </div>
                         <div class="col-md-6 col-sm-12">
-                            <p>产品名称：{{ product.name }}</p>
-                            <p>剂型：{{ product.category.name }}</p>
-                            <p>规格：{{ product.product_format }}</p>
-                            <p>功能主治：{{ product.product_indication }}</p>
+                            <table class="table table-hover table-light text-center">
+                                <tbody>
+                                <tr>
+                                    <th class="" style="white-space: nowrap;">产品名称:</th>
+                                    <td>{{ product.name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>剂 型：</th>
+                                    <td>{{ product.category.name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>规 格：</th>
+                                    <td>{{ product.product_format }}</td>
+                                </tr>
+                                <tr>
+                                    <th style="white-space: nowrap;">功能主治：</th>
+                                    <td>{{ product.product_indication }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="text-start mt-5">
-                        {{ product.product_content|safe }}
+                        {{ product.product_content | replace("<img", "<img class='img-fluid h-100'") | safe }}
                     </div>
                     <hr class="mt-5">
                     <nav aria-label="Page navigation">

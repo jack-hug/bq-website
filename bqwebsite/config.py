@@ -32,13 +32,15 @@ class BaseConfig:
     }
 
     SECRET_KEY = os.getenv('SECRET_KEY')
-    MAX_CONTENT_LENGTH = 3 * 1024 * 1024
+    MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 文件大小不能超过5MB
 
     CKEDITOR_ENABLE_CSRF = True
     CKEDITOR_SERVE_LOCAL = True
     CKEDITOR_PKG_TYPE = 'standard'
     CKEDITOR_HEIGHT = 400
-    # CKEDITOR_FILE_UPLOADER = 'admin.upload_image'
+    CKEDITOR_FILE_UPLOADER = 'admin.upload_image'  # ckeditor上传图片的函数
+
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
     # DROPZONE_MAX_FILE_SIZE = 3
     # DROPZONE_MAX_FILES = 30

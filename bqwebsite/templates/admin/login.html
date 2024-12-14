@@ -5,23 +5,25 @@
     登 录
 {% endblock %}
 {% block content %}
-        <header class="masthead bg-primary text-white text-center">
-        <div class="news_bg_img01"></div>
+    <header class="masthead bg-primary text-white text-center">
+        <div class="news_bg_img"><img src="{{ url_for('static', filename='assets/img/bg_img01.png') }}"
+                                      class="img-fluid" alt=""></div>
     </header>
     <section class="page-section portfolio bg-light">
         <div class="container">
             <div class="row">
                 <div class="col-md-4"></div>
-                <div class="col-md-4 align-self-center">
-                    <h1 class="text-center">登 录</h1>
+                <div class="col-md-4 align-self-center my-5">
+                    <h4 class="text-center">登 录</h4>
                     <div>
                         {{ render_form(form) }}
                         <hr>
-                        <p class="small text-end"><a href="{{ url_for('admin.forget_password') }}" class="text-decoration-none">忘记密码？</a></p>
+                        <p class="small text-end"><a href="{{ url_for('admin.forget_password') }}"
+                                                     class="text-decoration-none">忘记密码？</a></p>
                     </div>
                 </div>
                 <div class="col-md-4"></div>
-                </div>
             </div>
+        </div>
     </section>
 {% endblock %}

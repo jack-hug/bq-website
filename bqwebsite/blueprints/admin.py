@@ -1,7 +1,9 @@
+import os
 from datetime import datetime, timedelta, timezone
 
 from flask import render_template, Blueprint, redirect, url_for, flash, request, current_app, send_from_directory, \
     jsonify
+from flask_ckeditor import upload_fail, upload_success
 from flask_login import current_user, login_user, login_required, logout_user
 
 from ..extensions import db
@@ -133,6 +135,24 @@ def product_edit(product_id):
     return render_template('admin/product_edit.html', product=product, form=form, show_collapse=True)
 
 
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
+
+
+@admin_bp.route('/upload_image', methods=['POST'])  # flask_ckeditor上传图片
+@login_required
+def upload_image():
+    f = request.files.get('upload')
+    if not allowed_file(f.filename):
+        return upload_fail(message='错误的文件格式！')
+    filename = random_filename(f.filename)
+    f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
+    url = url_for('admin.get_image', filename=filename)
+
+    return upload_success(url=url)
+
+
 @admin_bp.route('/uploads/<path:filename>')  # 获得上传图片
 def get_image(filename):
     return send_from_directory(current_app.config['BQ_UPLOAD_PATH'], filename)
@@ -148,9 +168,8 @@ def check_product_name():
 @admin_bp.route('/product_delete/<int:product_id>', methods=['POST'])  # 删除产品
 @login_required
 def product_delete(product_id):
-    product_id = Product.query.get_or_404(product_id)
-    db.session.delete(product_id)
-    db.session.commit()
+    product = Product.query.get_or_404(product_id)
+    product.delete_product()
     flash('删除成功.', 'success')
     return redirect_back()
 
@@ -167,6 +186,17 @@ def product_multiple_delete():
         flash('批量删除成功.', 'success')
         return redirect(url_for('admin.product_list'))
     return redirect(url_for('admin.product_list'))
+
+
+@admin_bp.route('/delete_photo/<int:photo_id>', methods=['POST'])  # 删除图片
+@login_required
+def delete_photo(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    db.session.delete(photo)
+    db.session.commit()
+    flash('图片删除成功.', 'success')
+    return redirect(url_for('admin.product_edit', product_id=photo.product_id))
+
 
 
 @admin_bp.route('/product_status/<int:product_id>')  # 发布与撤销

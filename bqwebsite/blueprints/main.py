@@ -2,7 +2,7 @@ import os
 
 from flask import render_template, request, redirect, url_for, Blueprint, current_app, flash, send_from_directory
 from ..models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
-    IntroduceCategory, Contact, ContactCategory, Subject
+    IntroduceCategory, Contact, ContactCategory, Subject, Research
 
 main_bp = Blueprint('main', __name__)
 
@@ -162,30 +162,29 @@ def show_product(product_id):
 
 
 @main_bp.route('/introduce/<int:intro_id>')
+# 公司介绍
 def show_introduce(intro_id):
     show_intro = Introduce.query.get_or_404(intro_id)
     return render_template('main/introduce_detail.html', show_intro=show_intro)
 
 
 @main_bp.route('/honor')
+# 荣誉介绍
 def honor():
     return render_template('main/honor.html')
 
 
 @main_bp.route('/contact/<int:contact_id>')
+# 联系我们
 def show_contact(contact_id):
     show_con = Contact.query.get_or_404(contact_id)
     return render_template('main/contact_detail.html', show_con=show_con)
 
-
-@main_bp.route('/contact_cooperate')
-def contact_cooperate():
-    return render_template('main/contact_cooperate.html')
-
-
-@main_bp.route('/contact_recruit')
-def contact_recruit():
-    return render_template('main/contact_recruit.html')
+@main_bp.route('/show_research/<int:research_id>')
+# 研发生产
+def show_research(research_id):
+    show_research = Research.query.get_or_404(research_id)
+    return render_template('main/research_detail.html', show_research=show_research)
 
 
 @main_bp.route('/uploads/<int:filename>')  # 获得图片链接

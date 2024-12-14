@@ -1,4 +1,5 @@
 import os
+import re
 
 from flask import current_app
 from sqlalchemy import event
@@ -25,7 +26,6 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))  # 品名
     product_indication = db.Column(db.String(200))  # 功能主治
-    # product_manual = db.Column(db.Text)  # 说明书
     product_content = db.Column(db.Text)  # 产品页内容
     product_format = db.Column(db.String(100))  # 产品规格
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
@@ -43,6 +43,41 @@ class Product(db.Model):
 
     photos = db.relationship('Photo', back_populates='product', lazy='dynamic', cascade='all, delete-orphan')
 
+    def delete_product(self):
+        self.delete_ckeditor_images()
+
+        for photo in self.photos:
+            photo.delete_photos()
+
+        db.session.delete(self)
+        db.session.commit()
+
+    def delete_ckeditor_images(self):
+        image_paths = self.extract_image_paths(self.product_content)
+        for path in image_paths:
+            self.delete_image_file(path)
+
+    @staticmethod
+    def extract_image_paths(html):
+        img_pattern = re.compile(r'<img[^>]+src="([^">]+)"')
+        image_paths = img_pattern.findall(html)
+        image_paths = [path.lstrip('/admin') for path in image_paths]
+        print('image_paths:', image_paths)
+        return image_paths
+
+    @staticmethod
+    def delete_image_file(relative_path):
+        # 去掉 relative_path 中的 'uploads' 部分
+        if relative_path.startswith('uploads/'):
+            relative_path = relative_path[len('uploads/'):]
+        file_path = os.path.join(current_app.config['BQ_UPLOAD_PATH'], relative_path)
+        file_path = os.path.normpath(file_path)
+        print('file_path:', file_path)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        else:
+            print('文件不存在')
+
 
 class Photo(db.Model):
     # 图片
@@ -56,7 +91,7 @@ class Photo(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
     product = db.relationship('Product', back_populates='photos')
 
-    def delete_photos(self):
+    def delete_photos(self):  #
         upload_path = current_app.config['BQ_UPLOAD_PATH']
         for filename in [self.filename, self.filename_s, self.filename_m]:
             if filename:

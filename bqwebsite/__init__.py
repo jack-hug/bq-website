@@ -55,11 +55,14 @@ def register_template_context(app):
         all_news_limit = News.query.order_by(News.clicks.desc()).limit(10).all()
         news_categories = NewsCategory.query.order_by(NewsCategory.id.asc()).all()
         introduce_categories = IntroduceCategory.query.order_by(IntroduceCategory.id.asc()).all()
+        research_categories = ResearchCategory.query.order_by(ResearchCategory.id.asc()).all()
         contact_categories = ContactCategory.query.order_by(ContactCategory.id.asc()).all()
-        hot_products = Product.query.filter(Product.clicks > 0).order_by(Product.clicks.desc()).limit(15)
+        hot_products = Product.query.filter(Product.clicks > 0, Product.status == True).order_by(
+            Product.clicks.desc()).limit(15)
         return dict(admin=admin, categories=categories, subjects=subjects, brands=brands,
                     news_categories=news_categories, introduce_categories=introduce_categories,
-                    contact_categories=contact_categories, all_news_limit=all_news_limit, hot_products=hot_products)
+                    contact_categories=contact_categories, all_news_limit=all_news_limit, hot_products=hot_products,
+                    research_categories=research_categories)
 
 
 def register_shell_context(app):
@@ -114,7 +117,8 @@ def register_commands(app):
     @click.option('--photo', default=50, help='Quantity of photos, default is 50.')
     def forge(product, news, introduce, contact, photo, research):
         from .fakes import fake_categories, admin, fake_products, news_categories, fake_news, intro_category, \
-            fake_intro, fake_brand, fake_subject, contact_categories, fake_contact, fake_photo, research_category, fake_research
+            fake_intro, fake_brand, fake_subject, contact_categories, fake_contact, fake_photo, research_category, \
+            fake_research
 
         click.echo('Drop tables....')
         db.drop_all()
@@ -142,6 +146,8 @@ def register_commands(app):
         fake_news(news)
 
         click.echo('Generating research_categories and %d research contents...' % research)
+        research_category()
+        fake_research(research)
 
         click.echo('Generating contact_category and %d contact' % contact)
         contact_categories()

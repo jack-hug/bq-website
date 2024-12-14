@@ -53,14 +53,30 @@
                         {{ form.product_format(class="form-control") }}
                     </div>
                     <div class="mb-3">
+                        {{ form.photos.label(class="form-label") }}
+                        {{ form.photos(class="form-control", multiple=True, onchange="validateFiles(this)") }}
+                    </div>
+                    <div class="row row-cols-auto">
+                        {% for photo in product.photos %}
+                            <div class="col">
+                                <div class="photo-container" data-photo-id="{{ photo.id }}">
+                                    <img src="{{ url_for('admin.get_image', filename=photo.filename) }}"
+                                         alt="{{ photo.filename }}">
+                                    <button class="btn btn-danger btn-close delete-button"></button>
+                                    <form action="{{ url_for('admin.delete_photo', photo_id=product.id) }}"
+                                          method="post"
+                                          class="form text-center">
+                                        {{ form.hidden_tag() }}
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
                         {{ form.product_content.label(class="form-label") }}
                         {{ form.product_content(class="form-control") }}
                         {{ ckeditor.load(custom_url=url_for('static', filename='admin/ckeditor/ckeditor.js')) }}
                         {{ ckeditor.config(name='product_content') }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.photos.label(class="form-label") }}
-                        {{ form.photos(class="form-control", multiple=True, onchange="validateFiles(this)") }}
                     </div>
                     <div class="mb-3">
                         {{ form.submit(class="btn btn-primary btn-md") }}
@@ -85,6 +101,32 @@
                 }
             }
         }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+            const deleteButtons = document.querySelectorAll('.delete-button');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const photoContainer = button.closest('.photo-container');
+                    const photoId = photoContainer.getAttribute('data-photo-id');
+
+                    // 添加确认弹窗
+                    if (window.confirm('你确定要删除这张图片吗？')) {
+                        fetch(`/admin/delete_photo/${photoId}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrfToken
+                            }
+                        }).then(response => {
+                            if (response.ok) {
+                                photoContainer.remove();
+                            }
+                        });
+                    }
+                });
+            });
+        });
     </script>
 {% endblock %}
 

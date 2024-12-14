@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ show_research.title }}
+{% endblock %}
+{% block nav_research %}active{% endblock %}
+{% set active_page = show_research.research_category.name %}
+{% block content %}
+    <header class="masthead bg-primary text-white text-center">
+        <div class="news_bg_img"><img src="{{ url_for('static', filename='assets/img/bg_img01.png') }}"
+                                      class="img-fluid" alt=""></div>
+    </header>
+    <section class="page-section portfolio bg-light">
+        <div class="container mt-5">
+            <div class="row">
+                {% include 'main/_slider_research.html' %}
+                <div class="col-lg-9 col-md-9 col-sm-12 bg-white rounded">
+                    <h3 class="text-center text-dark mt-5">{{ show_research.title }}</h3>
+                    <p class="text-muted text-center"><small>发布时间：{{ show_research.timestamp }}</small></p>
+                    <hr>
+                    <p class="lh-lg text-start text-indent">{{ show_research.introduce_content }}</p>
+                    <hr class="mt-5">
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

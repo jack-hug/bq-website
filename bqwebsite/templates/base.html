@@ -57,8 +57,8 @@
                         </a>
                     </li>
                     <li class="nav-item mx-0 mx-lg-1">
-                        <a class="nav-link py-1 px-0 px-lg-3 rounded"
-                           href="#">研发生产
+                        <a class="nav-link py-1 px-0 px-lg-3 rounded {% block nav_research %}{% endblock %}"
+                           href="{{ url_for('main.show_research', research_id=1) }}">研发生产
                         </a>
                     </li>
                     <li class="nav-item mx-0 mx-lg-1">
@@ -69,13 +69,13 @@
                 </ul>
             </div>
         </div>
-        {% for message in get_flashed_messages(with_categories = True) %}
-            <div class="alert alert-{{ message[0] }}" role="alert">
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                {{ message[1] }}
-            </div>
-        {% endfor %}
     </nav>
+    {% for message in get_flashed_messages(with_categories = True) %}
+        <div class="alert alert-{{ message[0] }} alert-floating" role="alert" id="flash-message-{{ loop.index }}">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            {{ message[1] }}
+        </div>
+    {% endfor %}
 {% endblock %}
 
 {% block content %}

@@ -10,3 +10,30 @@
     content: ' \25B4'; /* Unicode for up arrow */
 }
 
+.alert-floating {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050; /* 确保它在其他内容之上 */
+    text-align: center; /* 确保文本居中 */
+}
+
+.photo-container {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+    border: 1px solid grey;
+}
+
+.photo-container img {
+    width: 100px;
+    height: auto;
+}
+
+.photo-container .btn-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+}
