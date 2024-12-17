@@ -15,7 +15,7 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False, unique=True)  # 产品分类名称
     status = db.Column(db.Boolean, default=True)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     products = db.relationship('Product', back_populates='category')
 
@@ -28,7 +28,7 @@ class Product(db.Model):
     product_indication = db.Column(db.String(200))  # 功能主治
     product_content = db.Column(db.Text)  # 产品页内容
     product_format = db.Column(db.String(100))  # 产品规格
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
     clicks = db.Column(db.Integer, default=0)  # 点击数
     status = db.Column(db.Boolean, default=True)
 
@@ -86,7 +86,7 @@ class Photo(db.Model):
     filename = db.Column(db.String(256), unique=True)   # 600*800 上传图片裁剪后尺寸
     filename_s = db.Column(db.String(256), unique=True)  # 300*400 产品中心缩略图
     filename_m = db.Column(db.String(256), unique=True)  # 450*600 首页分类及缩略图
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
     product = db.relationship('Product', back_populates='photos')
@@ -107,7 +107,7 @@ class News(db.Model):
     title = db.Column(db.String(100))
     content = db.Column(db.Text)
     status = db.Column(db.Boolean, default=True)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
     clicks = db.Column(db.Integer, default=0)  # 点击数
 
     newscategory_id = db.Column(db.Integer, db.ForeignKey('newscategory.id'))
@@ -120,7 +120,7 @@ class NewsCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), unique=True)
     status = db.Column(db.Boolean, default=True)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     news = db.relationship('News', back_populates='newscategory')
 
@@ -131,7 +131,7 @@ class Banner(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     filename = db.Column(db.String(100))
     status = db.Column(db.Boolean, default=True)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
 
 class Honor(db.Model):
@@ -140,7 +140,7 @@ class Honor(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     honor_title = db.Column(db.String(100))
     honor_img = db.Column(db.String(200))
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
 
 class Brand(db.Model):
@@ -150,7 +150,7 @@ class Brand(db.Model):
     name = db.Column(db.String(100))
     filename = db.Column(db.String(100))
     status = db.Column(db.Boolean, default=True)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     products = db.relationship('Product', back_populates='brand')
 
@@ -161,7 +161,7 @@ class Introduce(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100))
     introduce_content = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     introduce_category_id = db.Column(db.Integer, db.ForeignKey('introducecategory.id'))
     introduce_category = db.relationship('IntroduceCategory', back_populates='introduces')
@@ -172,7 +172,7 @@ class IntroduceCategory(db.Model):
     __tablename__ = 'introducecategory'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     introduces = db.relationship('Introduce', back_populates='introduce_category')
 
@@ -181,7 +181,7 @@ class ResearchCategory(db.Model):
     __tablename__ = 'researchcategory'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     researchs = db.relationship('Research', back_populates='research_category')
 
@@ -192,7 +192,7 @@ class Research(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100))
     research_content = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     research_category_id = db.Column(db.Integer, db.ForeignKey('researchcategory.id'))
     research_category = db.relationship('ResearchCategory', back_populates='researchs')
@@ -203,7 +203,7 @@ class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))
     status = db.Column(db.Boolean, default=True)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     products = db.relationship('Product', back_populates='subject')
 
@@ -228,7 +228,7 @@ class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100))
     content = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     contact_category_id = db.Column(db.Integer, db.ForeignKey('contactcategory.id'))
     contact_category = db.relationship('ContactCategory', back_populates='contacts')

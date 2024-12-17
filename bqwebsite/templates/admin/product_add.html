@@ -48,16 +48,19 @@
                         {{ form.product_indication.label(class="form-label") }}
                         {{ form.product_indication(class="form-control") }}
                     </div>
+                    <div class="mb-3">
+                        {{ form.product_format.label(class="form-label") }}
+                        {{ form.product_format(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.photos.label(class="form-label") }}
+                        {{ form.photos(class="form-control", multiple=True) }}
                     <p class="mb-3">
                         {{ form.product_content.label(class="form-label") }}
                         {{ form.product_content(class="form-control") }}
                         {{ ckeditor.load(custom_url=url_for('static', filename='admin/ckeditor/ckeditor.js')) }}
                         {{ ckeditor.config(name='product_content') }}
                     </p>
-                    <div class="mb-3">
-                        {{ form.photos.label(class="form-label") }}
-                        {{ form.photos(class="form-control", multiple=True, onchange="validateFiles(this)") }}
-                    </div>
                     <div class="mb-3">
                         {{ form.submit(class="btn btn-primary btn-md") }}
                     </div>
@@ -70,17 +73,30 @@
 {% block scripts %}
     {{ super() }}
     <script>
-        function validateFiles(input) {
-            const maxSize = 3 * 1024 * 1024; // 3MB
-            const files = input.files;
-            for (let i = 0; i < files.length; i++) {
-                if (files[i].size > maxSize) {
-                    alert(`文件 ${files[i].name} 过大，上传的文件大小不能超过3MB`);
-                    input.value = ""; // Clear the input
-                    return;
-                }
-            }
-        }
+        $(document).ready(function () {
+            $('#photos').fileinput({
+                language: 'zh',
+                allowedFileExtensions: ['jpg','jpeg', 'png', 'gif'],
+                maxFileSize: 5000, // 5MB
+                maxFilesNum: 10,
+                showUpload: false,
+                showRemove: true,
+                showPreview: true,
+                overwriteInitial: false,
+                initialCaption: "请选择图片,图片大小不能超过5MB.",
+                dropZoneEnabled: true,
+                browseLabel: '浏览',
+                removeLabel: '移除',
+                cancelLabel: '取消',
+                uploadLabel: '上传',
+                previewFileType: 'image',
+                browseIcon: '<i class="fa-regular fa-folder-open"></i>',
+                removeIcon: '<i class="fa-solid fa-trash"></i>',
+                cancelIcon: '<i class="fa-solid fa-ban"></i>',
+                uploadIcon: '<i class="fa-solid fa-file-arrow-up"></i>'
+            });
+        });
     </script>
 {% endblock %}
+
 

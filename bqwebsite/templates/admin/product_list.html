@@ -101,7 +101,7 @@
                                 <td>{{ product.category.name }}</td>
                                 <td>{{ product.brand.name }}</td>
                                 <td>{{ product.subject.name }}</td>
-                                <td>{{ product.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>{{ moment(product.timestamp).format('LLL') }}</td>
                                 <td>
                                     {% if product.status %}
                                         <small class="text-bg-success p-1 rounded">已发布</small>

@@ -1,13 +1,13 @@
 import click
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_wtf.csrf import CSRFError
 
 from .blueprints.main import main_bp
 from .blueprints.admin import admin_bp
 from .config import config
-from .extensions import bootstrap, db, csrf, dropzone, login_manager, ckeditor, migrate
+from .extensions import bootstrap, db, csrf, dropzone, login_manager, ckeditor, migrate, moment
 from .models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
     IntroduceCategory, Admin, Subject, ContactCategory, ResearchCategory, Research
 
@@ -38,6 +38,7 @@ def register_extensions(app):
     login_manager.init_app(app)
     ckeditor.init_app(app)
     migrate.init_app(app, db)
+    moment.init_app(app)
 
 
 def register_blueprints(app):
@@ -85,8 +86,8 @@ def register_errorhandlers(app):
         return render_template('errors/404.html'), 404
 
     @app.errorhandler(413)
-    def request_entity_too_large(e):
-        return render_template('errors/413.html'), 413
+    def request_entity_too_large(error):
+        return jsonify({'uploaded': 0, 'error': {'message': '文件大小不能超过5MB'}}), 413
 
     @app.errorhandler(500)
     def internal_server_error(e):
@@ -95,6 +96,7 @@ def register_errorhandlers(app):
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
         return render_template('errors/400.html', description=e.description), 400
+
 
 
 def register_commands(app):

@@ -8,16 +8,11 @@ from flask_login import current_user, login_user, login_required, logout_user
 
 from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
-from ..forms.admin import LoginForm, ProductForm, EditProductForm, CategoryForm, BrandForm, SubjectForm, EditCategoryForm
+from ..forms.admin import LoginForm, ProductForm, EditProductForm, CategoryForm, BrandForm, SubjectForm, \
+    EditCategoryForm
 from ..utils import random_filename, resize_image, redirect_back, save_uploaded_files
 
-
 admin_bp = Blueprint('admin', __name__)
-
-# 将数据库时间转换为本地时间
-utc_now = datetime.utcnow()
-local_tz = timezone(timedelta(hours=8))  # 设置本地时区为 UTC+8
-local_now = utc_now.replace(tzinfo=timezone.utc).astimezone(local_tz)
 
 
 @admin_bp.route('/')  # 首页
@@ -88,7 +83,8 @@ def product_add():
             product_indication=form.product_indication.data,
             category_id=form.category.data,
             brand_id=form.brand.data,
-            subject_id=form.subject.data
+            subject_id=form.subject.data,
+            timestamp=datetime.now()
         )
         db.session.add(product)
         db.session.commit()
@@ -115,7 +111,7 @@ def product_edit(product_id):
         product.category_id = form.category.data
         product.brand_id = form.brand.data
         product.subject_id = form.subject.data
-        product.timestamp = local_now
+        product.timestamp = datetime.now()
         if 'photos' in request.files and request.files['photos'].filename != '':
             photos = save_uploaded_files(request.files, product)
             db.session.add_all(photos)
@@ -145,7 +141,7 @@ def allowed_file(filename):
 def upload_image():
     f = request.files.get('upload')
     if not allowed_file(f.filename):
-        return upload_fail(message='错误的文件格式！')
+        return upload_fail(message='错误的文件格式！只能上传png, jpg, jpeg, gif格式文件')
     filename = random_filename(f.filename)
     f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
     url = url_for('admin.get_image', filename=filename)
@@ -198,7 +194,6 @@ def delete_photo(photo_id):
     return redirect(url_for('admin.product_edit', product_id=photo.product_id))
 
 
-
 @admin_bp.route('/product_status/<int:product_id>')  # 发布与撤销
 @login_required
 def product_status(product_id):
@@ -224,7 +219,7 @@ def category_add():
         if category_form.category_submit.data and category_form.validate():
             category = Category(
                 name=category_form.name.data,
-                timestamp=local_now
+                timestamp=datetime.now()
             )
             db.session.add(category)
             db.session.commit()
@@ -233,7 +228,7 @@ def category_add():
         if brand_form.brand_submit.data and brand_form.validate():
             brand = Brand(
                 name=brand_form.name.data,
-                timestamp=local_now
+                timestamp=datetime.now()
             )
             db.session.add(brand)
             db.session.commit()
@@ -242,7 +237,7 @@ def category_add():
         if subject_form.subject_submit.data and subject_form.validate():
             subject = Subject(
                 name=subject_form.name.data,
-                timestamp=local_now
+                timestamp=datetime.now()
             )
             db.session.add(subject)
             db.session.commit()
@@ -251,7 +246,8 @@ def category_add():
         else:
             flash('添加失败,名称已经存在', 'info')
             return redirect(url_for('admin.category_add'))
-    return render_template('admin/category_add.html', category_form=category_form, brand_form=brand_form, subject_form=subject_form, show_collapse=True)
+    return render_template('admin/category_add.html', category_form=category_form, brand_form=brand_form,
+                           subject_form=subject_form, show_collapse=True)
 
 
 @admin_bp.route('/brand_edit/<int:brand_id>', methods=['GET', 'POST'])  # 编辑商标
@@ -268,7 +264,7 @@ def category_edit(category_id):
     form = EditCategoryForm()
     if form.validate_on_submit():
         category.name = form.name.data
-        category.timestamp = local_now
+        category.timestamp = datetime.now()
         db.session.commit()
         flash('修改成功.', 'success')
         return redirect(url_for('admin.category_list'))

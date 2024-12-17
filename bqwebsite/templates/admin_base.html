@@ -14,7 +14,13 @@
             <link rel="stylesheet" href="https://cdn.staticfile.net/font-awesome/6.4.0/css/all.min.css">
             <!-- Core theme CSS (includes Bootstrap)-->
             <link rel="stylesheet" href="{{ url_for('static',filename = 'css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="https://cdn.staticfile.net/bootstrap-icons/1.11.3/font/bootstrap-icons.css">
             <link href="{{ url_for('static',filename = 'admin/css/styles.css') }}" rel="stylesheet"/>
+            <!-- bootstrap-fileinput上传文件插件 -->
+            <link href="https://cdn.staticfile.net/bootstrap-fileinput/5.5.2/css/fileinput.min.css" media="all"
+                  rel="stylesheet" type="text/css">
+            <link href="https://cdn.staticfile.net/bootstrap-fileinput/5.5.2/css/fileinput-rtl.min.css" media="all"
+                  rel="stylesheet" type="text/css">
         {% endblock %}
     {% endblock %}
 </head>
@@ -64,8 +70,17 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="https://cdn.staticfile.net/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.net/bootstrap-fileinput/5.5.2/js/plugins/buffer.min.js"></script>
+    <script src="https://cdn.staticfile.net/bootstrap-fileinput/5.5.2/js/plugins/filetype.min.js"></script>
+    <script src="https://cdn.staticfile.net/bootstrap-fileinput/5.5.2/js/plugins/piexif.min.js"></script>
+    <script src="https://cdn.staticfile.net/bootstrap-fileinput/5.5.2/js/plugins/sortable.min.js"></script>
     <script src="https://cdn.staticfile.net/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.staticfile.net/bootstrap-fileinput/5.5.2/js/fileinput.min.js"></script>
+    <script src="https://cdn.staticfile.net/bootstrap-fileinput/5.5.2/js/locales/zh.min.js"></script>
     <script src="{{ url_for('static',filename = 'admin/js/scripts.js') }}"></script>
+    {{ moment.include_moment(local_js=url_for('static', filename='admin/js/moment-with-locales.min.js')) }}
+    {{ moment.locale('zh-CN') }}
 {% endblock %}
 </body>
 </html>
