@@ -105,7 +105,6 @@ def product_edit(product_id):
     product = Product.query.get_or_404(product_id)
     form = EditProductForm(product=product)
     if form.validate_on_submit():
-        print('aaa')
         product.name = form.name.data
         product.product_content = form.product_content.data
         product.product_indication = form.product_indication.data
@@ -114,7 +113,6 @@ def product_edit(product_id):
         product.brand_id = form.brand.data
         product.subject_id = form.subject.data
         product.timestamp = datetime.utcnow()
-        print(product.timestamp)
         if 'photos' in request.files and request.files['photos'].filename != '':
             photos = save_uploaded_files(request.files, product)
             db.session.add_all(photos)
