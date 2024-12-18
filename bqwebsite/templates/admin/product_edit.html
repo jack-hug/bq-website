@@ -26,7 +26,7 @@
                 </nav>
                 <h4 class="text-center mb-3 mt-3">编辑产品</h4>
                 <hr>
-                <form method="POST" enctype="multipart/form-data" class="form" id="productForm">
+                <form method="POST" enctype="multipart/form-data" class="form">
                     {{ form.hidden_tag() }}
                     <div class="mb-3">
                         {{ form.name.label(class="form-label") }}
@@ -56,22 +56,6 @@
                         {{ form.photos.label(class="form-label") }}
                         {{ form.photos(class="form-control", multiple=True, onchange="validateFiles(this)") }}
                     </div>
-                    <div class="row row-cols-auto">
-                        {% for photo in product.photos %}
-                            <div class="col">
-                                <div class="photo-container" data-photo-id="{{ photo.id }}">
-                                    <img src="{{ url_for('admin.get_image', filename=photo.filename) }}"
-                                         alt="{{ photo.filename }}">
-                                    <button class="btn btn-danger btn-close delete-button"></button>
-                                    <form action="{{ url_for('admin.delete_photo', photo_id=product.id) }}"
-                                          method="post"
-                                          class="form text-center">
-                                        {{ form.hidden_tag() }}
-                                    </form>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
                     <div class="mb-3">
                         {{ form.product_content.label(class="form-label") }}
                         {{ form.product_content(class="form-control") }}
@@ -90,41 +74,40 @@
 {% block scripts %}
     {{ super() }}
     <script>
-        function validateFiles(input) {
-            const maxSize = 3 * 1024 * 1024; // 3MB
-            const files = input.files;
-            for (let i = 0; i < files.length; i++) {
-                if (files[i].size > maxSize) {
-                    alert(`文件 ${files[i].name} 过大，上传的文件大小不能超过3MB`);
-                    input.value = ""; // Clear the input
-                    return;
-                }
-            }
-        }
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const csrfToken = document.querySelector('input[name="csrf_token"]').value;
-            const deleteButtons = document.querySelectorAll('.delete-button');
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const photoContainer = button.closest('.photo-container');
-                    const photoId = photoContainer.getAttribute('data-photo-id');
+        // bootstrap-fileinput 插件设置
+        $(document).ready(function () {
+            // 动态设置已上传的图片
+            var imageUrls = {{ product.photos|tojson }};
+            var initialPreview = [];
+            var initialPreviewConfig = [];
 
-                    // 添加确认弹窗
-                    if (window.confirm('你确定要删除这张图片吗？')) {
-                        fetch(`/admin/delete_photo/${photoId}`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': csrfToken
-                            }
-                        }).then(response => {
-                            if (response.ok) {
-                                photoContainer.remove();
-                            }
-                        });
-                    }
+            imageUrls.forEach(function (url) {
+                initialPreview.push(url);
+                initialPreviewConfig.push({
+                    caption: url.split('/').pop(), // 文件名
+                    size: 0, // 文件大小（可选）
+                    url: 'admin/delete_photo/' + url.split('/').pop().split('.')[0], // 删除图片的 URL
+                    key: url.split('/').pop().split('.')[0] // 唯一标识符
                 });
+            });
+            $('#photos').fileinput({
+                language: 'zh',
+                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+                maxFileSize: 5000, // 5MB
+                maxFilesNum: 10,
+                showUpload: false,
+                showRemove: true,
+                showPreview: true,
+                initialPreview: initialPreview,
+                initialPreviewConfig: initialPreviewConfig,
+                overwriteInitial: false,
+                initialCaption: "请选择或拖动图片,图片大小不能超过5MB.",
+                dropZoneEnabled: true,
+                browseLabel: '浏览',
+                removeLabel: '移除',
+                cancelLabel: '取消',
+                uploadLabel: '上传',
+                previewFileType: 'image'
             });
         });
     </script>

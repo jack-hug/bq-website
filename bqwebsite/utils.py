@@ -72,7 +72,7 @@ def save_uploaded_files(request_files, product):  # 封装上传图片函数
     photos = []
     for f in request_files.getlist('photos'):
         if f.content_length > current_app.config['MAX_CONTENT_LENGTH']:
-            flash(f'文件 {f.filename} 过大，上传的文件大小不能超过3MB')
+            flash(f'文件 {f.filename} 过大，上传的文件大小不能超过5MB')
             continue
         filename = random_filename(f.filename)
         f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))

@@ -20,10 +20,11 @@ class ProductForm(FlaskForm):
     brand = SelectField('商标:', coerce=int, default=1)
     subject = SelectField('功能分类:', coerce=int, default=1)
     product_indication = StringField('功能主治:', validators=[DataRequired(), Length(1, 1024)])
-    product_format = StringField('产品规格:', validators=[DataRequired()])
+    product_format = StringField('产品规格:', validators=[])
     product_content = CKEditorField('产品内容:', validators=[DataRequired()])
     photos = FileField('产品图片:', validators=[])
-    submit = SubmitField('添加')
+    submit = SubmitField('确认添加')
+    cancel = SubmitField('取 消')
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
@@ -42,13 +43,13 @@ class EditProductForm(FlaskForm):
     brand = SelectField('商标:', coerce=int, default=1)
     subject = SelectField('功能分类:', coerce=int, default=1)
     product_indication = StringField('功能主治:', validators=[DataRequired(), Length(1, 1024)])
-    product_content = CKEditorField('产品内容:', validators=[DataRequired()])
     product_format = StringField('产品规格:', validators=[DataRequired()])
+    product_content = CKEditorField('产品内容:', validators=[DataRequired()])
     photos = FileField('产品图片:', validators=[FileAllowed(['jpg', 'png', 'gif'], '只能上传图片')])
     submit = SubmitField('确认修改')
     cancel = SubmitField('取消')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # 产品类别
         super(EditProductForm, self).__init__(*args, **kwargs)
         self.category.choices = [(category.id, category.name) for category in Category.query.all()]
         self.brand.choices = [(brand.id, brand.name) for brand in Brand.query.all()]
@@ -61,7 +62,7 @@ class CategoryForm(FlaskForm):
 
     def validate_name(self, field):
         if Category.query.filter_by(name=field.data).first():
-            raise ValidationError('该剂型已存在', )
+            raise ValidationError('该剂型已存在')
 
 
 class BrandForm(FlaskForm):

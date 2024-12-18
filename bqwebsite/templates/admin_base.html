@@ -81,6 +81,20 @@
     <script src="{{ url_for('static',filename = 'admin/js/scripts.js') }}"></script>
     {{ moment.include_moment(local_js=url_for('static', filename='admin/js/moment-with-locales.min.js')) }}
     {{ moment.locale('zh-CN') }}
+    <script>
+        // 验证上传图片大小
+        function validateFiles(input) {
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            const files = input.files;
+            for (let i = 0; i < files.length; i++) {
+                if (files[i].size > maxSize) {
+                    alert(`文件 ${files[i].name} 过大，上传的文件大小不能超过5MB`);
+                    input.value = ""; // Clear the input
+                    return;
+                }
+            }
+        }
+    </script>
 {% endblock %}
 </body>
 </html>

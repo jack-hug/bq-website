@@ -26,7 +26,7 @@
                 </nav>
                 <h4 class="text-center mb-3 mt-3">添加产品</h4>
                 <hr>
-                <form method="POST" enctype="multipart/form-data" class="form" id="productForm">
+                <form method="POST" enctype="multipart/form-data" class="form">
                     {{ form.hidden_tag() }}
                     <div class="mb-3">
                         {{ form.name.label(class="form-label") }}
@@ -54,7 +54,8 @@
                     </div>
                     <div class="mb-3">
                         {{ form.photos.label(class="form-label") }}
-                        {{ form.photos(class="form-control", multiple=True) }}
+                         {{ form.photos(class="form-control", multiple=True, onchange="validateFiles(this)") }}
+                    </div>
                     <p class="mb-3">
                         {{ form.product_content.label(class="form-label") }}
                         {{ form.product_content(class="form-control") }}
@@ -69,34 +70,6 @@
             </div>
         </div>
     </div>
-{% endblock %}
-{% block scripts %}
-    {{ super() }}
-    <script>
-        $(document).ready(function () {
-            $('#photos').fileinput({
-                language: 'zh',
-                allowedFileExtensions: ['jpg','jpeg', 'png', 'gif'],
-                maxFileSize: 5000, // 5MB
-                maxFilesNum: 10,
-                showUpload: false,
-                showRemove: true,
-                showPreview: true,
-                overwriteInitial: false,
-                initialCaption: "请选择图片,图片大小不能超过5MB.",
-                dropZoneEnabled: true,
-                browseLabel: '浏览',
-                removeLabel: '移除',
-                cancelLabel: '取消',
-                uploadLabel: '上传',
-                previewFileType: 'image',
-                browseIcon: '<i class="fa-regular fa-folder-open"></i>',
-                removeIcon: '<i class="fa-solid fa-trash"></i>',
-                cancelIcon: '<i class="fa-solid fa-ban"></i>',
-                uploadIcon: '<i class="fa-solid fa-file-arrow-up"></i>'
-            });
-        });
-    </script>
 {% endblock %}
 
 

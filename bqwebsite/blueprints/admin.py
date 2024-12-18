@@ -37,7 +37,7 @@ def login():
         if form.validate_on_submit():
             admin = Admin.query.filter_by(email=form.email.data.lower()).first()
             if admin is not None and admin.validate_password(form.password.data):
-                admin.last_login_time = datetime.now().replace(microsecond=0)
+                admin.last_login_time = datetime.utcnow().replace(microsecond=0)
                 db.session.commit()
                 if login_user(admin, form.remember_me.data):
                     flash('Login success...', 'info')
@@ -81,10 +81,11 @@ def product_add():
             name=form.name.data,
             product_content=form.product_content.data,
             product_indication=form.product_indication.data,
+            product_format=form.product_format.data,
             category_id=form.category.data,
             brand_id=form.brand.data,
             subject_id=form.subject.data,
-            timestamp=datetime.now()
+            timestamp=datetime.utcnow()
         )
         db.session.add(product)
         db.session.commit()
@@ -104,6 +105,7 @@ def product_edit(product_id):
     product = Product.query.get_or_404(product_id)
     form = EditProductForm(product=product)
     if form.validate_on_submit():
+        print('aaa')
         product.name = form.name.data
         product.product_content = form.product_content.data
         product.product_indication = form.product_indication.data
@@ -111,7 +113,8 @@ def product_edit(product_id):
         product.category_id = form.category.data
         product.brand_id = form.brand.data
         product.subject_id = form.subject.data
-        product.timestamp = datetime.now()
+        product.timestamp = datetime.utcnow()
+        print(product.timestamp)
         if 'photos' in request.files and request.files['photos'].filename != '':
             photos = save_uploaded_files(request.files, product)
             db.session.add_all(photos)
@@ -219,7 +222,7 @@ def category_add():
         if category_form.category_submit.data and category_form.validate():
             category = Category(
                 name=category_form.name.data,
-                timestamp=datetime.now()
+                timestamp=datetime.utcnow()
             )
             db.session.add(category)
             db.session.commit()
@@ -228,7 +231,7 @@ def category_add():
         if brand_form.brand_submit.data and brand_form.validate():
             brand = Brand(
                 name=brand_form.name.data,
-                timestamp=datetime.now()
+                timestamp=datetime.utcnow()
             )
             db.session.add(brand)
             db.session.commit()
@@ -237,7 +240,7 @@ def category_add():
         if subject_form.subject_submit.data and subject_form.validate():
             subject = Subject(
                 name=subject_form.name.data,
-                timestamp=datetime.now()
+                timestamp=datetime.utcnow()
             )
             db.session.add(subject)
             db.session.commit()
@@ -264,7 +267,7 @@ def category_edit(category_id):
     form = EditCategoryForm()
     if form.validate_on_submit():
         category.name = form.name.data
-        category.timestamp = datetime.now()
+        category.timestamp = datetime.utcnow()
         db.session.commit()
         flash('修改成功.', 'success')
         return redirect(url_for('admin.category_list'))

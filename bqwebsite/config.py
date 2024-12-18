@@ -42,6 +42,8 @@ class BaseConfig:
 
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+    MOMENT_TIMEZONE = 'Asia/Shanghai'  # 配置moment时区
+
     # DROPZONE_MAX_FILE_SIZE = 3
     # DROPZONE_MAX_FILES = 30
     # DROPZONE_ALLOWED_FILE_TYPE = 'image'
