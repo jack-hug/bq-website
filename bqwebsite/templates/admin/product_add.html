@@ -30,7 +30,10 @@
                     {{ form.hidden_tag() }}
                     <div class="mb-3">
                         {{ form.name.label(class="form-label") }}
-                        {{ form.name(class="form-control") }}
+                        {{ form.name(class="form-control", id="product-name") }}
+                        <div id="name-error" class="text-danger" style="display: none;">
+                            产品名称已经存在
+                        </div>
                     </div>
                     <div class="mb-3">
                         {{ form.category.label(class="form-label") }}
@@ -54,7 +57,7 @@
                     </div>
                     <div class="mb-3">
                         {{ form.photos.label(class="form-label") }}
-                         {{ form.photos(class="form-control", multiple=True, onchange="validateFiles(this)") }}
+                        {{ form.photos(class="form-control", multiple=True, onchange="validateFiles(this)") }}
                     </div>
                     <p class="mb-3">
                         {{ form.product_content.label(class="form-label") }}
@@ -71,5 +74,56 @@
         </div>
     </div>
 {% endblock %}
-
+{% block scripts %}
+    {{ super() }}
+    <script>
+        // bootstrap-fileinput 插件设置
+        $(document).ready(function () {
+            $('#photos').fileinput({
+                language: 'zh',
+                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+                maxFileSize: 5000, // 5MB
+                maxFilesNum: 10,
+                showUpload: false,
+                showRemove: true,
+                showPreview: true,
+                overwriteInitial: false,
+                initialCaption: "请选择或拖动图片,图片大小不能超过5MB.",
+                dropZoneEnabled: true,
+                browseLabel: '浏览',
+                removeLabel: '移除',
+                cancelLabel: '取消',
+                uploadLabel: '上传',
+                previewFileType: 'image'
+            });
+        });
+    </script>
+    <script>
+        // 检查产品名称是否已经存在
+        document.getElementById('product-name').addEventListener('input', function () {
+            const name = this.value;
+            const errorDiv = document.getElementById('name-error');
+            errorDiv.style.display = 'none';  // 清空之前的错误提示
+            if (!name) return;  // 如果输入为空，不进行检查
+            fetch('/admin/check_product_name/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({name: name})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        errorDiv.style.display = 'block';
+                    } else {
+                        errorDiv.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        })
+    </script>
+{% endblock %}
 

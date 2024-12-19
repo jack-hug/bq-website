@@ -86,8 +86,8 @@ def register_errorhandlers(app):
         return render_template('errors/404.html'), 404
 
     @app.errorhandler(413)
-    def request_entity_too_large(error):
-        return jsonify({'uploaded': 0, 'error': {'message': '文件大小不能超过5MB'}}), 413
+    def request_entity_too_large(e):
+        return render_template('errors/413.html'), 413
 
     @app.errorhandler(500)
     def internal_server_error(e):

@@ -3,6 +3,10 @@
 {% block title %}500 Error{% endblock %}
 
 {% block content %}
+    <header class="masthead bg-primary text-white text-center">
+        <div class="news_bg_img"><img src="{{ url_for('static', filename='assets/img/bg_img01.png') }}"
+                                      class="img-fluid" alt=""></div>
+    </header>
     <div class="row justify-content-md-center mt-3 mb-3">
         <div class="card w-50 bg-light">
             <img class="card-img-top img-fluid" src="{{ url_for('static', filename='assets/images/error.jpg') }}">
