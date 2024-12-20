@@ -150,6 +150,18 @@ def upload_image():
     return upload_success(url=url)
 
 
+@admin_bp.route('/product_upload_image', methods=['POST'])  # bootstrap-fileinput上传图片
+@login_required
+def product_upload_image():
+    f = request.files.get('file')
+    if not allowed_file(f.filename):
+        return jsonify(message='错误的文件格式！只能上传png, jpg, jpeg, gif格式文件'), 400
+    filename = random_filename(f.filename)
+    f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
+    url = url_for('admin.get_image', filename=filename)
+    return jsonify(filename=filename, uploaded=1, url=url)
+
+
 @admin_bp.route('/uploads/<path:filename>')  # 获得上传图片
 def get_image(filename):
     return send_from_directory(current_app.config['BQ_UPLOAD_PATH'], filename)
@@ -190,10 +202,16 @@ def product_multiple_delete():
 @login_required
 def delete_photo(photo_id):
     photo = Photo.query.get_or_404(photo_id)
+    try:
+        os.remove(os.path.join(current_app.config['BQ_UPLOAD_PATH'], photo.filename))
+    except OSError as e:
+        flash('删除失败，请重试.', 'warning')
+        return jsonify(success=False), 500
+
     db.session.delete(photo)
     db.session.commit()
     flash('图片删除成功.', 'success')
-    return redirect(url_for('admin.product_edit', product_id=photo.product_id))
+    return jsonify(success=True)
 
 
 @admin_bp.route('/product_status/<int:product_id>')  # 发布与撤销

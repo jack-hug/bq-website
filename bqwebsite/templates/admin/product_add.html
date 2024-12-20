@@ -29,7 +29,7 @@
                 </nav>
                 <h4 class="text-center mb-3 mt-3">添加产品</h4>
                 <hr>
-                <form method="POST" enctype="multipart/form-data" class="form">
+                <form method="POST" enctype="multipart/form-data" class="form" id="product-form">
                     {{ form.hidden_tag() }}
                     <div class="mb-3">
                         {{ form.name.label(class="form-label") }}
@@ -78,33 +78,33 @@
 {% block scripts %}
     {{ super() }}
     <script>
-        // bootstrap-fileinput 插件设置
-        $(document).ready(function () {
-            $('#photos').fileinput({
-                language: 'zh',
-                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
-                maxFileSize: 5000, // 5MB
-                maxFilesNum: 10,
-                showUpload: false,
-                showRemove: true,
-                showPreview: true,
-                overwriteInitial: false,
-                initialCaption: "请选择或拖动图片,图片大小不能超过5MB.",
-                dropZoneEnabled: true,
-                browseLabel: '浏览',
-                removeLabel: '移除',
-                cancelLabel: '取消',
-                uploadLabel: '上传',
-                previewFileType: 'image'
-            });
-        });
-    </script>
-    <script>
         // 获取 CSRF Token
         function getCsrfToken() {
             return "{{ csrf_token() }}";
         }
-
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#photos").fileinput({
+                uploadUrl: '/admin/product_upload_image',
+                enableResumableUpload: true,
+                initialPreviewAsData: true,
+                maxFileCount: 10,
+                showUpload: false,
+                theme: 'bs5',
+                deleteUrl: '/admin/delete_photo',
+                fileActionSettings: {
+                    showZoom: function (config) {
+                        if (config.type === 'pdf' || config.type === 'image') {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
         // 检查产品名称是否已经存在
         document.getElementById('product-name').addEventListener('input', function () {
             const name = this.value;
@@ -131,6 +131,36 @@
                     console.error('Error:', error);
                 });
         })
+
+        // 监听表单提交事件
+        document.getElementById('product-form').addEventListener('submit', function (event) {
+            event.preventDefault();  // 阻止默认的表单提交行为
+
+            // 获取所有需要验证的字段
+            const productNameInput = document.getElementById('product-name');
+            const nameErrorDiv = document.getElementById('name-error');
+
+            // 进行自定义验证
+            let isValid = true;
+            let firstInvalidField = null;
+
+            // 验证产品名称是否已经存在
+            if (nameErrorDiv.style.display === 'block') {
+                isValid = false;
+                firstInvalidField = productNameInput;
+            }
+
+            // 如果有其他字段需要验证，继续添加验证逻辑
+
+            // 如果验证通过，则提交表单
+            if (isValid) {
+                this.submit();  // 手动提交表单
+            } else {
+                if (firstInvalidField) {
+                    firstInvalidField.focus();
+                }
+            }
+        });
     </script>
 {% endblock %}
 
