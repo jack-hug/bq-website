@@ -155,9 +155,10 @@ def get_image(filename):
     return send_from_directory(current_app.config['BQ_UPLOAD_PATH'], filename)
 
 
-@admin_bp.route('/check_product_name', methods=['GET'])  # 检查产品名称
+@admin_bp.route('/check_product_name', methods=['POST'])  # 检查产品名称
 def check_product_name():
-    name = request.args.get('name')
+    print(request.method)  # 打印请求方法
+    name = request.json.get('name')
     exists = Product.query.filter_by(name=name).first() is not None
     return jsonify(exists=exists)
 
