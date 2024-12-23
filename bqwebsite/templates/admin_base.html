@@ -83,7 +83,7 @@
     {{ moment.include_moment(local_js=url_for('static', filename='admin/js/moment-with-locales.min.js')) }}
     {{ moment.locale('zh-CN') }}
     <script>
-        // 验证上传图片大小
+        // 验证上传图片大小，限制单个文件不能大于5MB
         function validateFiles(input) {
             const maxSize = 5 * 1024 * 1024; // 5MB
             const files = input.files;
