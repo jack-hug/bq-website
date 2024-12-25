@@ -26,11 +26,14 @@
                 </nav>
                 <h4 class="text-center mb-3 mt-3">编辑产品</h4>
                 <hr>
-                <form method="POST" enctype="multipart/form-data" class="form">
+                <form method="POST" enctype="multipart/form-data" class="form" id="product-form">
                     {{ form.hidden_tag() }}
                     <div class="mb-3">
                         {{ form.name.label(class="form-label") }}
-                        {{ form.name(class="form-control") }}
+                        {{ form.name(class="form-control", id="product-name") }}
+                        <div id="name-error" class="text-danger small" style="display: none;">
+                            产品名称已经存在
+                        </div>
                     </div>
                     <div class="mb-3">
                         {{ form.category.label(class="form-label") }}
@@ -74,42 +77,74 @@
 {% block scripts %}
     {{ super() }}
     <script>
-        // bootstrap-fileinput 插件设置
+        // 获取 CSRF Token
+        function getCsrfToken() {
+            return "{{ csrf_token() }}";
+        }
+    </script>
+    <script>
         $(document).ready(function () {
-            // 动态设置已上传的图片
-            var imageUrls = {{ product.photos|tojson }};
-            var initialPreview = [];
-            var initialPreviewConfig = [];
-
-            imageUrls.forEach(function (url) {
-                initialPreview.push(url);
-                initialPreviewConfig.push({
-                    caption: url.split('/').pop(), // 文件名
-                    size: 0, // 文件大小（可选）
-                    url: 'admin/delete_photo/' + url.split('/').pop().split('.')[0], // 删除图片的 URL
-                    key: url.split('/').pop().split('.')[0] // 唯一标识符
-                });
-            });
-            $('#photos').fileinput({
-                language: 'zh',
-                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
-                maxFileSize: 5000, // 5MB
-                maxFilesNum: 10,
+            $("#photos").fileinput({
+                uploadUrl: '/admin/product_upload_image',
+                enableResumableUpload: true,
+                initialPreviewAsData: true,
+                maxFileCount: 10,
                 showUpload: false,
-                showRemove: true,
-                showPreview: true,
-                initialPreview: initialPreview,
-                initialPreviewConfig: initialPreviewConfig,
-                overwriteInitial: false,
-                initialCaption: "请选择或拖动图片,图片大小不能超过5MB.",
-                dropZoneEnabled: true,
-                browseLabel: '浏览',
-                removeLabel: '移除',
-                cancelLabel: '取消',
-                uploadLabel: '上传',
-                previewFileType: 'image'
+                theme: 'bs5',
+                deleteExtraData: {
+                    csrf_token: getCsrfToken()  // 添加 CSRF Token 到请求头
+                },
+                fileActionSettings: {
+                    showZoom: function (config) {
+                        if (config.type === 'pdf' || config.type === 'image') {
+                            return true;
+                        }
+                        return false;
+                    }
+                },
+                initialPreview: [
+                    {% for url in initial_preview %}
+                        '{{ url }}',
+                    {% endfor %}
+                ],
+                deleteUrl: '/admin/photo_delete/52',
+
             });
         });
+    </script>
+    <script>
+        // 检查产品名称是否已经存在
+        document.getElementById('product-name').addEventListener('input', function () {
+            const name = this.value;
+            const errorDiv = document.getElementById('name-error');
+            errorDiv.style.display = 'none';  // 清空之前的错误提示
+
+            // 如果输入的名称与当前产品的名称相同，则不进行检查
+            if (name === '{{ product.name }}' || name === '') {
+                return;
+            }
+            fetch('/admin/check_product_name', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': getCsrfToken()  // 添加 CSRF Token 到请求头
+                },
+                body: JSON.stringify({name: name})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        errorDiv.style.display = 'block';
+                    } else {
+                        errorDiv.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        })
+
+
     </script>
 {% endblock %}
 

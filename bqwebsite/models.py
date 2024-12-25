@@ -24,7 +24,7 @@ class Product(db.Model):
     # 产品
     __tablename__ = 'product'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100))  # 品名
+    name = db.Column(db.String(100), unique=True)  # 品名
     product_indication = db.Column(db.String(200))  # 功能主治
     product_content = db.Column(db.Text)  # 产品页内容
     product_format = db.Column(db.String(100))  # 产品规格
@@ -47,7 +47,7 @@ class Product(db.Model):
         self.delete_ckeditor_images()
 
         for photo in self.photos:
-            photo.delete_photos()
+            photo.photos_delete()
 
         db.session.delete(self)
         db.session.commit()
@@ -91,7 +91,7 @@ class Photo(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
     product = db.relationship('Product', back_populates='photos')
 
-    def delete_photos(self):  #
+    def photos_delete(self):  #
         upload_path = current_app.config['BQ_UPLOAD_PATH']
         for filename in [self.filename, self.filename_s, self.filename_m]:
             if filename:
@@ -243,7 +243,7 @@ class ContactCategory(db.Model):
 
 
 @event.listens_for(Photo, 'after_delete')
-def delete_photo_files(mapper, connection, target):
-    target.delete_photos()
+def photo_delete_files(mapper, connection, target):
+    target.photos_delete()
 
 

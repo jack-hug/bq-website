@@ -103,6 +103,7 @@ def product_add():
 @login_required
 def product_edit(product_id):
     product = Product.query.get_or_404(product_id)
+    initial_preview = [url_for('admin.get_image', filename=photo.filename) for photo in product.photos]
     form = EditProductForm(product=product)
     if form.validate_on_submit():
         product.name = form.name.data
@@ -129,7 +130,7 @@ def product_edit(product_id):
     form.category.data = product.category_id
     form.brand.data = product.brand_id
     form.subject.data = product.subject_id
-    return render_template('admin/product_edit.html', product=product, form=form, show_collapse=True)
+    return render_template('admin/product_edit.html', product=product, form=form, initial_preview=initial_preview, show_collapse=True)
 
 
 def allowed_file(filename):
@@ -164,12 +165,15 @@ def product_upload_image():
 
 @admin_bp.route('/uploads/<path:filename>')  # 获得上传图片
 def get_image(filename):
+    upload_path = current_app.config['BQ_UPLOAD_PATH']
+    file_path = os.path.join(upload_path, filename)
+    if not os.path.exists(file_path):
+        return 'File not found', 404
     return send_from_directory(current_app.config['BQ_UPLOAD_PATH'], filename)
 
 
 @admin_bp.route('/check_product_name', methods=['POST'])  # 检查产品名称
 def check_product_name():
-    print(request.method)  # 打印请求方法
     name = request.json.get('name')
     exists = Product.query.filter_by(name=name).first() is not None
     return jsonify(exists=exists)
@@ -198,9 +202,9 @@ def product_multiple_delete():
     return redirect(url_for('admin.product_list'))
 
 
-@admin_bp.route('/delete_photo/<int:photo_id>', methods=['POST'])  # 删除图片
+@admin_bp.route('/photo_delete/<int:photo_id>', methods=['POST'])  # 删除图片
 @login_required
-def delete_photo(photo_id):
+def photo_delete(photo_id):
     photo = Photo.query.get_or_404(photo_id)
     try:
         os.remove(os.path.join(current_app.config['BQ_UPLOAD_PATH'], photo.filename))

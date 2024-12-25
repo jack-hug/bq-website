@@ -33,7 +33,7 @@
                     {{ form.hidden_tag() }}
                     <div class="mb-3">
                         {{ form.name.label(class="form-label") }}
-                        {{ form.name(class="form-control") }}
+                        {{ form.name(class="form-control", id="product-name") }}
                         <div id="name-error" class="text-danger small" style="display: none;">
                             产品名称已经存在
                         </div>
@@ -82,8 +82,8 @@
         function getCsrfToken() {
             return "{{ csrf_token() }}";
         }
-    </script>
-    <script>
+
+        // 初始化文件上传插件
         $(document).ready(function () {
             $("#photos").fileinput({
                 uploadUrl: '/admin/product_upload_image',
@@ -92,7 +92,7 @@
                 maxFileCount: 10,
                 showUpload: false,
                 theme: 'bs5',
-                deleteUrl: '/admin/delete_photo',
+                overwriteInitial: false,
                 fileActionSettings: {
                     showZoom: function (config) {
                         if (config.type === 'pdf' || config.type === 'image') {
@@ -103,8 +103,7 @@
                 }
             });
         });
-    </script>
-    <script>
+
         // 检查产品名称是否已经存在
         document.getElementById('product-name').addEventListener('input', function () {
             const name = this.value;
@@ -132,33 +131,12 @@
                 });
         })
 
-        // 监听表单提交事件
+        // 处理表单提交事件
         document.getElementById('product-form').addEventListener('submit', function (event) {
-            event.preventDefault();  // 阻止默认的表单提交行为
-
-            // 获取所有需要验证的字段
-            const productNameInput = document.getElementById('product-name');
-            const nameErrorDiv = document.getElementById('name-error');
-
-            // 进行自定义验证
-            let isValid = true;
-            let firstInvalidField = null;
-
-            // 验证产品名称是否已经存在
-            if (nameErrorDiv.style.display === 'block') {
-                isValid = false;
-                firstInvalidField = productNameInput;
-            }
-
-            // 如果有其他字段需要验证，继续添加验证逻辑
-
-            // 如果验证通过，则提交表单
-            if (isValid) {
-                this.submit();  // 手动提交表单
-            } else {
-                if (firstInvalidField) {
-                    firstInvalidField.focus();
-                }
+            const errorDiv = document.getElementById('name-error');
+            if (errorDiv.style.display === 'block') {
+                event.preventDefault();  // 阻止表单提交
+                document.getElementById('product-name').focus();  // 将焦点设置到输入框
             }
         });
     </script>
