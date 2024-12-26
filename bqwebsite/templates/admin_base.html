@@ -16,11 +16,8 @@
             <link rel="stylesheet" href="{{ url_for('static',filename = 'css/bootstrap.min.css') }}">
             <link rel="stylesheet" href="https://cdn.staticfile.net/bootstrap-icons/1.11.3/font/bootstrap-icons.css">
             <link href="{{ url_for('static',filename = 'admin/css/styles.css') }}" rel="stylesheet"/>
-            <!-- bootstrap-fileinput上传文件插件 -->
-            <link rel="stylesheet"
-                  href="{{ url_for('static',filename = 'admin/bootstrap-fileinput-5.5.4/css/fileinput.min.css') }}">
-            <link rel="stylesheet"
-                  href="{{ url_for('static',filename = 'admin/bootstrap-fileinput-5.5.4/css/fileinput-rtl.min.css') }}">
+            <!-- dropzone.js上传文件插件 -->
+
         {% endblock %}
     {% endblock %}
 </head>
@@ -70,15 +67,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://cdn.staticfile.net/jquery/3.7.1/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename="admin/bootstrap-fileinput-5.5.4/js/plugins/buffer.min.js") }}"></script>
-    <script src="{{ url_for('static', filename="admin/bootstrap-fileinput-5.5.4/js/plugins/filetype.min.js") }}"></script>
-    <script src="{{ url_for('static', filename="admin/bootstrap-fileinput-5.5.4/js/plugins/piexif.min.js") }}"></script>
-    <script src="{{ url_for('static', filename="admin/bootstrap-fileinput-5.5.4/js/plugins/sortable.min.js") }}"></script>
     <script src="https://cdn.staticfile.net/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename="admin/bootstrap-fileinput-5.5.4/js/fileinput.min.js") }}"></script>
-    <script src="{{ url_for('static', filename="admin/bootstrap-fileinput-5.5.4/themes/bs5/theme.min.js") }}"></script>
-    <script src="{{ url_for('static', filename="admin/bootstrap-fileinput-5.5.4/js/locales/zh.js") }}"></script>
     <script src="{{ url_for('static',filename = 'admin/js/scripts.js') }}"></script>
     {{ moment.include_moment(local_js=url_for('static', filename='admin/js/moment-with-locales.min.js')) }}
     {{ moment.locale('zh-CN') }}

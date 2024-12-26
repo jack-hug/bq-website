@@ -83,26 +83,7 @@
             return "{{ csrf_token() }}";
         }
 
-        // 初始化文件上传插件
-        $(document).ready(function () {
-            $("#photos").fileinput({
-                uploadUrl: '/admin/product_upload_image',
-                enableResumableUpload: true,
-                initialPreviewAsData: true,
-                maxFileCount: 10,
-                showUpload: false,
-                theme: 'bs5',
-                overwriteInitial: false,
-                fileActionSettings: {
-                    showZoom: function (config) {
-                        if (config.type === 'pdf' || config.type === 'image') {
-                            return true;
-                        }
-                        return false;
-                    }
-                }
-            });
-        });
+
 
         // 检查产品名称是否已经存在
         document.getElementById('product-name').addEventListener('input', function () {

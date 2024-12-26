@@ -7,7 +7,7 @@ from flask_wtf.csrf import CSRFError
 from .blueprints.main import main_bp
 from .blueprints.admin import admin_bp
 from .config import config
-from .extensions import bootstrap, db, csrf, dropzone, login_manager, ckeditor, migrate, moment
+from .extensions import bootstrap, db, csrf, login_manager, ckeditor, migrate, moment
 from .models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
     IntroduceCategory, Admin, Subject, ContactCategory, ResearchCategory, Research
 
@@ -34,7 +34,6 @@ def register_extensions(app):
     bootstrap.init_app(app)
     db.init_app(app)
     csrf.init_app(app)
-    dropzone.init_app(app)
     login_manager.init_app(app)
     ckeditor.init_app(app)
     migrate.init_app(app, db)

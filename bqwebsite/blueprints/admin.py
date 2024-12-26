@@ -104,7 +104,6 @@ def product_add():
 def product_edit(product_id):
     product = Product.query.get_or_404(product_id)
     initial_preview = [url_for('admin.get_image', filename=photo.filename) for photo in product.photos]
-    print(initial_preview)
     form = EditProductForm(product=product)
     if form.validate_on_submit():
         product.name = form.name.data
@@ -156,6 +155,7 @@ def upload_image():
 @login_required
 def product_upload_image():
     f = request.files.get('file')
+    print(f)
     if not allowed_file(f.filename):
         return jsonify(message='错误的文件格式！只能上传png, jpg, jpeg, gif格式文件'), 400
     filename = random_filename(f.filename)
@@ -214,6 +214,7 @@ def photo_delete(photo_id):
 
     db.session.delete(photo)
     db.session.commit()
+    print('delete...')
     return jsonify(success=True)
 
 

@@ -82,43 +82,6 @@
             return "{{ csrf_token() }}";
         }
 
-        $(document).ready(function () {
-            $("#photos").fileinput({
-                uploadUrl: '/admin/product_upload_image',
-                enableResumableUpload: true,
-                initialPreviewAsData: true,
-                maxFileCount: 10,
-                showUpload: false,
-                showRemove: false,
-                theme: 'bs5',
-                overwriteInitial: false,
-                deleteExtraData: {
-                    csrf_token: getCsrfToken()  // 添加 CSRF Token 到请求头
-                },
-                fileActionSettings: {
-                    showZoom: function (config) {
-                        return config.type === 'pdf' || config.type === 'image';
-                    }
-                },
-                initialPreview: [
-                    {% for image_url in initial_preview %}
-                    '{{ image_url }}',
-                    {% endfor %}
-                ],
-                initialPreviewConfig: [
-                    {% for photo in product.photos %}
-                        {
-                            url: '/admin/photo_delete/{{ photo.id }}',
-                            key: '{{ photo.id }}',
-                            extra: {
-                                csrf_token: getCsrfToken()
-                            }
-                        },
-                    {% endfor %}
-                ]
-
-            });
-        });
 
         // 检查产品名称是否已经存在
         document.getElementById('product-name').addEventListener('input', function () {

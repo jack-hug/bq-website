@@ -76,8 +76,6 @@ def save_uploaded_files(request_files, product):  # 封装上传图片函数
             continue
         filename = random_filename(f.filename)
         f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
-        # filename_s = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['small'])
-        # filename_m = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['medium'])
         filename_s = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['small'],
                                   current_app.config['BQ_PHOTO_SIZE']['small'])
         filename_m = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['medium'],
@@ -89,6 +87,7 @@ def save_uploaded_files(request_files, product):  # 封装上传图片函数
             product=product
         )
         photos.append(photo)
+        print(photo.filename)
     return photos
 
 
