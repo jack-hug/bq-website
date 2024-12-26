@@ -81,8 +81,7 @@
         function getCsrfToken() {
             return "{{ csrf_token() }}";
         }
-    </script>
-    <script>
+
         $(document).ready(function () {
             $("#photos").fileinput({
                 uploadUrl: '/admin/product_upload_image',
@@ -90,34 +89,43 @@
                 initialPreviewAsData: true,
                 maxFileCount: 10,
                 showUpload: false,
+                showRemove: false,
                 theme: 'bs5',
+                overwriteInitial: false,
                 deleteExtraData: {
                     csrf_token: getCsrfToken()  // 添加 CSRF Token 到请求头
                 },
                 fileActionSettings: {
                     showZoom: function (config) {
-                        if (config.type === 'pdf' || config.type === 'image') {
-                            return true;
-                        }
-                        return false;
+                        return config.type === 'pdf' || config.type === 'image';
                     }
                 },
                 initialPreview: [
-                    {% for url in initial_preview %}
-                        '{{ url }}',
+                    {% for image_url in initial_preview %}
+                    '{{ image_url }}',
                     {% endfor %}
                 ],
-                deleteUrl: '/admin/photo_delete/52',
+                initialPreviewConfig: [
+                    {% for photo in product.photos %}
+                        {
+                            url: '/admin/photo_delete/{{ photo.id }}',
+                            key: '{{ photo.id }}',
+                            extra: {
+                                csrf_token: getCsrfToken()
+                            }
+                        },
+                    {% endfor %}
+                ]
 
             });
         });
-    </script>
-    <script>
+
         // 检查产品名称是否已经存在
         document.getElementById('product-name').addEventListener('input', function () {
             const name = this.value;
             const errorDiv = document.getElementById('name-error');
             errorDiv.style.display = 'none';  // 清空之前的错误提示
+            if (!name) return;  // 如果输入为空，不进行检查
 
             // 如果输入的名称与当前产品的名称相同，则不进行检查
             if (name === '{{ product.name }}' || name === '') {
@@ -144,7 +152,14 @@
                 });
         })
 
-
+        // 处理表单提交事件
+        document.getElementById('product-form').addEventListener('submit', function (event) {
+            const errorDiv = document.getElementById('name-error');
+            if (errorDiv.style.display === 'block') {
+                event.preventDefault();  // 阻止表单提交
+                document.getElementById('product-name').focus();  // 将焦点设置到输入框
+            }
+        });
     </script>
 {% endblock %}
 

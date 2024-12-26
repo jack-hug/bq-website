@@ -104,6 +104,7 @@ def product_add():
 def product_edit(product_id):
     product = Product.query.get_or_404(product_id)
     initial_preview = [url_for('admin.get_image', filename=photo.filename) for photo in product.photos]
+    print(initial_preview)
     form = EditProductForm(product=product)
     if form.validate_on_submit():
         product.name = form.name.data
@@ -209,12 +210,10 @@ def photo_delete(photo_id):
     try:
         os.remove(os.path.join(current_app.config['BQ_UPLOAD_PATH'], photo.filename))
     except OSError as e:
-        flash('删除失败，请重试.', 'warning')
         return jsonify(success=False), 500
 
     db.session.delete(photo)
     db.session.commit()
-    flash('图片删除成功.', 'success')
     return jsonify(success=True)
 
 
