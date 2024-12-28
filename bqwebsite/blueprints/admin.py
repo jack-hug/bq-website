@@ -1,8 +1,8 @@
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 
 from flask import render_template, Blueprint, redirect, url_for, flash, request, current_app, send_from_directory, \
-    jsonify
+    jsonify, session
 from flask_ckeditor import upload_fail, upload_success
 from flask_login import current_user, login_user, login_required, logout_user
 
@@ -10,7 +10,7 @@ from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, CategoryForm, BrandForm, SubjectForm, \
     EditCategoryForm
-from ..utils import random_filename, resize_image, redirect_back, save_uploaded_files
+from ..utils import random_filename, redirect_back
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -90,9 +90,16 @@ def product_add():
         db.session.add(product)
         db.session.commit()
 
-        if 'photos' in request.files and request.files['photos'].filename != '':
-            photos = save_uploaded_files(request.files, product)
-            db.session.add_all(photos)
+        photos = request.form.get('photos')  # 获取dropzone传送到photo-filenames的图片名称
+        if photos:
+            for photo in photos.split(','):
+                photo = Photo(
+                    filename=photo,
+                    filename_m=photo,
+                    filename_s=photo,
+                    product_id=product.id
+                )
+                db.session.add(photo)
             db.session.commit()
         flash('添加成功.', 'success')
         return redirect(url_for('admin.product_list'))
@@ -103,7 +110,6 @@ def product_add():
 @login_required
 def product_edit(product_id):
     product = Product.query.get_or_404(product_id)
-    initial_preview = [url_for('admin.get_image', filename=photo.filename) for photo in product.photos]
     form = EditProductForm(product=product)
     if form.validate_on_submit():
         product.name = form.name.data
@@ -114,10 +120,6 @@ def product_edit(product_id):
         product.brand_id = form.brand.data
         product.subject_id = form.subject.data
         product.timestamp = datetime.utcnow()
-        if 'photos' in request.files and request.files['photos'].filename != '':
-            photos = save_uploaded_files(request.files, product)
-            db.session.add_all(photos)
-            db.session.commit()
         db.session.commit()
         flash('修改成功.', 'success')
         return redirect(url_for('admin.product_list'))
@@ -130,7 +132,7 @@ def product_edit(product_id):
     form.category.data = product.category_id
     form.brand.data = product.brand_id
     form.subject.data = product.subject_id
-    return render_template('admin/product_edit.html', product=product, form=form, initial_preview=initial_preview, show_collapse=True)
+    return render_template('admin/product_edit.html', product=product, form=form, show_collapse=True)
 
 
 def allowed_file(filename):
@@ -151,17 +153,18 @@ def upload_image():
     return upload_success(url=url)
 
 
-@admin_bp.route('/product_upload_image', methods=['POST'])  # bootstrap-fileinput上传图片
+@admin_bp.route('/product_photo_upload', methods=['POST'])  # dropzone上传图片
 @login_required
-def product_upload_image():
-    f = request.files.get('file')
-    print(f)
+def product_photo_upload():
+    if 'file' not in request.files:
+        return jsonify(message='没有文件或者文件出错'), 400
+    f = request.files.get('file')   # file是dropzone插件上传的参数名
     if not allowed_file(f.filename):
         return jsonify(message='错误的文件格式！只能上传png, jpg, jpeg, gif格式文件'), 400
     filename = random_filename(f.filename)
     f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
-    url = url_for('admin.get_image', filename=filename)
-    return jsonify(filename=filename, uploaded=1, url=url)
+
+    return jsonify({'filename': filename}), 200
 
 
 @admin_bp.route('/uploads/<path:filename>')  # 获得上传图片

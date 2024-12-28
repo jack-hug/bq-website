@@ -22,7 +22,6 @@ class ProductForm(FlaskForm):
     product_indication = StringField('功能主治:', validators=[DataRequired(), Length(1, 1024)])
     product_format = StringField('产品规格:', validators=[])
     product_content = CKEditorField('产品内容:', validators=[DataRequired()])
-    photos = MultipleFileField('产品图片:', validators=[])
     submit = SubmitField('确认添加')
     cancel = SubmitField('取 消')
 
@@ -45,7 +44,6 @@ class EditProductForm(FlaskForm):
     product_indication = StringField('功能主治:', validators=[DataRequired(), Length(1, 1024)])
     product_format = StringField('产品规格:', validators=[DataRequired()])
     product_content = CKEditorField('产品内容:', validators=[DataRequired()])
-    photos = MultipleFileField('产品图片:', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], '只能上传图片')])
     submit = SubmitField('确认修改')
     cancel = SubmitField('取消')
 

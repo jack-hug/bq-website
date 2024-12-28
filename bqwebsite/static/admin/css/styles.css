@@ -37,3 +37,29 @@
     right: 0;
     z-index: 10;
 }
+
+/* 自定义 Dropzone 样式 */
+.dropzone {
+    margin: 2px;
+    border: 2px dashed #0087F7;
+    background: #f9f9f9;
+    border-radius: 5px;
+    min-height: 200px;
+    padding: 20px;
+    color: #0087F7;
+    font-size: 16px;
+}
+
+.dropzone:hover {
+    background: #f0f0f0;
+}
+
+.dropzone .dz-message {
+    margin: 5rem 0;
+    font-size: 18px;
+    color: #555;
+}
+
+.dropzone .dz-preview.dz-image-preview {
+    background: none;
+}

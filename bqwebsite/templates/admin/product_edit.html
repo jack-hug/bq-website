@@ -56,8 +56,8 @@
                         {{ form.product_format(class="form-control") }}
                     </div>
                     <div class="mb-3">
-                        {{ form.photos.label(class="form-label") }}
-                        {{ form.photos(class="form-control", multiple=True, onchange="validateFiles(this)") }}
+                        <label for="dropzone" class="form-label">产品图片:</label>
+                        <div class="dropzone" id="my-dropzone"></div>
                     </div>
                     <div class="mb-3">
                         {{ form.product_content.label(class="form-label") }}
@@ -82,6 +82,21 @@
             return "{{ csrf_token() }}";
         }
 
+        // dropzone设置
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone("#my-dropzone", {
+            url: "{{ url_for('admin.product_photo_upload') }}",
+            method: "POST",
+            headers: {
+                'X-CSRF-Token': getCsrfToken()  // 添加 CSRF Token 到请求头
+            },
+            maxFiles: 10,
+            maxFilesize: 5,
+            acceptedFiles: "image/*",
+            addRemoveLinks: true,
+            dictRemoveFile: "删 除",
+            dictDefaultMessage: "拖拽图片到框内或点击上传",
+        });
 
         // 检查产品名称是否已经存在
         document.getElementById('product-name').addEventListener('input', function () {

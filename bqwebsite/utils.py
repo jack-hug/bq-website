@@ -28,19 +28,6 @@ def random_filename(filename):
     new_filename = uuid.uuid4().hex + ext
     return new_filename
 
-
-# def resize_image(image, filename, base_width):
-#     # filename, ext = os.path.splitext(filename)
-#     # img = Image.open(image)
-#     # if img.size[0] <= base_width:
-#     #     return filename + ext
-#     # w_percent = (base_width / float(img.size[0]))
-#     # h_size = int(float(img.size[1]) * float(w_percent))
-#     # img = img.resize((base_width, h_size), PIL.Image.Resampling.LANCZOS)
-#     #
-#     # filename += current_app.config['BQ_PHOTO_SUFFIX'][base_width] + ext
-#     # img.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
-#     # return filename
 def resize_image(image, filename, base_width, base_height):
     filename, ext = os.path.splitext(filename)
     img = Image.open(image)
@@ -68,28 +55,27 @@ def resize_image(image, filename, base_width, base_height):
     return filename
 
 
-def save_uploaded_files(request_files, product):  # 封装上传图片函数
-    photos = []
-    for f in request_files.getlist('photos'):
-        if f.content_length > current_app.config['MAX_CONTENT_LENGTH']:
-            flash(f'文件 {f.filename} 过大，上传的文件大小不能超过5MB')
-            continue
-        filename = random_filename(f.filename)
-        f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
-        filename_s = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['small'],
-                                  current_app.config['BQ_PHOTO_SIZE']['small'])
-        filename_m = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['medium'],
-                                  current_app.config['BQ_PHOTO_SIZE']['medium'])
-        photo = Photo(
-            filename=filename,
-            filename_s=filename_s,
-            filename_m=filename_m,
-            product=product
-        )
-        photos.append(photo)
-        print(photo.filename)
-    return photos
-
+# def save_uploaded_files(request_files, product):  # 封装上传图片函数
+#     photos = []
+#     for f in request_files.getlist('photos'):
+#         if f.content_length > current_app.config['MAX_CONTENT_LENGTH']:
+#             flash(f'文件 {f.filename} 过大，上传的文件大小不能超过5MB')
+#             continue
+#         filename = random_filename(f.filename)
+#         f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
+#         filename_s = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['small'],
+#                                   current_app.config['BQ_PHOTO_SIZE']['small'])
+#         filename_m = resize_image(f, filename, current_app.config['BQ_PHOTO_SIZE']['medium'],
+#                                   current_app.config['BQ_PHOTO_SIZE']['medium'])
+#         photo = Photo(
+#             filename=filename,
+#             filename_s=filename_s,
+#             filename_m=filename_m,
+#             product_id=product.id
+#         )
+#         photos.append(photo)
+#         print(photo.filename)
+#     return photos
 
 def generate_gradient_image(width, height, filename):  # 生成随机渐变图片
     img = Image.new(mode='RGB', size=(width, height), color=(0, 0, 0))
