@@ -10,7 +10,7 @@ from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, CategoryForm, BrandForm, SubjectForm, \
     EditCategoryForm
-from ..utils import random_filename, redirect_back
+from ..utils import random_filename, redirect_back, save_uploaded_files
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -89,18 +89,6 @@ def product_add():
         )
         db.session.add(product)
         db.session.commit()
-
-        photos = request.form.get('photos')  # 获取dropzone传送到photo-filenames的图片名称
-        if photos:
-            for photo in photos.split(','):
-                photo = Photo(
-                    filename=photo,
-                    filename_m=photo,
-                    filename_s=photo,
-                    product_id=product.id
-                )
-                db.session.add(photo)
-            db.session.commit()
         flash('添加成功.', 'success')
         return redirect(url_for('admin.product_list'))
     return render_template('admin/product_add.html', form=form, show_collapse=True)
@@ -153,18 +141,36 @@ def upload_image():
     return upload_success(url=url)
 
 
-@admin_bp.route('/product_photo_upload', methods=['POST'])  # dropzone上传图片
+@admin_bp.route('/product_photo_upload', methods=['POST'])  # dropzone上传图片并绑定product.id
 @login_required
 def product_photo_upload():
+    product_id = request.form.get('product_id')
     if 'file' not in request.files:
         return jsonify(message='没有文件或者文件出错'), 400
-    f = request.files.get('file')   # file是dropzone插件上传的参数名
-    if not allowed_file(f.filename):
+    if request.files['file'].filename == '':
+        return jsonify(message='没有上传文件'), 400
+    if not allowed_file(request.files.get('file')):
         return jsonify(message='错误的文件格式！只能上传png, jpg, jpeg, gif格式文件'), 400
-    filename = random_filename(f.filename)
-    f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
+    try:
+        photos = save_uploaded_files(request.files, product_id)
+        db.session.add_all(photos)
+        db.session.commit()
+        return jsonify(message='图片上传成功', filenames=[photo.filename for photo in photos])
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(message='上传失败', error=str(e)), 400
 
-    return jsonify({'filename': filename}), 200
+
+# @admin_bp.route('/product_photo_upload', methods=['POST'])  # dropzone上传图片
+# @login_required
+# def product_photo_upload():
+#     f = request.files.get('file')
+#     if not allowed_file(f.filename):
+#         return jsonify(message='错误的文件格式！只能上传png, jpg, jpeg, gif格式文件'), 400
+#     filename = random_filename(f.filename)
+#     f.save(os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename))
+#     url = url_for('admin.get_image', filename=filename)
+#     return jsonify(filename=filename, uploaded=1, url=url)
 
 
 @admin_bp.route('/uploads/<path:filename>')  # 获得上传图片

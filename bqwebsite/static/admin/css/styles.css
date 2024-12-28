@@ -63,3 +63,7 @@
 .dropzone .dz-preview.dz-image-preview {
     background: none;
 }
+
+.dropzone .dz-error .dz-error-message {
+    margin-top: 15px;
+}
