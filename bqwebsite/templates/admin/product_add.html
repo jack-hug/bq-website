@@ -67,7 +67,7 @@
                         {{ form.product_content(class="form-control") }}
                     </div>
                     <div class="mb-3">
-                        <input type="hidden" name="product_id" id="product_id">
+                        <input type="hidden" name="temp_files" id="temp_files">
                         {{ form.submit(class="btn btn-primary btn-md") }}
                     </div>
                 </form>
@@ -99,30 +99,7 @@
             addRemoveLinks: true,
             dictRemoveFile: "删 除",
             dictDefaultMessage: "拖拽图片到框内或点击上传",
-            sending: function (file, xhr, formData) {
-                var productId = document.getElementById('product_id').value;
-                formData.append('product_id', productId);
-            }
         });
-
-        // 提交产品表单时，获取product_id并设置到隐藏输入框中
-        document.getElementById('product-form').addEventListener('submit', function (event) {
-            event.preventDefault();
-            fetch(this.action, {
-                method: 'POST',
-                body: new FormData(this),
-                headers: {
-                    'X-CSRF-Token': getCsrfToken()  // 添加 CSRF Token 到请求头
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('product_id').value = data.product_id;
-                    this.submit();
-                });
-
-        })
-
 
         // 检查产品名称是否已经存在
         document.getElementById('product-name').addEventListener('input', function () {
