@@ -28,9 +28,9 @@ def random_filename(filename):
     new_filename = uuid.uuid4().hex + ext
     return new_filename
 
-def resize_image(image, filename, base_width, base_height):
+def resize_image(image_path, filename, base_width, base_height):
     filename, ext = os.path.splitext(filename)
-    img = Image.open(image)
+    img = Image.open(image_path)
 
     # Determine the maximum dimension
     max_dimension = max(img.size[0], img.size[1])
@@ -57,7 +57,7 @@ def resize_image(image, filename, base_width, base_height):
 def save_temp_files(file):
     if not os.path.exists(current_app.config['BQ_TEMP_FOLDER']):
         os.makedirs(current_app.config['BQ_TEMP_FOLDER'])
-    filename = str(uuid.uuid4()) + '_' + random_filename(file.filename)
+    filename = random_filename(file.filename)
     file_path = os.path.join(current_app.config['BQ_TEMP_FOLDER'], filename)
     file.save(file_path)
     return filename

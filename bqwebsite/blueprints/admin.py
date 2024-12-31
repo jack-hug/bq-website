@@ -1,4 +1,6 @@
+import json
 import os
+import time
 from datetime import datetime
 
 from flask import render_template, Blueprint, redirect, url_for, flash, request, current_app, send_from_directory, \
@@ -13,6 +15,14 @@ from ..forms.admin import LoginForm, ProductForm, EditProductForm, CategoryForm,
 from ..utils import random_filename, redirect_back, save_uploaded_files, resize_image, save_temp_files
 
 admin_bp = Blueprint('admin', __name__)
+
+
+def clean_temp_folder():
+    now = time.time()
+    for filename in os.listdir(current_app.config['BQ_TEMP_FOLDER']):
+        file_path = os.path.join(current_app.config['BQ_TEMP_FOLDER'], filename)
+        if os.path.getmtime(file_path) < now - 3600:
+            os.remove(file_path)
 
 
 @admin_bp.route('/')  # 首页
@@ -89,8 +99,28 @@ def product_add():
         )
         db.session.add(product)
         db.session.commit()
+
+        temp_files = request.form.get('temp_files')
+        temp_files = json.loads(temp_files)
+        if temp_files:
+            for temp_file in temp_files:
+                temp_path = os.path.join(current_app.config['BQ_TEMP_FOLDER'], temp_file)
+                final_path = os.path.join(current_app.config['BQ_UPLOAD_PATH'], temp_file)
+                os.rename(temp_path, final_path)
+
+                photo = Photo(
+                    filename=temp_file,
+                    filename_m=resize_image(final_path, temp_file, current_app.config['BQ_PHOTO_SIZE']['medium'],
+                                            current_app.config['BQ_PHOTO_SIZE']['medium']),
+                    filename_s=resize_image(final_path, temp_file, current_app.config['BQ_PHOTO_SIZE']['small'],
+                                            current_app.config['BQ_PHOTO_SIZE']['small']),
+                    product_id=product.id
+                )
+                db.session.add(photo)
+            db.session.commit()
+
         flash('添加成功.', 'success')
-        return jsonify(success=True, product_id=product.id)
+        return redirect(url_for('admin.product_list'))
     return render_template('admin/product_add.html', form=form, show_collapse=True)
 
 

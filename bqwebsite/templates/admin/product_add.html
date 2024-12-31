@@ -85,6 +85,7 @@
         }
 
         // dropzone设置
+        const tempFiles = [];
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone("#my-dropzone", {
             paramName: "file",
@@ -99,6 +100,12 @@
             addRemoveLinks: true,
             dictRemoveFile: "删 除",
             dictDefaultMessage: "拖拽图片到框内或点击上传",
+            init: function () {
+                this.on('success', function (file, response) {
+                    tempFiles.push(response.filename);
+                    document.getElementById('temp_files').value = JSON.stringify(tempFiles);
+                });
+            }
         });
 
         // 检查产品名称是否已经存在
@@ -134,6 +141,9 @@
             if (errorDiv.style.display === 'block') {
                 event.preventDefault();  // 阻止表单提交
                 document.getElementById('product-name').focus();  // 将焦点设置到输入框
+            }
+            else {
+                document.getElementById('temp_files').value = JSON.stringify(tempFiles);
             }
         });
     </script>

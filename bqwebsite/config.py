@@ -20,7 +20,7 @@ class BaseConfig:
     BQ_MANAGE_CATEGORY_PER_PAGE = 20
     BQ_SEARCH_RESULT_PER_PAGE = 30
     BQ_UPLOAD_PATH = os.path.join(basedir, 'uploads')
-    BQ_TEMP_FOLDER = os.path.join(basedir, 'uploads/temp')
+    BQ_TEMP_FOLDER = os.path.join(basedir, 'temp')
     if not os.path.exists(BQ_UPLOAD_PATH):
         os.mkdir(BQ_UPLOAD_PATH)
     BQ_PHOTO_SIZE = {
