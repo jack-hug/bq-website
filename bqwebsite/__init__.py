@@ -10,6 +10,7 @@ from .config import config
 from .extensions import bootstrap, db, csrf, login_manager, ckeditor, migrate, moment
 from .models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
     IntroduceCategory, Admin, Subject, ContactCategory, ResearchCategory, Research
+from .utils import clean_temp_folder
 
 
 def create_app(config_name=None):
@@ -26,6 +27,9 @@ def create_app(config_name=None):
     register_errorhandlers(app)
     register_commands(app)
     register_template_context(app)
+
+    with app.app_context():
+        clean_temp_folder()
 
     return app
 
@@ -95,6 +99,8 @@ def register_errorhandlers(app):
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
         return render_template('errors/400.html', description=e.description), 400
+
+
 
 
 

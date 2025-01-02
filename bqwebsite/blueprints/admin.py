@@ -17,14 +17,6 @@ from ..utils import random_filename, redirect_back, save_uploaded_files, resize_
 admin_bp = Blueprint('admin', __name__)
 
 
-def clean_temp_folder():
-    now = time.time()
-    for filename in os.listdir(current_app.config['BQ_TEMP_FOLDER']):
-        file_path = os.path.join(current_app.config['BQ_TEMP_FOLDER'], filename)
-        if os.path.getmtime(file_path) < now - 3600:
-            os.remove(file_path)
-
-
 @admin_bp.route('/')  # 首页
 def index():
     if not current_user.is_authenticated:
@@ -128,6 +120,7 @@ def product_add():
 @login_required
 def product_edit(product_id):
     product = Product.query.get_or_404(product_id)
+    photos = Photo.query.filter_by(product_id=product_id).all()
     form = EditProductForm(product=product)
     if form.validate_on_submit():
         product.name = form.name.data
@@ -139,6 +132,26 @@ def product_edit(product_id):
         product.subject_id = form.subject.data
         product.timestamp = datetime.utcnow()
         db.session.commit()
+
+        temp_files = request.form.get('temp_files')
+        temp_files = json.loads(temp_files)
+        if temp_files:
+            for temp_file in temp_files:
+                temp_path = os.path.join(current_app.config['BQ_TEMP_FOLDER'], temp_file)
+                final_path = os.path.join(current_app.config['BQ_UPLOAD_PATH'], temp_file)
+                os.rename(temp_path, final_path)
+
+                photo = Photo(
+                    filename=temp_file,
+                    filename_m=resize_image(final_path, temp_file, current_app.config['BQ_PHOTO_SIZE']['medium'],
+                                            current_app.config['BQ_PHOTO_SIZE']['medium']),
+                    filename_s=resize_image(final_path, temp_file, current_app.config['BQ_PHOTO_SIZE']['small'],
+                                            current_app.config['BQ_PHOTO_SIZE']['small']),
+                    product_id=product.id
+                )
+                db.session.add(photo)
+            db.session.commit()
+
         flash('修改成功.', 'success')
         return redirect(url_for('admin.product_list'))
     elif form.cancel.data:
@@ -150,7 +163,7 @@ def product_edit(product_id):
     form.category.data = product.category_id
     form.brand.data = product.brand_id
     form.subject.data = product.subject_id
-    return render_template('admin/product_edit.html', product=product, form=form, show_collapse=True)
+    return render_template('admin/product_edit.html', product=product, photos=photos, form=form, show_collapse=True)
 
 
 def allowed_file(filename):

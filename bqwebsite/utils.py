@@ -1,4 +1,5 @@
 import os
+import time
 import uuid
 from urllib.parse import urlparse, urljoin
 
@@ -98,3 +99,10 @@ def generate_gradient_image(width, height, filename):  # 生成随机渐变图�
 
     upload_path = current_app.config['BQ_UPLOAD_PATH']
     img.save(os.path.join(upload_path, filename))
+
+def clean_temp_folder():  # 定时清除临时文件夹的文件
+    now = time.time()
+    for filename in os.listdir(current_app.config['BQ_TEMP_FOLDER']):
+        file_path = os.path.join(current_app.config['BQ_TEMP_FOLDER'], filename)
+        if os.path.getmtime(file_path) < now - 3600:
+            os.remove(file_path)

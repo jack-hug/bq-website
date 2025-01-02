@@ -66,6 +66,7 @@
                         {{ ckeditor.config(name='product_content') }}
                     </div>
                     <div class="mb-3">
+                        <input type="hidden" name="temp_files" id="temp_files">
                         {{ form.submit(class="btn btn-primary btn-md") }}
                         {{ form.cancel(class="btn btn-secondary btn-md") }}
                     </div>
@@ -82,9 +83,22 @@
             return "{{ csrf_token() }}";
         }
 
+        // 已有的图片数据
+        const existingPhotos = [
+            {% for photo in photos %}
+                {
+                    id: {{ photo.id }},
+                    filename: "{{ photo.filename }}",
+                    url: "{{ url_for('admin.get_image', filename=photo.filename_s) }}"
+                },
+            {% endfor %}
+        ];
+
         // dropzone设置
+        const tempFiles = [];
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone("#my-dropzone", {
+            paramName: "file",
             url: "{{ url_for('admin.product_photo_upload') }}",
             method: "POST",
             headers: {
@@ -96,7 +110,61 @@
             addRemoveLinks: true,
             dictRemoveFile: "删 除",
             dictDefaultMessage: "拖拽图片到框内或点击上传",
+            init: function () {
+                // 添加已有图片到Dropzone
+                existingPhotos.forEach(photo => {
+                    const mockFile = {name: photo.filename, size: 12345}; // 模拟文件对象
+                    this.emit("addedfile", mockFile); // 添加到Dropzone
+                    this.emit("thumbnail", mockFile, photo.url); // 显示缩略图
+                    this.emit("complete", mockFile); // 标记为上传完成
+                });
+
+                // 新文件上传成功后的处理
+                this.on('success', function (file, response) {
+                    tempFiles.push(response.filename);
+                    document.getElementById('temp_files').value = JSON.stringify(tempFiles);
+                });
+
+                // 删除图片
+                this.on('removedfile', function (file) {
+                    const filename = file.name;
+                    const photoId = existingPhotos.find(photo => photo.filename === filename)?.id;
+                    if (photoId) {
+                        deletePhoto(photoId);
+                    } else {
+                        // 从临时文件列表中移除文件
+                        const index = tempFiles.indexOf(filename);
+                        if (index > -1) {
+                            tempFiles.splice(index, 1);
+                        }
+                    }
+                })
+            }
         });
+
+        // 删除已有图片
+        function deletePhoto(photoId) {
+            fetch('/admin/photo_delete/' + photoId, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-Token': getCsrfToken()
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 从Dropzone中移除文件
+                        myDropzone.files.forEach(file => {
+                            if (file.id === photoId) {
+                                myDropzone.removeFile(file);
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
 
         // 检查产品名称是否已经存在
         document.getElementById('product-name').addEventListener('input', function () {
@@ -104,11 +172,6 @@
             const errorDiv = document.getElementById('name-error');
             errorDiv.style.display = 'none';  // 清空之前的错误提示
             if (!name) return;  // 如果输入为空，不进行检查
-
-            // 如果输入的名称与当前产品的名称相同，则不进行检查
-            if (name === '{{ product.name }}' || name === '') {
-                return;
-            }
             fetch('/admin/check_product_name', {
                 method: 'POST',
                 headers: {
@@ -128,7 +191,7 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
-        })
+        });
 
         // 处理表单提交事件
         document.getElementById('product-form').addEventListener('submit', function (event) {
@@ -136,6 +199,8 @@
             if (errorDiv.style.display === 'block') {
                 event.preventDefault();  // 阻止表单提交
                 document.getElementById('product-name').focus();  // 将焦点设置到输入框
+            } else {
+                document.getElementById('temp_files').value = JSON.stringify(tempFiles);
             }
         });
     </script>
