@@ -67,3 +67,31 @@
 .dropzone .dz-error .dz-error-message {
     margin-top: 15px;
 }
+
+.dz-size {
+    display: none;
+}
+
+.dz-filename {
+    display: none;
+}
+
+/* 确保缩略图容器居中 */
+.dropzone .dz-preview .dz-image {
+    width: 120px; /* 设置缩略图容器的宽度 */
+    height: 120px; /* 设置缩略图容器的高度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* 防止图片溢出 */
+    border: 1px solid #ddd; /* 可选：添加边框 */
+    background-color: #f9f9f9; /* 可选：添加背景色 */
+}
+
+/* 确保图片居中 */
+.dz-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* 保持图片比例并居中 */
+}
+

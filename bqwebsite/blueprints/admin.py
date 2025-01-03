@@ -122,6 +122,9 @@ def product_edit(product_id):
     product = Product.query.get_or_404(product_id)
     photos = Photo.query.filter_by(product_id=product_id).all()
     form = EditProductForm(product=product)
+
+    if form.cancel.data:
+        return redirect(url_for('admin.product_list'))
     if form.validate_on_submit():
         product.name = form.name.data
         product.product_content = form.product_content.data
@@ -153,8 +156,6 @@ def product_edit(product_id):
             db.session.commit()
 
         flash('修改成功.', 'success')
-        return redirect(url_for('admin.product_list'))
-    elif form.cancel.data:
         return redirect(url_for('admin.product_list'))
     form.name.data = product.name
     form.product_content.data = product.product_content

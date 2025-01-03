@@ -89,13 +89,14 @@
                 {
                     id: {{ photo.id }},
                     filename: "{{ photo.filename }}",
-                    url: "{{ url_for('admin.get_image', filename=photo.filename_s) }}"
+                    url: "{{ url_for('admin.get_image', filename=photo.filename_m) }}"
                 },
             {% endfor %}
         ];
 
         // dropzone设置
         const tempFiles = [];
+        const deletedPhotos = [];
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone("#my-dropzone", {
             paramName: "file",
@@ -111,60 +112,47 @@
             dictRemoveFile: "删 除",
             dictDefaultMessage: "拖拽图片到框内或点击上传",
             init: function () {
-                // 添加已有图片到Dropzone
-                existingPhotos.forEach(photo => {
-                    const mockFile = {name: photo.filename, size: 12345}; // 模拟文件对象
-                    this.emit("addedfile", mockFile); // 添加到Dropzone
-                    this.emit("thumbnail", mockFile, photo.url); // 显示缩略图
-                    this.emit("complete", mockFile); // 标记为上传完成
-                });
-
                 // 新文件上传成功后的处理
                 this.on('success', function (file, response) {
                     tempFiles.push(response.filename);
                     document.getElementById('temp_files').value = JSON.stringify(tempFiles);
                 });
-
-                // 删除图片
+                // 删除文件时的处理
                 this.on('removedfile', function (file) {
-                    const filename = file.name;
-                    const photoId = existingPhotos.find(photo => photo.filename === filename)?.id;
+                    const photoId = file.id; // 假设 file 对象中有 id 属性
                     if (photoId) {
-                        deletePhoto(photoId);
-                    } else {
-                        // 从临时文件列表中移除文件
-                        const index = tempFiles.indexOf(filename);
-                        if (index > -1) {
-                            tempFiles.splice(index, 1);
+                        // 从 existingPhotos 中移除图片
+                        const index = existingPhotos.findIndex(photo => photo.id === photoId);
+                        if (index !== -1) {
+                            const deletedPhoto = existingPhotos.splice(index, 1)[0]; // 移除并获取被删除的图片
+                            deletedPhotos.push(deletedPhoto); // 将被删除的图片存储到 deletedPhotos 数组中
                         }
                     }
-                })
+                });
+                // 遍历 existingPhotos，将已上传的图片添加到 Dropzone
+                existingPhotos.forEach(function (photo) {
+                    // 创建一个模拟的文件对象
+                    var mockFile = {
+                        id: photo.id,
+                        name: photo.filename,
+                        size: 0, // 如果需要可以设置实际大小
+                        url: photo.url // 图片的 URL
+                    };
+
+                    // 调用 Dropzone 的 addedfile 事件来添加文件
+                    this.emit("addedfile", mockFile);
+
+                    // 如果文件是图片，调用 Dropzone 的 thumbnail 事件生成缩略图
+                    if (mockFile.url.match(/\.(jpeg|jpg|png|gif)$/i)) {
+                        this.emit("thumbnail", mockFile, mockFile.url);
+                    }
+
+                    // 确保文件不会再次上传
+                    mockFile.accepted = true;
+                    this.emit("complete", mockFile);
+                }.bind(this));
             }
         });
-
-        // 删除已有图片
-        function deletePhoto(photoId) {
-            fetch('/admin/photo_delete/' + photoId, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-Token': getCsrfToken()
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // 从Dropzone中移除文件
-                        myDropzone.files.forEach(file => {
-                            if (file.id === photoId) {
-                                myDropzone.removeFile(file);
-                            }
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
 
         // 检查产品名称是否已经存在
         document.getElementById('product-name').addEventListener('input', function () {
@@ -202,6 +190,66 @@
             } else {
                 document.getElementById('temp_files').value = JSON.stringify(tempFiles);
             }
+        });
+
+        // 点击取消按钮还原图片
+        document.getElementById('cancel').addEventListener('click', function () {
+            // 遍历 deletedPhotos 数组，将图片重新添加到 existingPhotos 和 Dropzone
+            deletedPhotos.forEach(photo => {
+                // 将图片重新添加到 existingPhotos
+                existingPhotos.push(photo);
+
+                // 创建一个模拟的文件对象
+                var mockFile = {
+                    name: photo.filename,
+                    size: 0, // 如果需要可以设置实际大小
+                    url: photo.url, // 图片的 URL
+                    id: photo.id // 添加 id 属性
+                };
+
+                // 调用 Dropzone 的 addedfile 事件来添加文件
+                myDropzone.emit("addedfile", mockFile);
+
+                // 如果文件是图片，调用 Dropzone 的 thumbnail 事件生成缩略图
+                if (mockFile.url.match(/\.(jpeg|jpg|png|gif)$/i)) {
+                    myDropzone.emit("thumbnail", mockFile, mockFile.url);
+                }
+
+                // 确保文件不会再次上传
+                mockFile.accepted = true;
+                myDropzone.emit("complete", mockFile);
+            });
+
+            // 清空 deletedPhotos 数组
+            deletedPhotos.length = 0;
+        });
+
+        // 点击确认按钮提交删除请求
+        document.getElementById('submit').addEventListener('click', function () {
+            // 遍历 deletedPhotos 数组，提交删除请求
+            deletedPhotos.forEach(photo => {
+                fetch(`/admin/photo_delete/${photo.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-Token': getCsrfToken(),
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('图片已删除');
+                        } else {
+                            console.error('删除图片失败');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('删除图片时出错:', error);
+                    });
+            });
+
+            // 清空 deletedPhotos 数组
+            deletedPhotos.length = 0;
         });
     </script>
 {% endblock %}
