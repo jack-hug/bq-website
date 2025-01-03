@@ -112,6 +112,12 @@
             dictRemoveFile: "删 除",
             dictDefaultMessage: "拖拽图片到框内或点击上传",
             init: function () {
+                console.log('当前文件列表:', this.files);
+                // 新文件添加时的处理
+                this.on('addedfile', function (file) {
+                    // 隐藏默认消息
+                    this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                });
                 // 新文件上传成功后的处理
                 this.on('success', function (file, response) {
                     tempFiles.push(response.filename);
@@ -128,7 +134,25 @@
                             deletedPhotos.push(deletedPhoto); // 将被删除的图片存储到 deletedPhotos 数组中
                         }
                     }
+
+
+                    // 检查 Dropzone 中剩余的文件数量
+                    if (this.files.length === 0) {
+                        // 如果没有文件，显示默认消息
+                        this.element.querySelector('.dz-default.dz-message').style.display = 'block';
+                    } else {
+                        // 如果有文件，隐藏默认消息
+                        this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                    }
                 });
+
+                // 初始化时检查文件数量
+                if (this.files.length > 0) {
+                    this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                } else {
+                    this.element.querySelector('.dz-default.dz-message').style.display = 'block';
+                }
+
                 // 遍历 existingPhotos，将已上传的图片添加到 Dropzone
                 existingPhotos.forEach(function (photo) {
                     // 创建一个模拟的文件对象
@@ -150,6 +174,7 @@
                     // 确保文件不会再次上传
                     mockFile.accepted = true;
                     this.emit("complete", mockFile);
+                    this.files.push(mockFile)
                 }.bind(this));
             }
         });
