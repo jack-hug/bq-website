@@ -101,9 +101,32 @@
             dictRemoveFile: "删 除",
             dictDefaultMessage: "拖拽图片到框内或点击上传",
             init: function () {
+                // 自定义函数来检查文件数量并更新 .dz-default.dz-message 的显示状态
+                const updateMessageDisplay = () => {
+                    if (this.files.length > 0) {
+                        this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                    } else {
+                        this.element.querySelector('.dz-default.dz-message').style.display = 'block';
+                    }
+                };
+                // 初始化时检查文件数量
+                updateMessageDisplay();
+                // 文件上传成功时更新 tempFiles 并检查文件数量
                 this.on('success', function (file, response) {
                     tempFiles.push(response.filename);
                     document.getElementById('temp_files').value = JSON.stringify(tempFiles);
+                    updateMessageDisplay();
+                });
+
+                // 文件被删除时更新 tempFiles 并检查文件数量
+                this.on('removedfile', function (file) {
+                    const fileName = file.name;
+                    const index = tempFiles.indexOf(fileName);
+                    if (index !== -1) {
+                        tempFiles.splice(index, 1);
+                        document.getElementById('temp_files').value = JSON.stringify(tempFiles);
+                    }
+                    updateMessageDisplay();
                 });
             }
         });
@@ -141,8 +164,7 @@
             if (errorDiv.style.display === 'block') {
                 event.preventDefault();  // 阻止表单提交
                 document.getElementById('product-name').focus();  // 将焦点设置到输入框
-            }
-            else {
+            } else {
                 document.getElementById('temp_files').value = JSON.stringify(tempFiles);
             }
         });
