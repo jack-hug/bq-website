@@ -17,7 +17,7 @@ class Category(db.Model):
     status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
-    products = db.relationship('Product', back_populates='category')
+    products = db.relationship('Product', back_populates='category', cascade='all, delete-orphan')
 
 
 class Product(db.Model):

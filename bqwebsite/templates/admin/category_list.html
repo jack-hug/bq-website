@@ -19,7 +19,7 @@
                 </nav>
                 <h4 class="text-center mb-3 mt-3">分类管理</h4>
                 <hr>
-                <div class="row">
+                <div class="row mb-5">
                     <div class="col-md-4">
                         {% if categories %}
                             <table class="table table-striped table-hover border mt-3">
@@ -45,31 +45,36 @@
                                         <td>{{ category.name }}</td>
                                         <td>{{ category.products|length }}</td>
                                         <td>
-                                            <small>
-                                                {% if category.status %}
-                                                    已发布
-                                                {% else %}
-                                                    已下架
-                                                {% endif %}
-                                            </small>
+                                            {% if category.status %}
+                                                <small class="text-bg-primary p-1 rounded">已发布</small>
+                                            {% else %}
+                                                <small class="text-bg-secondary p-1 rounded">已下架</small>
+                                            {% endif %}
                                         </td>
                                         <td>
                                             <a href="{{ url_for('admin.category_edit', category_id=category.id) }}"
-                                               class="btn btn-sm btn-primary">
+                                               class="btn btn-sm btn-outline-secondary">
                                                 <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                             </a>
                                             {% if category.status %}
-                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                <a href="{{ url_for('admin.category_status', category_id=category.id, next=request.full_path) }}"
+                                                   class="btn btn-sm btn-secondary">
                                                     <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                                 </a>
                                             {% else %}
-                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                <a href="{{ url_for('admin.category_status', category_id=category.id, next=request.full_path) }}"
+                                                   class="btn btn-sm btn-warning">
                                                     <i class="fa-solid fa-arrow-up" title="发布"></i>
                                                 </a>
                                             {% endif %}
-                                            <a href="#" class="btn btn-sm btn-danger">
-                                                <i class="fa-regular fa-trash-can" title="删除"></i>
-                                            </a>
+                                            <form action="{{ url_for('admin.category_delete', category_id=category.id, next=request.full_path) }}"
+                                                  class="d-inline" method="post">
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('确定要删除吗？分类下面的产品也会被一起删除。')">
+                                                    <i class="fa-regular fa-trash-can" title="删除"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -80,15 +85,17 @@
                                 没有剂型数据
                             </div>
                         {% endif %}
-                        <form class="col-auto row mb-5">
-                            <div class="col-md-auto">
-                                <input class="form-control me-2" type="search" placeholder="请输入剂型名称"
-                                       aria-label="Category">
+                        <form method="POST" action="{{ url_for('admin.category_list') }}"
+                              class="row align-items-center">
+                            {{ category_add_form.hidden_tag() }}
+                            <div class="col-auto">
+                                {{ category_add_form.name.label() }}
                             </div>
                             <div class="col-auto">
-                                <a type="button" class="btn btn-outline-secondary" href="{{ url_for('admin.category_add') }}"><i
-                                        class="fa-solid fa-plus"></i> 添加剂型
-                                </a>
+                                {{ category_add_form.name(class="form-control") }}
+                            </div>
+                            <div class="col-auto">
+                                {{ category_add_form.category_submit(class="btn btn-primary") }}
                             </div>
                         </form>
                     </div>
@@ -129,11 +136,11 @@
                                                 <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                             </a>
                                             {% if brand.status %}
-                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                <a href="{{ url_for('admin.brand_status', brand_id=brand.id, next=request.full_path) }}" class="btn btn-sm btn-secondary">
                                                     <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                                 </a>
                                             {% else %}
-                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                <a href="{{ url_for('admin.brand_status', brand_id=brand.id, next=request.full_path) }}" class="btn btn-sm btn-warning">
                                                     <i class="fa-solid fa-arrow-up" title="发布"></i>
                                                 </a>
                                             {% endif %}
@@ -150,15 +157,17 @@
                                 没有商标数据
                             </div>
                         {% endif %}
-                        <form class="col-auto row mb-5">
-                            <div class="col-md-auto">
-                                <input class="form-control me-2" type="search" placeholder="请输入商标名称"
-                                       aria-label="Category">
+                        <form method="POST" action="{{ url_for('admin.category_list') }}"
+                              class="row align-items-center">
+                            {{ brand_add_form.hidden_tag() }}
+                            <div class="col-auto">
+                                {{ brand_add_form.name.label() }}
                             </div>
                             <div class="col-auto">
-                                <a type="button" class="btn btn-outline-secondary" href="{{ url_for('admin.category_add') }}"><i
-                                        class="fa-solid fa-plus"></i> 添加商标
-                                </a>
+                                {{ brand_add_form.name(class="form-control") }}
+                            </div>
+                            <div class="col-auto">
+                                {{ brand_add_form.brand_submit(class="btn btn-primary") }}
                             </div>
                         </form>
                     </div>
@@ -187,25 +196,23 @@
                                         <td>{{ subject.name }}</td>
                                         <td>{{ subject.products|length }}</td>
                                         <td>
-                                            <small>
-                                                {% if subject.status %}
-                                                    已发布
-                                                {% else %}
-                                                    已下架
-                                                {% endif %}
-                                            </small>
+                                            {% if subject.status %}
+                                                <small class="text-bg-primary p-1 rounded">已发布</small>
+                                            {% else %}
+                                                <small class="text-bg-secondary p-1 rounded">已下架</small>
+                                            {% endif %}
                                         </td>
                                         <td>
                                             <a href="{{ url_for('admin.subject_edit', subject_id=subject.id) }}"
-                                               class="btn btn-sm btn-primary">
+                                               class="btn btn-sm btn-outline-secondary">
                                                 <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                             </a>
                                             {% if subject.status %}
-                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                <a href="{{ url_for('admin.subject_status', subject_id=subject.id, next=request.full_path) }}" class="btn btn-sm btn-secondary">
                                                     <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                                 </a>
                                             {% else %}
-                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                <a href="{{ url_for('admin.subject_status', subject_id=subject.id, next=request.full_path) }}" class="btn btn-sm btn-warning">
                                                     <i class="fa-solid fa-arrow-up" title="发布"></i>
                                                 </a>
                                             {% endif %}
@@ -222,15 +229,17 @@
                                 没有功能分类数据
                             </div>
                         {% endif %}
-                        <form class="col-auto row mb-5">
-                            <div class="col-md-auto">
-                                <input class="form-control me-2" type="search" placeholder="请输入功能名称"
-                                       aria-label="Category">
+                        <form method="POST" action="{{ url_for('admin.category_list') }}"
+                              class="row align-items-center">
+                            {{ subject_add_form.hidden_tag() }}
+                            <div class="col-auto">
+                                {{ subject_add_form.name.label() }}
                             </div>
                             <div class="col-auto">
-                                <a type="button" class="btn btn-outline-secondary" href="{{ url_for('admin.category_add') }}"><i
-                                        class="fa-solid fa-plus"></i> 添加功能
-                                </a>
+                                {{ subject_add_form.name(class="form-control") }}
+                            </div>
+                            <div class="col-auto">
+                                {{ subject_add_form.subject_submit(class="btn btn-primary") }}
                             </div>
                         </form>
                     </div>

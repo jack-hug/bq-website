@@ -1,10 +1,122 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'admin_base.html' %}
 
-</body>
-</html>
+{% block title %}
+    后台管理面板-修改商标名称
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('admin.index') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a href="{{ url_for('admin.category_list') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">产品分类
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">修改商标名称</li>
+                    </ol>
+                </nav>
+                <h4 class="text-center mb-3 mt-3">修改商标名称</h4>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <form class="form" method="post" id="category-form">
+                            {{ form.hidden_tag() }}
+                            <div class="mb-3">
+                                {{ form.name.label(class="form-label") }}
+                                {{ form.name(class="form-control") }}
+                                <div id="name-error" class="mt-2 alert alert-danger" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                {{ form.submit(class="btn btn-primary btn-md") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        // 获取 CSRF Token
+        function getCsrfToken() {
+            return "{{ csrf_token() }}";
+        }
+
+        const nameInput = document.getElementById('name');
+        const nameError = document.getElementById('name-error');
+
+        // 监听输入事件
+        nameInput.addEventListener('input', function () {
+            const name = nameInput.value.trim();
+
+            // 清空之前的错误信息
+            nameError.style.display = 'none';
+            nameError.textContent = '';
+
+            // 如果输入为空，不发送请求
+            if (name === '') {
+                return;
+            }
+
+            // 发送 AJAX 请求
+            fetch('/admin/check_category_name', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()  // 手动添加 CSRF 令牌
+                },
+                body: JSON.stringify({name: name}),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        nameError.textContent = '该剂型已存在';
+                        nameError.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('AJAX 请求失败:', error);
+                });
+        });
+
+        // 监听表单提交事件
+        document.getElementById('category-form').addEventListener('submit', function (event) {
+            const name = nameInput.value.trim();
+
+            // 如果剂型名称已存在，阻止表单提交
+            if (nameError.textContent === '该剂型已存在') {
+                event.preventDefault();
+                return;
+            }
+
+            // 如果剂型名称为空，阻止表单提交
+            if (name === '') {
+                nameError.textContent = '剂型名称不能为空';
+                nameError.style.display = 'block';
+                event.preventDefault();
+                return;
+            }
+
+            // 如果剂型名称超过 128 个字符，阻止表单提交
+            if (name.length > 128) {
+                nameError.textContent = '剂型名称不能超过128个字符';
+                nameError.style.display = 'block';
+                event.preventDefault();
+            }
+        });
+    </script>
+{% endblock %}
+

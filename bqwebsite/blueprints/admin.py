@@ -4,15 +4,15 @@ import time
 from datetime import datetime
 
 from flask import render_template, Blueprint, redirect, url_for, flash, request, current_app, send_from_directory, \
-    jsonify, session
+    jsonify, session, abort
 from flask_ckeditor import upload_fail, upload_success
 from flask_login import current_user, login_user, login_required, logout_user
 
 from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
-from ..forms.admin import LoginForm, ProductForm, EditProductForm, CategoryForm, BrandForm, SubjectForm, \
-    EditCategoryForm
-from ..utils import random_filename, redirect_back, save_uploaded_files, resize_image, save_temp_files
+from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryForm, EditBrandForm, CategoryAddForm, \
+    BrandAddForm, SubjectAddForm
+from ..utils import random_filename, redirect_back, resize_image, save_temp_files
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -263,62 +263,90 @@ def product_status(product_id):
 @admin_bp.route('/category_list', methods=['GET', 'POST'])  # 分类列表
 @login_required
 def category_list():
-    return render_template('admin/category_list.html', show_collapse=True)
-
-
-@admin_bp.route('/category_add', methods=['GET', 'POST'])  # 新建分类
-@login_required
-def category_add():
-    category_form = CategoryForm()
-    brand_form = BrandForm()
-    subject_form = SubjectForm()
+    category_add_form = CategoryAddForm()
+    brand_add_form = BrandAddForm()
+    subject_add_form = SubjectAddForm()
     if request.method == 'POST':
-        if category_form.category_submit.data and category_form.validate():
+        if category_add_form.category_submit.data and category_add_form.validate():
             category = Category(
-                name=category_form.name.data,
+                name=category_add_form.name.data,
+                status=True,
                 timestamp=datetime.utcnow()
             )
             db.session.add(category)
             db.session.commit()
             flash('添加成功', 'success')
             return redirect(url_for('admin.category_list'))
-        if brand_form.brand_submit.data and brand_form.validate():
+        if brand_add_form.brand_submit.data and brand_add_form.validate():
             brand = Brand(
-                name=brand_form.name.data,
+                name=brand_add_form.name.data,
+                status=True,
                 timestamp=datetime.utcnow()
             )
             db.session.add(brand)
             db.session.commit()
             flash('添加成功', 'success')
             return redirect(url_for('admin.category_list'))
-        if subject_form.subject_submit.data and subject_form.validate():
+        if subject_add_form.subject_submit.data and subject_add_form.validate():
             subject = Subject(
-                name=subject_form.name.data,
+                name=subject_add_form.name.data,
+                status=True,
                 timestamp=datetime.utcnow()
             )
             db.session.add(subject)
             db.session.commit()
             flash('添加成功', 'success')
             return redirect(url_for('admin.category_list'))
-        else:
-            flash('添加失败,名称已经存在', 'info')
-            return redirect(url_for('admin.category_add'))
-    return render_template('admin/category_add.html', category_form=category_form, brand_form=brand_form,
-                           subject_form=subject_form, show_collapse=True)
+    return render_template('admin/category_list.html', category_add_form=category_add_form,
+                           brand_add_form=brand_add_form, subject_add_form=subject_add_form, show_collapse=True)
+
+@admin_bp.route('/category_status/<int:category_id>')  # 分类发布与撤销
+@login_required
+def category_status(category_id):
+    category = Category.query.get_or_404(category_id)
+    category.status = not category.status
+    db.session.commit()
+    return redirect_back()
+
+
+@admin_bp.route('/brand_status/<int:brand_id>')  # 商标发布与撤销
+@login_required
+def brand_status(brand_id):
+    brand = Brand.query.get_or_404(brand_id)
+    brand.status = not brand.status
+    db.session.commit()
+    return redirect_back()
+
+
+@admin_bp.route('/subject_status/<int:subject_id>')  # 功能主治发布与撤销
+@login_required
+def subject_status(subject_id):
+    subject = Subject.query.get_or_404(subject_id)
+    subject.status = not subject.status
+    db.session.commit()
+    return redirect_back()
 
 
 @admin_bp.route('/brand_edit/<int:brand_id>', methods=['GET', 'POST'])  # 编辑商标
 @login_required
 def brand_edit(brand_id):
-    brand_id = Brand.query.get_or_404(brand_id)
-    return render_template('admin/brand_edit.html', brand_id=brand_id)
+    brand = Brand.query.get_or_404(brand_id)
+    form = EditBrandForm()
+    if form.validate_on_submit():
+        brand.name = form.name.data
+        brand.timestamp = datetime.utcnow()
+        db.session.commit()
+        flash('修改成功.', 'success')
+        return redirect(url_for('admin.category_list'))
+    form.name.data = brand.name
+    return render_template('admin/brand_edit.html', brand=brand, form=form)
 
 
 @admin_bp.route('/category_edit/<int:category_id>', methods=['GET', 'POST'])  # 编辑分类
 @login_required
 def category_edit(category_id):
     category = Category.query.get_or_404(category_id)
-    form = EditCategoryForm()
+    form = EditCategoryForm(category_id=category.id)
     if form.validate_on_submit():
         category.name = form.name.data
         category.timestamp = datetime.utcnow()
@@ -334,6 +362,16 @@ def category_edit(category_id):
 def subject_edit(subject_id):
     subject_id = Subject.query.get_or_404(subject_id)
     return render_template('admin/category_edit.html', subject_id=subject_id)
+
+
+@admin_bp.route('/category_delete/<int:category_id>', methods=['GET', 'POST'])  # 删除分类
+@login_required
+def category_delete(category_id):
+    category = Category.query.get_or_404(category_id)
+    db.session.delete(category)
+    db.session.commit()
+    flash('删除成功.', 'success')
+    return redirect(url_for('admin.category_list'))
 
 
 @admin_bp.route('/news_list', methods=['GET', 'POST'])  # 新闻列表
@@ -395,3 +433,11 @@ def index_photo_list():
 @login_required
 def introduce_list():
     return render_template('admin/introduce_list.html')
+
+
+@admin_bp.route('/check_category_name', methods=['POST'])  # 检查分类名称是否已经存在
+def check_category_name():
+    data = request.get_json()
+    name = data.get('name')
+    category = Category.query.filter_by(name=name).first()
+    return jsonify({'exists': category is not None})

@@ -10,13 +10,13 @@
     <div class="row justify-content-md-center mt-3 mb-3">
         <div class="card w-50 bg-light">
             <img class="card-img-top img-fluid" src="{{ url_for('static', filename='assets/img/error.jpg') }}">
-            <div class="card-body">
+            <div class="card-body text-center">
                 <h5 class="card-title">404 Error</h5>
                 <p class="card-text">Page Not Found</p>
             </div>
             <div class="card-footer">
-                <div class="float-right">
-                    <a class="btn btn-primary" href="{{ url_for('main.index') }}">Return Home</a>
+                <div class="text-center">
+                    <a class="btn btn-primary" href="javascript:history.back();">Return</a>
                 </div>
             </div>
         </div>

@@ -83,6 +83,9 @@ def product():
 @main_bp.route('/category/<category>')  # 按剂型分类
 def product_category(category):
     category = Category.query.filter_by(name=category).first_or_404()
+    if not category.status:
+        flash('该分类不存在', 'info')
+        return redirect(url_for('main.product'))
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
     pagination = Product.query.with_parent(category).order_by(Product.timestamp.desc()).paginate(page=page,
@@ -94,6 +97,9 @@ def product_category(category):
 @main_bp.route('/brand/<brand>')  # 按商标分类
 def product_brand(brand):
     brand = Brand.query.filter_by(name=brand).first_or_404()
+    if not brand.status:
+        flash('该商标不存在', 'info')
+        return redirect(url_for('main.product'))
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
     pagination = Product.query.with_parent(brand).order_by(Product.timestamp.desc()).paginate(page=page,
@@ -105,6 +111,9 @@ def product_brand(brand):
 @main_bp.route('/subject/<subject>')  # 按功能主治分类
 def product_subject(subject):
     subject = Subject.query.filter_by(name=subject).first_or_404()
+    if not subject.status:
+        flash('该功能主治不存在', 'info')
+        return redirect(url_for('main.product'))
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
     pagination = Product.query.with_parent(subject).order_by(Product.timestamp.desc()).paginate(page=page,

@@ -54,27 +54,27 @@ class EditProductForm(FlaskForm):
         self.subject.choices = [(subject.id, subject.name) for subject in Subject.query.all()]
 
 
-class CategoryForm(FlaskForm):
-    name = StringField('剂型名称', validators=[DataRequired(), Length(1, 128)])
-    category_submit = SubmitField('提交', name='category_submit')
+class CategoryAddForm(FlaskForm):
+    name = StringField('添加剂型：', validators=[DataRequired(), Length(1, 128)])
+    category_submit = SubmitField('添 加', name='category_submit')
 
     def validate_name(self, field):
         if Category.query.filter_by(name=field.data).first():
             raise ValidationError('该剂型已存在')
 
 
-class BrandForm(FlaskForm):
-    name = StringField('商标名称', validators=[DataRequired(), Length(1, 128)])
-    brand_submit = SubmitField('提交', name='brand_submit')
+class BrandAddForm(FlaskForm):
+    name = StringField('添加商标：', validators=[DataRequired(), Length(1, 128)])
+    brand_submit = SubmitField('添 加', name='brand_submit')
 
     def validate_name(self, field):
         if Brand.query.filter_by(name=field.data).first():
             raise ValidationError('该商标已存在')
 
 
-class SubjectForm(FlaskForm):
-    name = StringField('功能主治名称', validators=[DataRequired(), Length(1, 128)])
-    subject_submit = SubmitField('提交', name='subject_submit')
+class SubjectAddForm(FlaskForm):
+    name = StringField('添加功能分类：', validators=[DataRequired(), Length(1, 128)])
+    subject_submit = SubmitField('添 加', name='subject_submit')
 
     def validate_name(self, field):
         if Subject.query.filter_by(name=field.data).first():
@@ -85,8 +85,16 @@ class EditCategoryForm(FlaskForm):
     name = StringField('剂型名称', validators=[DataRequired(), Length(1, 128)])
     submit = SubmitField('修改')
 
+    def __init__(self, *args, **kwargs):
+        super(EditCategoryForm, self).__init__(*args, **kwargs)
+        self.category_id = kwargs.get('category_id')
+
     def validate_name(self, field):
-        if Category.query.filter_by(name=field.data).first():
+        category = Category.query.filter(
+            Category.id != self.category_id,
+            Category.name == field.data
+        ).first()
+        if category:
             raise ValidationError('该剂型已存在')
 
 
