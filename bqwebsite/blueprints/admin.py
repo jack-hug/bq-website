@@ -11,7 +11,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryForm, EditBrandForm, CategoryAddForm, \
-    BrandAddForm, SubjectAddForm
+    BrandAddForm, SubjectAddForm, EditSubjectForm
 from ..utils import random_filename, redirect_back, resize_image, save_temp_files
 
 admin_bp = Blueprint('admin', __name__)
@@ -360,8 +360,16 @@ def category_edit(category_id):
 @admin_bp.route('/subject_edit/<int:subject_id>', methods=['GET', 'POST'])  # 编辑功能主治
 @login_required
 def subject_edit(subject_id):
-    subject_id = Subject.query.get_or_404(subject_id)
-    return render_template('admin/category_edit.html', subject_id=subject_id)
+    subject = Subject.query.get_or_404(subject_id)
+    form = EditSubjectForm(subject_id=subject.id)
+    if form.validate_on_submit():
+        subject.name = form.name.data
+        subject.timestamp = datetime.utcnow()
+        db.session.commit()
+        flash('修改成功.', 'success')
+        return redirect(url_for('admin.category_list'))
+    form.name.data = subject.name
+    return render_template('admin/subject_edit.html', subject=subject, form=form)
 
 
 @admin_bp.route('/category_delete/<int:category_id>', methods=['GET', 'POST'])  # 删除分类
@@ -369,6 +377,24 @@ def subject_edit(subject_id):
 def category_delete(category_id):
     category = Category.query.get_or_404(category_id)
     db.session.delete(category)
+    db.session.commit()
+    flash('删除成功.', 'success')
+    return redirect(url_for('admin.category_list'))
+
+@admin_bp.route('/brand_delete/<int:brand_id>', methods=['GET', 'POST'])  # 删除商标
+@login_required
+def brand_delete(brand_id):
+    brand = Brand.query.get_or_404(brand_id)
+    db.session.delete(brand)
+    db.session.commit()
+    flash('删除成功.', 'success')
+    return redirect(url_for('admin.category_list'))
+
+@admin_bp.route('/subject_delete/<int:subject_id>', methods=['GET', 'POST'])  # 删除功能
+@login_required
+def subject_delete(subject_id):
+    subject = Subject.query.get_or_404(subject_id)
+    db.session.delete(subject)
     db.session.commit()
     flash('删除成功.', 'success')
     return redirect(url_for('admin.category_list'))
@@ -435,9 +461,20 @@ def introduce_list():
     return render_template('admin/introduce_list.html')
 
 
+# 类型与数据表的映射
+MODEL_MAP = {
+    'category-input': Category,
+    'brand-input': Brand,
+    'subject-input': Subject,
+}
 @admin_bp.route('/check_category_name', methods=['POST'])  # 检查分类名称是否已经存在
 def check_category_name():
     data = request.get_json()
     name = data.get('name')
-    category = Category.query.filter_by(name=name).first()
-    return jsonify({'exists': category is not None})
+    check_type = data.get('type')
+    model = MODEL_MAP.get(check_type)
+    if not model:
+        return jsonify({'exists': False}), 400
+
+    exists = model.query.filter_by(name=name).first() is not None
+    return jsonify({'exists': exists})

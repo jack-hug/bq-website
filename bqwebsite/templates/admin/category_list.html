@@ -86,16 +86,19 @@
                             </div>
                         {% endif %}
                         <form method="POST" action="{{ url_for('admin.category_list') }}"
-                              class="row align-items-center">
+                              class="row align-items-center category-form">
                             {{ category_add_form.hidden_tag() }}
                             <div class="col-auto">
                                 {{ category_add_form.name.label() }}
                             </div>
                             <div class="col-auto">
-                                {{ category_add_form.name(class="form-control") }}
+                                {{ category_add_form.name(class="form-control category-input", id="category-name") }}
                             </div>
                             <div class="col-auto">
                                 {{ category_add_form.category_submit(class="btn btn-primary") }}
+                            </div>
+                            <div id="category-name-error" class="mt-2 alert alert-danger error-message"
+                                 style="display: none;">
                             </div>
                         </form>
                     </div>
@@ -136,15 +139,17 @@
                                                 <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                             </a>
                                             {% if brand.status %}
-                                                <a href="{{ url_for('admin.brand_status', brand_id=brand.id, next=request.full_path) }}" class="btn btn-sm btn-secondary">
+                                                <a href="{{ url_for('admin.brand_status', brand_id=brand.id, next=request.full_path) }}"
+                                                   class="btn btn-sm btn-secondary">
                                                     <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                                 </a>
                                             {% else %}
-                                                <a href="{{ url_for('admin.brand_status', brand_id=brand.id, next=request.full_path) }}" class="btn btn-sm btn-warning">
+                                                <a href="{{ url_for('admin.brand_status', brand_id=brand.id, next=request.full_path) }}"
+                                                   class="btn btn-sm btn-warning">
                                                     <i class="fa-solid fa-arrow-up" title="发布"></i>
                                                 </a>
                                             {% endif %}
-                                            <a href="#" class="btn btn-sm btn-danger">
+                                            <a href="{{ url_for('admin.brand_delete', brand_id=brand.id, next=request.full_path) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该商标吗？该商标下面的产品也会一起删除。')">
                                                 <i class="fa-regular fa-trash-can" title="删除"></i>
                                             </a>
                                         </td>
@@ -158,16 +163,19 @@
                             </div>
                         {% endif %}
                         <form method="POST" action="{{ url_for('admin.category_list') }}"
-                              class="row align-items-center">
+                              class="row align-items-center brand-form">
                             {{ brand_add_form.hidden_tag() }}
                             <div class="col-auto">
                                 {{ brand_add_form.name.label() }}
                             </div>
                             <div class="col-auto">
-                                {{ brand_add_form.name(class="form-control") }}
+                                {{ brand_add_form.name(class="form-control brand-input", id="brand-name") }}
                             </div>
                             <div class="col-auto">
                                 {{ brand_add_form.brand_submit(class="btn btn-primary") }}
+                            </div>
+                            <div id="brand-name-error" class="mt-2 alert alert-danger error-message"
+                                 style="display: none;">
                             </div>
                         </form>
                     </div>
@@ -208,15 +216,17 @@
                                                 <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                             </a>
                                             {% if subject.status %}
-                                                <a href="{{ url_for('admin.subject_status', subject_id=subject.id, next=request.full_path) }}" class="btn btn-sm btn-secondary">
+                                                <a href="{{ url_for('admin.subject_status', subject_id=subject.id, next=request.full_path) }}"
+                                                   class="btn btn-sm btn-secondary">
                                                     <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                                 </a>
                                             {% else %}
-                                                <a href="{{ url_for('admin.subject_status', subject_id=subject.id, next=request.full_path) }}" class="btn btn-sm btn-warning">
+                                                <a href="{{ url_for('admin.subject_status', subject_id=subject.id, next=request.full_path) }}"
+                                                   class="btn btn-sm btn-warning">
                                                     <i class="fa-solid fa-arrow-up" title="发布"></i>
                                                 </a>
                                             {% endif %}
-                                            <a href="#" class="btn btn-sm btn-danger">
+                                            <a href="{{ url_for('admin.subject_delete', subject_id=subject.id, next=request.full_path) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除吗？功能主治下面的产品也会被删除。')">
                                                 <i class="fa-regular fa-trash-can" title="删除"></i>
                                             </a>
                                         </td>
@@ -230,16 +240,19 @@
                             </div>
                         {% endif %}
                         <form method="POST" action="{{ url_for('admin.category_list') }}"
-                              class="row align-items-center">
+                              class="row align-items-center subject-form">
                             {{ subject_add_form.hidden_tag() }}
                             <div class="col-auto">
                                 {{ subject_add_form.name.label() }}
                             </div>
                             <div class="col-auto">
-                                {{ subject_add_form.name(class="form-control") }}
+                                {{ subject_add_form.name(class="form-control subject-input", id="subject-name") }}
                             </div>
                             <div class="col-auto">
                                 {{ subject_add_form.subject_submit(class="btn btn-primary") }}
+                            </div>
+                            <div id="subject-name-error" class="mt-2 alert alert-danger error-message"
+                                 style="display: none;">
                             </div>
                         </form>
                     </div>
@@ -247,4 +260,95 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        // 获取 CSRF Token
+        function getCsrfToken() {
+            return "{{ csrf_token() }}";
+        }
+
+        // 监听输入事件（事件委托）
+        document.addEventListener('input', function (event) {
+            const target = event.target;
+
+            // 只处理带有 category-input、subject-input 或 brand-input 类的输入框
+            if (target.classList.contains('category-input') ||
+                target.classList.contains('subject-input') ||
+                target.classList.contains('brand-input')) {
+                const name = target.value.trim();
+                const errorElement = document.getElementById(`${target.id}-error`); // 动态获取错误提示容器
+
+                // 清空之前的错误信息
+                errorElement.style.display = 'none';
+                errorElement.textContent = '';
+
+                // 如果输入为空，不发送请求
+                if (name === '') {
+                    return;
+                }
+
+                // 发送 AJAX 请求
+                fetch('/admin/check_category_name', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCsrfToken()  // 手动添加 CSRF 令牌
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        type: target.classList[1]
+                    }), // 传递输入框类型
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.exists) {
+                            errorElement.textContent = '该名称已存在';
+                            errorElement.style.display = 'block';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('AJAX 请求失败:', error);
+                    });
+            }
+        });
+
+        // 监听表单提交事件
+        document.querySelectorAll('.category-form, .subject-form, .brand-form').forEach(form => {
+            form.addEventListener('submit', function (event) {
+                let hasError = false;
+
+                // 获取当前表单的输入框和错误提示容器
+                const input = form.querySelector('.category-input, .subject-input, .brand-input');
+                const errorElement = document.getElementById(`${input.id}-error`);
+
+                const name = input.value.trim();
+
+                // 如果名称已存在，阻止表单提交
+                if (errorElement.textContent === '该名称已存在') {
+                    hasError = true;
+                }
+
+                // 如果名称为空，阻止表单提交
+                if (name === '') {
+                    errorElement.textContent = '名称不能为空';
+                    errorElement.style.display = 'block';
+                    hasError = true;
+                }
+
+                // 如果名称超过 128 个字符，阻止表单提交
+                if (name.length > 128) {
+                    errorElement.textContent = '名称不能超过128个字符';
+                    errorElement.style.display = 'block';
+                    hasError = true;
+                }
+
+                // 如果有错误，阻止表单提交
+                if (hasError) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
 {% endblock %}

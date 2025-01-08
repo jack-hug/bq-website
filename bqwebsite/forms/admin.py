@@ -102,8 +102,16 @@ class EditBrandForm(FlaskForm):
     name = StringField('商标名称', validators=[DataRequired(), Length(1, 128)])
     submit = SubmitField('修改')
 
+    def __init__(self, *args, **kwargs):
+        super(EditBrandForm, self).__init__(*args, **kwargs)
+        self.brand_id = kwargs.get('brand_id')
+
     def validate_name(self, field):
-        if Brand.query.filter_by(name=field.data).first():
+        brand = Brand.query.filter(
+            Brand.id != self.brand_id,
+            Brand.name == field.data
+        ).first()
+        if brand:
             raise ValidationError('该商标已存在')
 
 
@@ -111,6 +119,14 @@ class EditSubjectForm(FlaskForm):
     name = StringField('功能名称', validators=[DataRequired(), Length(1, 128)])
     submit = SubmitField('修改')
 
+    def __init__(self, *args, **kwargs):
+        super(EditSubjectForm, self).__init__(*args, **kwargs)
+        self.subject_id = kwargs.get('subject_id')
+
     def validate_name(self, field):
-        if Subject.query.filter_by(name=field.data).first():
-            raise ValidationError('该功能分类已存在')
+        subject = Subject.query.filter(
+            Subject.id != self.subject_id,
+            Subject.name == field.data
+        ).first()
+        if subject:
+            raise ValidationError('该剂型已存在')

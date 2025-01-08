@@ -28,11 +28,11 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-4 col-sm-12">
-                        <form class="form" method="post" id="category-form">
+                        <form class="form" method="post" id="brand-form">
                             {{ form.hidden_tag() }}
                             <div class="mb-3">
                                 {{ form.name.label(class="form-label") }}
-                                {{ form.name(class="form-control") }}
+                                {{ form.name(class="form-control", id="brand-input") }}
                                 <div id="name-error" class="mt-2 alert alert-danger" style="display: none;">
                                 </div>
                             </div>
@@ -55,12 +55,13 @@
             return "{{ csrf_token() }}";
         }
 
-        const nameInput = document.getElementById('name');
+        const nameInput = document.getElementById('brand-input');
         const nameError = document.getElementById('name-error');
 
         // 监听输入事件
         nameInput.addEventListener('input', function () {
             const name = nameInput.value.trim();
+            const inputType = nameInput.id;
 
             // 清空之前的错误信息
             nameError.style.display = 'none';
@@ -78,7 +79,7 @@
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCsrfToken()  // 手动添加 CSRF 令牌
                 },
-                body: JSON.stringify({name: name}),
+                body: JSON.stringify({name: name, type: inputType}),
             })
                 .then(response => response.json())
                 .then(data => {
@@ -93,7 +94,7 @@
         });
 
         // 监听表单提交事件
-        document.getElementById('category-form').addEventListener('submit', function (event) {
+        document.getElementById('brand-form').addEventListener('submit', function (event) {
             const name = nameInput.value.trim();
 
             // 如果剂型名称已存在，阻止表单提交

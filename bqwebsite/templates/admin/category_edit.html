@@ -32,7 +32,7 @@
                             {{ form.hidden_tag() }}
                             <div class="mb-3">
                                 {{ form.name.label(class="form-label") }}
-                                {{ form.name(class="form-control") }}
+                                {{ form.name(class="form-control", id="category-input") }}
                                 <div id="name-error" class="mt-2 alert alert-danger" style="display: none;">
                                 </div>
                                 <div class="my-3">
@@ -54,12 +54,13 @@
             return "{{ csrf_token() }}";
         }
 
-        const nameInput = document.getElementById('name');
+        const nameInput = document.getElementById('category-input');
         const nameError = document.getElementById('name-error');
 
         // 监听输入事件
         nameInput.addEventListener('input', function () {
             const name = nameInput.value.trim();
+            const inputType = nameInput.id;
 
             // 清空之前的错误信息
             nameError.style.display = 'none';
@@ -77,7 +78,7 @@
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCsrfToken()  // 手动添加 CSRF 令牌
                 },
-                body: JSON.stringify({name: name}),
+                body: JSON.stringify({name: name,type: inputType}),
             })
                 .then(response => response.json())
                 .then(data => {
