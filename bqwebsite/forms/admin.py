@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, MultipleFileField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
-from ..models import Category, Brand, Subject, Product
+from ..models import Category, Brand, Subject, Product, NewsCategory
 from flask_ckeditor import CKEditorField
 
 
@@ -54,7 +54,7 @@ class EditProductForm(FlaskForm):
         self.subject.choices = [(subject.id, subject.name) for subject in Subject.query.all()]
 
 
-class CategoryAddForm(FlaskForm):
+class CategoryAddForm(FlaskForm):  # 添加剂型
     name = StringField('添加剂型：', validators=[DataRequired(), Length(1, 128)])
     category_submit = SubmitField('添 加', name='category_submit')
 
@@ -63,7 +63,7 @@ class CategoryAddForm(FlaskForm):
             raise ValidationError('该剂型已存在')
 
 
-class BrandAddForm(FlaskForm):
+class BrandAddForm(FlaskForm):  # 添加商标
     name = StringField('添加商标：', validators=[DataRequired(), Length(1, 128)])
     brand_submit = SubmitField('添 加', name='brand_submit')
 
@@ -72,7 +72,7 @@ class BrandAddForm(FlaskForm):
             raise ValidationError('该商标已存在')
 
 
-class SubjectAddForm(FlaskForm):
+class SubjectAddForm(FlaskForm):  # 添加功能分类
     name = StringField('添加功能分类：', validators=[DataRequired(), Length(1, 128)])
     subject_submit = SubmitField('添 加', name='subject_submit')
 
@@ -81,7 +81,7 @@ class SubjectAddForm(FlaskForm):
             raise ValidationError('该类型已存在')
 
 
-class EditCategoryForm(FlaskForm):
+class EditCategoryForm(FlaskForm):  # 修改剂型分类
     name = StringField('剂型名称', validators=[DataRequired(), Length(1, 128)])
     submit = SubmitField('修改')
 
@@ -98,7 +98,7 @@ class EditCategoryForm(FlaskForm):
             raise ValidationError('该剂型已存在')
 
 
-class EditBrandForm(FlaskForm):
+class EditBrandForm(FlaskForm):  # 修改商标分类
     name = StringField('商标名称', validators=[DataRequired(), Length(1, 128)])
     submit = SubmitField('修改')
 
@@ -115,7 +115,7 @@ class EditBrandForm(FlaskForm):
             raise ValidationError('该商标已存在')
 
 
-class EditSubjectForm(FlaskForm):
+class EditSubjectForm(FlaskForm):  # 修改功能分类
     name = StringField('功能名称', validators=[DataRequired(), Length(1, 128)])
     submit = SubmitField('修改')
 
@@ -130,3 +130,16 @@ class EditSubjectForm(FlaskForm):
         ).first()
         if subject:
             raise ValidationError('该剂型已存在')
+
+
+class NewsForm(FlaskForm):  # 添加新闻
+    title = StringField('标题', validators=[DataRequired(), Length(1, 128)])
+    newscategory = SelectField('新闻分类:', coerce=int, default=1)
+    content = CKEditorField('新闻内容:', validators=[DataRequired()])
+    submit = SubmitField('确认添加')
+
+    def __init__(self, *args, **kwargs):
+        super(NewsForm, self).__init__(*args, **kwargs)
+        self.newscategory.choices = [(newscategory.id, newscategory.name) for newscategory in
+                                     NewsCategory.query.all()]
+

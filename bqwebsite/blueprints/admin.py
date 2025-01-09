@@ -11,7 +11,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryForm, EditBrandForm, CategoryAddForm, \
-    BrandAddForm, SubjectAddForm, EditSubjectForm
+    BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm
 from ..utils import random_filename, redirect_back, resize_image, save_temp_files
 
 admin_bp = Blueprint('admin', __name__)
@@ -435,6 +435,36 @@ def news_edit(news_id):
 def news_category_edit(news_category_id):
     news_category_id = NewsCategory.query.get_or_404(news_category_id)
     return render_template('admin/category_edit.html', news_category_id=news_category_id)
+
+@admin_bp.route('/news/new', methods=['GET', 'POST'])  # 新建文章
+@login_required
+def news_add():
+    form = NewsForm()
+    if form.validate_on_submit():
+        news = News(
+            title=form.title.data,
+            newscategory_id=form.newscategory.data,
+            content=form.content.data,
+            timestamp=datetime.utcnow()
+        )
+        db.session.add(news)
+        db.session.commit()
+        flash('添加成功.', 'success')
+        return redirect(url_for('admin.news_list'))
+    return render_template('admin/news_add.html', form=form, show_collapse=True)
+
+@admin_bp.route('/news_multiple_delete', methods=['GET', 'POST'])  # 批量删除文章
+@login_required
+def news_multiple_delete():
+    if request.method == 'POST':
+        selected_ids = request.form.getlist('item_ids')
+        for news_id in selected_ids:
+            news = Product.query.get(news_id)
+            db.session.delete(news)
+        db.session.commit()
+        flash('批量删除成功.', 'success')
+        return redirect(url_for('admin.news_list'))
+    return redirect(url_for('admin.news_list'))
 
 
 @admin_bp.route('/banner_photo_list', methods=['GET', 'POST'])  # 轮播图列表

@@ -2,7 +2,7 @@
 {% from 'bootstrap5/pagination.html' import render_pagination %}
 
 {% block title %}
-    后台管理面板-新闻列表
+    后台管理面板-文章管理
 {% endblock %}
 {% block content %}
     <div class="container-fluid my-3">
@@ -11,7 +11,9 @@
             <div class="col-md-10">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}" class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}"
+                                                       class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页</a>
+                        </li>
                         <li class="breadcrumb-item" aria-current="page">文章管理</li>
                         <li class="breadcrumb-item active" aria-current="page">文章列表</li>
                     </ol>
@@ -21,13 +23,20 @@
                 <div class="p-3 bg-light border rounded d-flex justify-content-between align-items-center">
                     <div class="row">
                         <div class="col-auto">
-                            <button type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> 添加文章
-                            </button>
+                            <a type="button" class="btn btn-primary" href="{{ url_for('admin.news_add') }}"><i
+                                    class="fa-solid fa-plus"></i> 添加文章
+                            </a>
                         </div>
                         <div class="col-auto">
-                            <button type="button" class="btn btn-danger"><i class="fa-solid fa-trash"></i> 批量删除
-                            </button>
+                            <form action="{{ url_for('admin.news_multiple_delete') }}" method="post"
+                                  id="delete-selected-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="button" class="btn btn-danger" id="delete-selected-button"><i
+                                        class="fa-solid fa-trash"></i> 批量删除
+                                </button>
+                            </form>
                         </div>
+
                         <form class="col-auto row" role="search">
                             <div class="col-md-auto">
                                 <input class="form-control me-2" type="search" placeholder="输入文章关键字"
@@ -71,10 +80,10 @@
                                     </div>
                                 </td>
                                 <td>{{ new.id }}</td>
-                                <td>{{ new.title }}</td>
-                                <td>{{ new.content|truncate(30) }}</td>
+                                <td><a href="{{ url_for('main.show_news', news_id=new.id) }}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" target="_blank">{{ new.title }}</a></td>
+                                <td>{{ new.content|safe|truncate(20) }}</td>
                                 <td>{{ new.newscategory.name }}</td>
-                                <td>{{ new.timestamp }}</td>
+                                <td>{{ moment(new.timestamp).format('LLL') }}</td>
                                 <td>{{ new.clicks }}</td>
                                 <td>
                                     {% if new.status %}
@@ -115,4 +124,53 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        // 选中产品
+        document.getElementById('all_products_check').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('input[name="item_ids"]');
+            for (const checkbox of checkboxes) {
+                checkbox.checked = this.checked;
+            }
+        });
+        // 删除选中的产品
+        document.getElementById('delete-selected-button').addEventListener('click', function () {
+            const checkboxes = document.querySelectorAll('.product-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('请选择要删除的产品');
+                return;
+            }
+            if (!confirm('确定要删除选中的产品吗？')) {
+                return;
+            }
+
+            const form = document.getElementById('delete-selected-form');
+            if (!form) {
+                alert('找不到删除表单');
+                return;
+            }
+
+            // 移除之前可能存在的隐藏输入
+            const existingHiddenInputs = form.querySelectorAll('input[name="item_ids"]');
+            existingHiddenInputs.forEach(input => form.removeChild(input));
+
+            // 为每个选中的复选框创建一个隐藏输入
+            checkboxes.forEach(function (checkbox) {
+                const hidden_input = document.createElement('input');
+                hidden_input.type = 'hidden';
+                hidden_input.name = 'item_ids';
+                hidden_input.value = checkbox.value;
+                form.appendChild(hidden_input);
+            });
+
+            try {
+                form.submit();
+            } catch (error) {
+                alert('提交失败');
+                console.error(error);
+            }
+        });
+    </script>
 {% endblock %}

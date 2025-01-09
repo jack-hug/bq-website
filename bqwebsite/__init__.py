@@ -101,9 +101,6 @@ def register_errorhandlers(app):
         return render_template('errors/400.html', description=e.description), 400
 
 
-
-
-
 def register_commands(app):
     @app.cli.command()
     @click.option('--drop', is_flag=True, help='Create after drop.')
