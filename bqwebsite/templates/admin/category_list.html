@@ -71,7 +71,7 @@
                                                   class="d-inline" method="post">
                                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                                 <button type="submit" class="btn btn-sm btn-danger"
-                                                        onclick="return confirm('确定要删除吗？分类下面的产品也会被一起删除。')">
+                                                        onclick="return confirm('确定要删除该分类？')">
                                                     <i class="fa-regular fa-trash-can" title="删除"></i>
                                                 </button>
                                             </form>
@@ -149,7 +149,7 @@
                                                     <i class="fa-solid fa-arrow-up" title="发布"></i>
                                                 </a>
                                             {% endif %}
-                                            <a href="{{ url_for('admin.brand_delete', brand_id=brand.id, next=request.full_path) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该商标吗？该商标下面的产品也会一起删除。')">
+                                            <a href="{{ url_for('admin.brand_delete', brand_id=brand.id, next=request.full_path) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该商标？')">
                                                 <i class="fa-regular fa-trash-can" title="删除"></i>
                                             </a>
                                         </td>
@@ -226,7 +226,7 @@
                                                     <i class="fa-solid fa-arrow-up" title="发布"></i>
                                                 </a>
                                             {% endif %}
-                                            <a href="{{ url_for('admin.subject_delete', subject_id=subject.id, next=request.full_path) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除吗？功能主治下面的产品也会被删除。')">
+                                            <a href="{{ url_for('admin.subject_delete', subject_id=subject.id, next=request.full_path) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该功能分类？')">
                                                 <i class="fa-regular fa-trash-can" title="删除"></i>
                                             </a>
                                         </td>

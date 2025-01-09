@@ -17,7 +17,16 @@ class Category(db.Model):
     status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
-    products = db.relationship('Product', back_populates='category', cascade='all, delete-orphan')
+    @staticmethod
+    def get_default_category():  # 添加默认分类
+        default_category = Category.query.filter_by(name='未分类').first()
+        if not default_category:
+            default_category = Category(name='未分类')
+            db.session.add(default_category)
+            db.session.commit()
+        return default_category
+
+    products = db.relationship('Product', back_populates='category')
 
 
 class Product(db.Model):
@@ -43,7 +52,7 @@ class Product(db.Model):
 
     photos = db.relationship('Photo', back_populates='product', lazy='dynamic', cascade='all, delete-orphan')
 
-    def delete_product(self):
+    def delete_product(self):  # 删除产品时删除图片
         self.delete_ckeditor_images()
 
         for photo in self.photos:
@@ -148,9 +157,17 @@ class Brand(db.Model):
     __tablename__ = 'brand'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))
-    filename = db.Column(db.String(100))
     status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
+
+    @staticmethod
+    def get_default_brand():  # 添加默认商标分类
+        default_brand = Brand.query.filter_by(name='未分类').first()
+        if not default_brand:
+            default_brand = Brand(name='未分类')
+            db.session.add(default_brand)
+            db.session.commit()
+        return default_brand
 
     products = db.relationship('Product', back_populates='brand')
 
@@ -204,6 +221,15 @@ class Subject(db.Model):
     name = db.Column(db.String(100))
     status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
+
+    @staticmethod
+    def get_default_subject():  # 添加默认功能分类
+        default_subject = Subject.query.filter_by(name='未分类').first()
+        if not default_subject:
+            default_subject = Subject(name='未分类')
+            db.session.add(default_subject)
+            db.session.commit()
+        return default_subject
 
     products = db.relationship('Product', back_populates='subject')
 

@@ -114,6 +114,10 @@ def register_commands(app):
             click.echo('Drop tables...')
         db.create_all()
         click.echo('Initialized database...')
+        Category.get_default_category()
+        Brand.get_default_brand()
+        Subject.get_default_subject()
+        click.echo('Initialized default category, Brand, Subject...')
 
     @app.cli.command()
     @click.option('--product', default=30, help='Quantity of products, default is 30.')
@@ -131,6 +135,10 @@ def register_commands(app):
         db.drop_all()
         click.echo('Initialized database......')
         db.create_all()
+        Category.get_default_category()
+        Brand.get_default_brand()
+        Subject.get_default_subject()
+        click.echo('Generating default category, Brand, Subject...')
 
         click.echo('Generating the administrator...')
         admin()

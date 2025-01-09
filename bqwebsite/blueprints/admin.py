@@ -376,6 +376,8 @@ def subject_edit(subject_id):
 @login_required
 def category_delete(category_id):
     category = Category.query.get_or_404(category_id)
+    default_category = Category.get_default_category()
+    Product.query.filter_by(category_id=category.id).update({'category_id': default_category.id})
     db.session.delete(category)
     db.session.commit()
     flash('删除成功.', 'success')
@@ -385,6 +387,8 @@ def category_delete(category_id):
 @login_required
 def brand_delete(brand_id):
     brand = Brand.query.get_or_404(brand_id)
+    default_brand = Brand.get_default_brand()
+    Product.query.filter_by(brand_id=brand.id).update({'brand_id': default_brand.id})
     db.session.delete(brand)
     db.session.commit()
     flash('删除成功.', 'success')
@@ -394,6 +398,8 @@ def brand_delete(brand_id):
 @login_required
 def subject_delete(subject_id):
     subject = Subject.query.get_or_404(subject_id)
+    default_subject = Subject.get_default_subject()
+    Product.query.filter_by(subject_id=subject.id).update({'subject_id': default_subject.id})
     db.session.delete(subject)
     db.session.commit()
     flash('删除成功.', 'success')
