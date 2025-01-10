@@ -56,7 +56,7 @@ def register_template_context(app):
         categories = Category.query.order_by(Category.id.asc()).all()
         subjects = Subject.query.order_by(Subject.id.asc()).all()
         brands = Brand.query.order_by(Brand.id.asc()).all()
-        all_news_limit = News.query.order_by(News.clicks.desc()).limit(10).all()
+        all_news_limit = News.query.filter(News.status == True).order_by(News.clicks.desc()).limit(10).all()
         news_categories = NewsCategory.query.order_by(NewsCategory.id.asc()).all()
         introduce_categories = IntroduceCategory.query.order_by(IntroduceCategory.id.asc()).all()
         research_categories = ResearchCategory.query.order_by(ResearchCategory.id.asc()).all()

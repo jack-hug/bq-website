@@ -143,3 +143,16 @@ class NewsForm(FlaskForm):  # 添加新闻
         self.newscategory.choices = [(newscategory.id, newscategory.name) for newscategory in
                                      NewsCategory.query.all()]
 
+
+class EditNewsForm(FlaskForm):
+    title = StringField('标题', validators=[DataRequired(), Length(1, 128)])
+    newscategory = SelectField('新闻分类:', coerce=int, default=1)
+    content = CKEditorField('新闻内容:', validators=[DataRequired()])
+    submit = SubmitField('确认修改')
+    cancel = SubmitField('取 消')
+
+    def __init__(self, *args, **kwargs):
+        super(EditNewsForm, self).__init__(*args, **kwargs)
+        self.newscategory.choices = [(newscategory.id, newscategory.name) for newscategory in
+                                     NewsCategory.query.all()]
+

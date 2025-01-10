@@ -11,7 +11,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryForm, EditBrandForm, CategoryAddForm, \
-    BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm
+    BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm, EditNewsForm
 from ..utils import random_filename, redirect_back, resize_image, save_temp_files
 
 admin_bp = Blueprint('admin', __name__)
@@ -426,8 +426,31 @@ def news_category_list():
 @admin_bp.route('/news_edit/<int:news_id>', methods=['GET', 'POST'])  # 编辑新闻
 @login_required
 def news_edit(news_id):
-    news_id = News.query.get_or_404(news_id)
-    return render_template('admin/category_edit.html', news_id=news_id)
+    news = News.query.get_or_404(news_id)
+    form = EditNewsForm()
+    if form.cancel.data:
+        return redirect(url_for('admin.news_list'))
+    if form.validate_on_submit():
+        news.title = form.title.data
+        news.newscategory_id = form.newscategory.data
+        news.content = form.content.data
+        news.timestamp = datetime.utcnow()
+        db.session.commit()
+        flash('修改成功.', 'success')
+        return redirect(url_for('admin.news_list'))
+    form.title.data = news.title
+    form.newscategory.data = news.newscategory_id
+    form.content.data = news.content
+    return render_template('admin/news_edit.html', news=news, form=form)
+
+@admin_bp.route('/news_delete/<int:news_id>', methods=['POST'])  # 删除新闻
+@login_required
+def news_delete(news_id):
+    news = News.query.get_or_404(news_id)
+    db.session.delete(news)
+    db.session.commit()
+    flash('删除成功.', 'success')
+    return redirect(url_for('admin.news_list'))
 
 
 @admin_bp.route('/news_category_edit/<int:news_category_id>', methods=['GET', 'POST'])  # 编辑新闻分类
@@ -459,12 +482,21 @@ def news_multiple_delete():
     if request.method == 'POST':
         selected_ids = request.form.getlist('item_ids')
         for news_id in selected_ids:
-            news = Product.query.get(news_id)
+            news = News.query.get(news_id)
             db.session.delete(news)
         db.session.commit()
         flash('批量删除成功.', 'success')
         return redirect(url_for('admin.news_list'))
     return redirect(url_for('admin.news_list'))
+
+
+@admin_bp.route('/news_status/<int:news_id>')  # 新闻发布与撤销
+@login_required
+def news_status(news_id):
+    news = News.query.get_or_404(news_id)
+    news.status = not news.status
+    db.session.commit()
+    return redirect_back()
 
 
 @admin_bp.route('/banner_photo_list', methods=['GET', 'POST'])  # 轮播图列表

@@ -56,7 +56,7 @@
                         <tr class="align-middle">
                             <th>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="5555"
+                                    <input class="form-check-input" type="checkbox" value=""
                                            id="all_products_check" name="item_ids">
                                 </div>
                             </th>
@@ -101,7 +101,7 @@
                                 <td>{{ product.category.name }}</td>
                                 <td>{{ product.brand.name }}</td>
                                 <td>{{ product.subject.name }}</td>
-                                <td>{{ moment(product.timestamp).format('LLL') }}</td>
+                                <td>{{ moment(product.timestamp).format('lll') }}</td>
                                 <td>
                                     {% if product.status %}
                                         <small class="text-bg-success p-1 rounded">已发布</small>

@@ -26,7 +26,7 @@
                     {% if news_list %}
                         {% for news in news_list %}
                             <div class="col-md-4 mb-3 col-sm-6">
-                                <div class="card hover-effect">
+                                <div class="card hover-effect h-100">
                                     <a href="{{ url_for('main.show_news', news_id=news.id) }}"><img
                                             src="{{ url_for('static', filename='assets/img/news/bangqi01.png') }}"
                                             class="card-img-top" alt="..."></a>
@@ -35,10 +35,10 @@
                                                 href="{{ url_for('main.show_news', news_id=news.id) }}" class="link-offset-2 link-underline link-underline-opacity-0 text-dark">{{ news.title|truncate(20) }}</a>
                                         </h6>
                                         <p class="card-text"><a
-                                                href="{{ url_for('main.show_news', news_id=news.id) }}" class="link-offset-2 link-underline link-underline-opacity-0 text-dark">{{ news.content|truncate(60) }}</a>
+                                                href="{{ url_for('main.show_news', news_id=news.id) }}" class="link-offset-2 link-underline link-underline-opacity-0 text-dark">{{ news.content|truncate(60)|safe }}</a>
                                         </p>
                                     </div>
-                                    <div class="card-footer"><span class="text-muted small">{{ news.timestamp }}</span>
+                                    <div class="card-footer"><span class="text-muted small">{{ moment(news.timestamp).format('lll') }}</span>
                                     </div>
                                 </div>
                             </div>

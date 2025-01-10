@@ -57,7 +57,8 @@
                         <tr>
                             <th>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="all_news_check">
+                                    <input class="form-check-input" type="checkbox" value=""
+                                           id="all_news_check" name="item_ids">
                                 </div>
                             </th>
                             <th>ID</th>
@@ -71,43 +72,53 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for new in news %}
+                        {% for news in news %}
                             <tr>
                                 <td>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                               id="all_news_check">
+                                        <input class="form-check-input news-checkbox" type="checkbox"
+                                               value="{{ news.id }}"
+                                               name="item_ids">
                                     </div>
                                 </td>
-                                <td>{{ new.id }}</td>
-                                <td><a href="{{ url_for('main.show_news', news_id=new.id) }}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" target="_blank">{{ new.title }}</a></td>
-                                <td>{{ new.content|safe|truncate(20) }}</td>
-                                <td>{{ new.newscategory.name }}</td>
-                                <td>{{ moment(new.timestamp).format('LLL') }}</td>
-                                <td>{{ new.clicks }}</td>
+                                <td>{{ news.id }}</td>
+                                <td><a href="{{ url_for('main.show_news', news_id=news.id) }}"
+                                       class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                       target="_blank">{{ news.title }}</a></td>
+                                <td>{{ news.content|safe|truncate(30) }}</td>
+                                <td>{{ news.newscategory.name }}</td>
+                                <td>{{ moment(news.timestamp).format('lll') }}</td>
+                                <td>{{ news.clicks }}</td>
                                 <td>
-                                    {% if new.status %}
+                                    {% if news.status %}
                                         <small class="text-bg-primary p-1 rounded">已发布</small>
                                     {% else %}
                                         <small class="text-bg-secondary p-1 rounded">已下架</small>
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <a href="" class="btn btn-sm btn-primary">
+                                    <a href="{{ url_for('admin.news_edit', news_id=news.id) }}" class="btn btn-sm btn-primary">
                                         <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                     </a>
-                                    {% if new.status %}
-                                        <a href="" class="btn btn-sm btn-secondary">
+                                    {% if news.status %}
+                                        <a href="{{ url_for('admin.news_status', news_id=news.id, next=request.full_path) }}"
+                                           class="btn btn-sm btn-secondary">
                                             <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                         </a>
                                     {% else %}
-                                        <a href="" class="btn btn-sm btn-secondary">
+                                        <a href="{{ url_for('admin.news_status', news_id=news.id, next=request.full_path) }}"
+                                           class="btn btn-sm btn-warning">
                                             <i class="fa-solid fa-arrow-up" title="发布"></i>
                                         </a>
                                     {% endif %}
-                                    <a href="" class="btn btn-sm btn-danger">
-                                        <i class="fa-regular fa-trash-can" title="删除"></i>
-                                    </a>
+                                    <form action="{{ url_for('admin.news_delete', news_id=news.id, next=request.full_path) }}"
+                                          class="d-inline" method="post">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('确定要删除吗？')">
+                                            <i class="fa-regular fa-trash-can" title="删除"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -129,7 +140,7 @@
     {{ super() }}
     <script>
         // 选中产品
-        document.getElementById('all_products_check').addEventListener('change', function () {
+        document.getElementById('all_news_check').addEventListener('change', function () {
             const checkboxes = document.querySelectorAll('input[name="item_ids"]');
             for (const checkbox of checkboxes) {
                 checkbox.checked = this.checked;
@@ -137,7 +148,7 @@
         });
         // 删除选中的产品
         document.getElementById('delete-selected-button').addEventListener('click', function () {
-            const checkboxes = document.querySelectorAll('.product-checkbox:checked');
+            const checkboxes = document.querySelectorAll('.news-checkbox:checked');
             if (checkboxes.length === 0) {
                 alert('请选择要删除的产品');
                 return;

@@ -1,0 +1,55 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+    后台管理面板-编辑新闻
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('admin.index') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a href="{{ url_for('admin.news_list') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">新闻列表
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">编辑产品</li>
+                    </ol>
+                </nav>
+                <h4 class="text-center mb-3 mt-3">编辑新闻</h4>
+                <hr>
+                <form method="POST" enctype="multipart/form-data" class="form" id="product-form">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.newscategory.label(class="form-label") }}
+                        {{ form.newscategory(class="form-control") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.content.label(class="form-label") }}
+                        {{ form.content(class="form-control") }}
+                        {{ ckeditor.load(custom_url=url_for('static', filename='admin/ckeditor/ckeditor.js')) }}
+                        {{ ckeditor.config(name='content') }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.submit(class="btn btn-primary btn-md") }}
+                        {{ form.cancel(class="btn btn-secondary btn-md") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

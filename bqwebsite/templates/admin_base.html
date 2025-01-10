@@ -68,7 +68,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://cdn.staticfile.net/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static',filename = 'js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static',filename = 'admin/js/dropzone.min.js') }}"></script>
     <script src="{{ url_for('static',filename = 'admin/js/scripts.js') }}"></script>
     {{ moment.include_moment(local_js=url_for('static', filename='admin/js/moment-with-locales.min.js')) }}

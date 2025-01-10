@@ -31,6 +31,9 @@ def show_news_category(news_category_id):
 # 新闻详细页面
 def show_news(news_id):
     news_detail = News.query.get_or_404(news_id)
+    if not news_detail.status:
+        flash('该新闻不存在', 'info')
+        return redirect(url_for('main.news'))
     return render_template('main/news_detail.html', news_detail=news_detail)
 
 
@@ -38,6 +41,9 @@ def show_news(news_id):
 # 下一篇文章
 def news_next(news_id):
     news_n_detail = News.query.get_or_404(news_id)
+    if not news_n_detail.status:
+        flash('该文章不存在', 'info')
+        return redirect(url_for('main.show_news', news_id=news_id))
     news_n = News.query.with_parent(news_n_detail.newscategory).filter(
         News.timestamp < news_n_detail.timestamp).order_by(News.timestamp.desc()).first()
 
@@ -51,6 +57,9 @@ def news_next(news_id):
 # 上一篇文章
 def news_previous(news_id):
     news_p_detail = News.query.get_or_404(news_id)
+    if not news_p_detail.status:
+        flash('该文章不存在', 'info')
+        return redirect(url_for('main.show_news', news_id=news_id))
     news_p = News.query.with_parent(news_p_detail.newscategory).filter(
         News.timestamp > news_p_detail.timestamp).order_by(News.timestamp.asc()).first()
 
@@ -65,7 +74,7 @@ def news_previous(news_id):
 def news():
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_NEWS_PER_PAGE']
-    pagination = News.query.order_by(News.timestamp.desc()).paginate(page=page, per_page=per_page)
+    pagination = News.query.filter(News.status == True).order_by(News.timestamp.desc()).paginate(page=page, per_page=per_page)
     all_news = pagination.items
     return render_template('main/news.html', all_news=all_news, pagination=pagination)
 
@@ -88,7 +97,7 @@ def product_category(category):
         return redirect(url_for('main.product'))
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
-    pagination = Product.query.with_parent(category).order_by(Product.timestamp.desc()).paginate(page=page,
+    pagination = Product.query.with_parent(category).filter(Product.status==True).order_by(Product.timestamp.desc()).paginate(page=page,
                                                                                                  per_page=per_page)
     products = pagination.items
     return render_template('main/product_category.html', category=category, pagination=pagination, products=products)
@@ -102,7 +111,7 @@ def product_brand(brand):
         return redirect(url_for('main.product'))
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
-    pagination = Product.query.with_parent(brand).order_by(Product.timestamp.desc()).paginate(page=page,
+    pagination = Product.query.with_parent(brand).filter(Product.status==True).order_by(Product.timestamp.desc()).paginate(page=page,
                                                                                               per_page=per_page)
     products = pagination.items
     return render_template('main/product_brand.html', brand=brand, pagination=pagination, products=products)
@@ -116,7 +125,7 @@ def product_subject(subject):
         return redirect(url_for('main.product'))
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
-    pagination = Product.query.with_parent(subject).order_by(Product.timestamp.desc()).paginate(page=page,
+    pagination = Product.query.with_parent(subject).filter(Product.status==True).order_by(Product.timestamp.desc()).paginate(page=page,
                                                                                                 per_page=per_page)
     products = pagination.items
     return render_template('main/product_subject.html', subject=subject, pagination=pagination, products=products)
@@ -126,6 +135,9 @@ def product_subject(subject):
 # 下一个品种
 def product_next(product_id):
     product_n_detail = Product.query.get_or_404(product_id)
+    if not product_n_detail.status:
+        flash('该品种不存在', 'info')
+        return redirect(url_for('main.product'))
     product_n = Product.query.with_parent(product_n_detail.category).filter(
         Product.timestamp > product_n_detail.timestamp).order_by(Product.timestamp.asc()).first()
 
@@ -139,6 +151,9 @@ def product_next(product_id):
 # 上一个品种
 def product_previous(product_id):
     product_p_detail = Product.query.get_or_404(product_id)
+    if not product_p_detail.status:
+        flash('该品种不存在', 'info')
+        return redirect(url_for('main.product'))
     product_p = Product.query.with_parent(product_p_detail.category).filter(
         Product.timestamp < product_p_detail.timestamp).order_by(Product.timestamp.desc()).first()
 
@@ -151,23 +166,22 @@ def product_previous(product_id):
 @main_bp.route('/product_detail/<int:product_id>')  # 产品详细页面
 def show_product(product_id):
     product = Product.query.get_or_404(product_id)
+    if not product.status:
+        flash('该产品不存在', 'info')
+        return redirect(url_for('main.product'))
 
     # 获取上一个品种
-    product_p = Product.query.with_parent(product.category).filter(Product.timestamp < product.timestamp).order_by(
+    product_p = Product.query.with_parent(product.category).filter(Product.timestamp < product.timestamp,
+                                                                   Product.status == True).order_by(
         Product.timestamp.desc()).first()
     product_p_name = product_p.name if product_p else None
     # 获取下一个品种
-    product_n = Product.query.with_parent(product.category).filter(Product.timestamp > product.timestamp).order_by(
+    product_n = Product.query.with_parent(product.category).filter(Product.timestamp > product.timestamp,
+                                                                   Product.status == True).order_by(
         Product.timestamp.asc()).first()
     product_n_name = product_n.name if product_n else None
     return render_template('main/product_detail.html', product=product, product_p_name=product_p_name,
                            product_n_name=product_n_name)
-
-
-# @main_bp.route('/introduce-category/<int:intro_category_id>')
-# def show_introduce_category(intro_category_id):
-#     intro_category = IntroduceCategory.query.get_or_404(intro_category_id)
-#     return render_template('main/introduce_detail.html', intro_category=intro_category)
 
 
 @main_bp.route('/introduce/<int:intro_id>')
@@ -188,6 +202,7 @@ def honor():
 def show_contact(contact_id):
     show_con = Contact.query.get_or_404(contact_id)
     return render_template('main/contact_detail.html', show_con=show_con)
+
 
 @main_bp.route('/show_research/<int:research_id>')
 # 研发生产

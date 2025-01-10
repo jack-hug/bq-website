@@ -31,7 +31,7 @@
                         </ol>
                     </nav>
                     <h3 class="text-center text-dark mt-5">{{ news_detail.title }}</h3>
-                    <p class="text-muted text-center"><small>发布时间：{{ moment(news_detail.timestamp).format('LLL') }}</small></p>
+                    <p class="text-muted text-center"><small>发布时间：{{ moment(news_detail.timestamp).format('lll') }}</small></p>
                     <hr>
                     <p class="lh-lg text-start text-indent">{{ news_detail.content | replace("<img", "<img class='img-fluid h-100'") | safe }}</p>
                     <hr class="mt-5">
