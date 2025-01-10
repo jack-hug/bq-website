@@ -156,3 +156,13 @@ class EditNewsForm(FlaskForm):
         self.newscategory.choices = [(newscategory.id, newscategory.name) for newscategory in
                                      NewsCategory.query.all()]
 
+
+class EditNewsCategoryForm(FlaskForm):
+    name = StringField('新闻分类名称', validators=[DataRequired(), Length(1, 128)])
+    submit = SubmitField('修改')
+
+
+class AddNewsCategoryForm(FlaskForm):
+    name = StringField('添加新闻分类：', validators=[DataRequired(), Length(1, 128)])
+    submit = SubmitField('添加分类')
+

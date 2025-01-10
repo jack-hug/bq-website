@@ -11,7 +11,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryForm, EditBrandForm, CategoryAddForm, \
-    BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm, EditNewsForm
+    BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm, EditNewsForm, EditNewsCategoryForm, AddNewsCategoryForm
 from ..utils import random_filename, redirect_back, resize_image, save_temp_files
 
 admin_bp = Blueprint('admin', __name__)
@@ -420,7 +420,28 @@ def news_list():
 @admin_bp.route('/news_category_list', methods=['GET', 'POST'])  # 新闻分类列表
 @login_required
 def news_category_list():
-    return render_template('admin/news_category_list.html')
+    form = AddNewsCategoryForm()
+    if form.validate_on_submit():
+        news_category = NewsCategory.query.filter_by(name=form.name.data).first()
+        if news_category:
+            flash('该新闻分类已存在.', 'warning')
+            return redirect(url_for('admin.news_category_list'))
+        else:
+            news_category = NewsCategory(
+                name=form.name.data,
+                timestamp=datetime.utcnow()
+            )
+            db.session.add(news_category)
+            db.session.commit()
+            flash('添加成功.', 'success')
+            return redirect(url_for('admin.news_category_list'))
+    return render_template('admin/news_category_list.html', form=form)
+
+@admin_bp.route('/news_category_edit/<int:news_category_id>', methods=['GET', 'POST'])  # 编辑新闻分类
+@login_required
+def news_category_edit(news_category_id):
+    news_category_id = NewsCategory.query.get_or_404(news_category_id)
+    return render_template('admin/category_edit.html', news_category_id=news_category_id)
 
 
 @admin_bp.route('/news_edit/<int:news_id>', methods=['GET', 'POST'])  # 编辑新闻
@@ -452,12 +473,6 @@ def news_delete(news_id):
     flash('删除成功.', 'success')
     return redirect(url_for('admin.news_list'))
 
-
-@admin_bp.route('/news_category_edit/<int:news_category_id>', methods=['GET', 'POST'])  # 编辑新闻分类
-@login_required
-def news_category_edit(news_category_id):
-    news_category_id = NewsCategory.query.get_or_404(news_category_id)
-    return render_template('admin/category_edit.html', news_category_id=news_category_id)
 
 @admin_bp.route('/news/new', methods=['GET', 'POST'])  # 新建文章
 @login_required
