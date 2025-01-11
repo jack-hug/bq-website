@@ -17,10 +17,14 @@ def index():
 # 新闻分类页面
 def show_news_category(news_category_id):
     news_category = NewsCategory.query.get_or_404(news_category_id)
+    if not news_category.status:
+        flash('该新闻分类不存在', 'info')
+        return redirect(url_for('main.news'))
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_NEWS_PER_PAGE']
-    pagination = News.query.with_parent(news_category).order_by(News.timestamp.desc()).paginate(page=page,
-                                                                                                per_page=per_page)
+    pagination = News.query.with_parent(news_category).filter(NewsCategory.status == True).order_by(
+        News.timestamp.desc()).paginate(page=page,
+                                        per_page=per_page)
     news_list = pagination.items
 
     return render_template('main/news_category.html', news_category=news_category, news_list=news_list,
@@ -45,7 +49,7 @@ def news_next(news_id):
         flash('该文章不存在', 'info')
         return redirect(url_for('main.show_news', news_id=news_id))
     news_n = News.query.with_parent(news_n_detail.newscategory).filter(
-        News.timestamp < news_n_detail.timestamp).order_by(News.timestamp.desc()).first()
+        News.timestamp < news_n_detail.timestamp, News.status == True).order_by(News.timestamp.desc()).first()
 
     if news_n is None:
         flash('已经是最后一篇文章', 'info')
@@ -61,7 +65,7 @@ def news_previous(news_id):
         flash('该文章不存在', 'info')
         return redirect(url_for('main.show_news', news_id=news_id))
     news_p = News.query.with_parent(news_p_detail.newscategory).filter(
-        News.timestamp > news_p_detail.timestamp).order_by(News.timestamp.asc()).first()
+        News.timestamp > news_p_detail.timestamp, News.status == True).order_by(News.timestamp.asc()).first()
 
     if news_p is None:
         flash('已经是最新一篇文章', 'info')
@@ -74,7 +78,8 @@ def news_previous(news_id):
 def news():
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_NEWS_PER_PAGE']
-    pagination = News.query.filter(News.status == True).order_by(News.timestamp.desc()).paginate(page=page, per_page=per_page)
+    pagination = News.query.filter(News.status == True).order_by(News.timestamp.desc()).paginate(page=page,
+                                                                                                 per_page=per_page)
     all_news = pagination.items
     return render_template('main/news.html', all_news=all_news, pagination=pagination)
 
@@ -97,8 +102,9 @@ def product_category(category):
         return redirect(url_for('main.product'))
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
-    pagination = Product.query.with_parent(category).filter(Product.status==True).order_by(Product.timestamp.desc()).paginate(page=page,
-                                                                                                 per_page=per_page)
+    pagination = Product.query.with_parent(category).filter(Product.status == True).order_by(
+        Product.timestamp.desc()).paginate(page=page,
+                                           per_page=per_page)
     products = pagination.items
     return render_template('main/product_category.html', category=category, pagination=pagination, products=products)
 
@@ -111,8 +117,9 @@ def product_brand(brand):
         return redirect(url_for('main.product'))
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
-    pagination = Product.query.with_parent(brand).filter(Product.status==True).order_by(Product.timestamp.desc()).paginate(page=page,
-                                                                                              per_page=per_page)
+    pagination = Product.query.with_parent(brand).filter(Product.status == True).order_by(
+        Product.timestamp.desc()).paginate(page=page,
+                                           per_page=per_page)
     products = pagination.items
     return render_template('main/product_brand.html', brand=brand, pagination=pagination, products=products)
 
@@ -125,8 +132,9 @@ def product_subject(subject):
         return redirect(url_for('main.product'))
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_PRODUCT_PER_PAGE']
-    pagination = Product.query.with_parent(subject).filter(Product.status==True).order_by(Product.timestamp.desc()).paginate(page=page,
-                                                                                                per_page=per_page)
+    pagination = Product.query.with_parent(subject).filter(Product.status == True).order_by(
+        Product.timestamp.desc()).paginate(page=page,
+                                           per_page=per_page)
     products = pagination.items
     return render_template('main/product_subject.html', subject=subject, pagination=pagination, products=products)
 

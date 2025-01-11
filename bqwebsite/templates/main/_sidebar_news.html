@@ -5,8 +5,10 @@
                 邦资讯
             </div>
             {% for news_category in news_categories %}
-                <a href="{{ url_for('main.show_news_category', news_category_id=news_category.id) }}"
-                   class="list-group-item list-group-item-action {% if news_category.name == active_page %}active{% endif %} ">{{ news_category.name }}</a>
+                {% if news_category.status %}
+                    <a href="{{ url_for('main.show_news_category', news_category_id=news_category.id) }}"
+                       class="list-group-item list-group-item-action {% if news_category.name == active_page %}active{% endif %} ">{{ news_category.name }}</a>
+                {% endif %}
             {% endfor %}
         </div>
         <div class="list-group mb-3 mx-auto">
@@ -14,9 +16,12 @@
                 热门文章
             </div>
             {% for news in all_news_limit %}
-                <a href="{{ url_for('main.show_news', news_id=news.id) }}"
-                   class="list-group-item list-group-item-action"><span class=""></span>{{ news.title|truncate(19) }}
-                </a>
+                {% if news.status %}
+                    <a href="{{ url_for('main.show_news', news_id=news.id) }}"
+                       class="list-group-item list-group-item-action"><span
+                            class=""></span>{{ news.title|truncate(19) }}
+                    </a>
+                {% endif %}
             {% endfor %}
         </div>
     </div>

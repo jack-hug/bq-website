@@ -131,7 +131,7 @@ class NewsCategory(db.Model):
     status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
-    news = db.relationship('News', back_populates='newscategory')
+    news = db.relationship('News', back_populates='newscategory', cascade='all, delete-orphan')
 
 
 class Banner(db.Model):

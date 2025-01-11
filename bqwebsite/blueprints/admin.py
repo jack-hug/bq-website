@@ -406,6 +406,16 @@ def subject_delete(subject_id):
     return redirect(url_for('admin.category_list'))
 
 
+@admin_bp.route('/news_category_delete/<int:news_category_id>', methods=['GET', 'POST'])  # 删除文章分类功能
+@login_required
+def news_category_delete(news_category_id):
+    news_category = NewsCategory.query.get_or_404(news_category_id)
+    db.session.delete(news_category)
+    db.session.commit()
+    flash('删除成功.', 'success')
+    return redirect(url_for('admin.news_category_list'))
+
+
 @admin_bp.route('/news_list', methods=['GET', 'POST'])  # 新闻列表
 @login_required
 def news_list():
@@ -421,8 +431,9 @@ def news_list():
 @login_required
 def news_category_list():
     form = AddNewsCategoryForm()
+
     if form.validate_on_submit():
-        news_category = NewsCategory.query.filter_by(name=form.name.data).first()
+        news_category = NewsCategory.query.filter_by(name=form.name.data.replace(' ', '')).first()
         if news_category:
             flash('该新闻分类已存在.', 'warning')
             return redirect(url_for('admin.news_category_list'))
@@ -440,8 +451,24 @@ def news_category_list():
 @admin_bp.route('/news_category_edit/<int:news_category_id>', methods=['GET', 'POST'])  # 编辑新闻分类
 @login_required
 def news_category_edit(news_category_id):
-    news_category_id = NewsCategory.query.get_or_404(news_category_id)
-    return render_template('admin/category_edit.html', news_category_id=news_category_id)
+    news_category = NewsCategory.query.get_or_404(news_category_id)
+    form = EditNewsCategoryForm()
+    if form.validate_on_submit():
+        news_category.name = form.name.data.replace(' ', '')
+        news_category.timestamp = datetime.utcnow()
+        db.session.commit()
+        flash('修改成功.', 'success')
+        return redirect(url_for('admin.news_category_list'))
+    form.name.data = news_category.name
+    return render_template('admin/news_category_edit.html', news_category_id=news_category_id, form=form)
+
+@admin_bp.route('/news_category_status/<int:news_category_id>')  # 新闻分类发布与撤销
+@login_required
+def news_category_status(news_category_id):
+    news_category = NewsCategory.query.get_or_404(news_category_id)
+    news_category.status = not news_category.status
+    db.session.commit()
+    return redirect_back()
 
 
 @admin_bp.route('/news_edit/<int:news_id>', methods=['GET', 'POST'])  # 编辑新闻
@@ -549,6 +576,7 @@ MODEL_MAP = {
     'category-input': Category,
     'brand-input': Brand,
     'subject-input': Subject,
+    'news-category-input': NewsCategory,
 }
 @admin_bp.route('/check_category_name', methods=['POST'])  # 检查分类名称是否已经存在
 def check_category_name():

@@ -71,15 +71,15 @@
                                                 <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                             </a>
                                             {% if news_category.status %}
-                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                <a href="{{ url_for('admin.news_category_status', news_category_id=news_category.id) }}" class="btn btn-sm btn-secondary">
                                                     <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                                 </a>
                                             {% else %}
-                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                <a href="{{ url_for('admin.news_category_status', news_category_id=news_category.id) }}" class="btn btn-sm btn-warning">
                                                     <i class="fa-solid fa-arrow-up" title="发布"></i>
                                                 </a>
                                             {% endif %}
-                                            <a href="#" class="btn btn-sm btn-danger">
+                                            <a href="{{ url_for('admin.news_category_delete', news_category_id=news_category.id, next=request.full_path) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该分类？')">
                                                 <i class="fa-regular fa-trash-can" title="删除"></i>
                                             </a>
                                         </td>
