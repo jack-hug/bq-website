@@ -15,8 +15,20 @@
             <div class="row">
                 {% include 'main/_sidebar_product.html' %}
                 <div class="col-lg-9 col-md-9 col-sm-12 bg-white rounded">
+                    <nav aria-label="breadcrumb" class="p-1 bg-white">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('main.product') }}"
+                                                           class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">全部产品</a>
+                            </li>
+                            <li class="breadcrumb-item"><a href="{{ url_for('main.product_category', category=product.category.name) }}"
+                                                           class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ product.category.name }}</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+                        </ol>
+                    </nav>
                     <h3 class="text-center text-secondary mt-3 text-dark">{{ product.name }}</h3>
-                    <p class="text-muted text-center"><small>发布时间：{{ moment(product.timestamp).format('lll') }}</small></p>
+                    <p class="text-muted text-center">
+                        <small>发布时间：{{ moment(product.timestamp).format('lll') }}</small></p>
                     <hr class="divider-custom">
                     <div class="row">
                         <div class="col-md-6 col-sm-12">
@@ -36,7 +48,8 @@
                                     <!-- 轮播项 -->
                                     <div class="carousel-inner">
                                         {% for photo in product.photos %}
-                                            <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="3000">
+                                            <div class="carousel-item {% if loop.first %}active{% endif %}"
+                                                 data-bs-interval="3000">
                                                 <img src="{{ url_for('admin.get_image', filename=photo.filename_m) }}"
                                                      alt="{{ product.name }}" class="d-block w-100 img-fluid rounded"
                                                      style="width: 400px; height: 500px; object-fit: contain;">
