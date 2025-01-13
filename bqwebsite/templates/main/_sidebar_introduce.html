@@ -1,13 +1,11 @@
-{% if introduce_categories %}
-    <div class="col-lg-3 col-md-3 col-sm-12">
+ <div class="col-lg-3 col-md-3 col-sm-12">
         <div class="list-group mb-3 mx-auto">
             <div class="list-group-item list-group-item-action bg-danger text-white fw-bold">
                 公司介绍
             </div>
-            {% for introduce_category in introduce_categories %}
-                <a href="{{ url_for('main.show_introduce', intro_id=introduce_category.id) }}"
-                   class="list-group-item list-group-item-action {% if introduce_category.name == active_page %}active{% endif %} ">{{ introduce_category.name }}</a>
+            {% for intro_category in intro_categories %}
+                <a href="{{ url_for('main.show_intro', intro_id=intro_category.introduces[0].id) }}"
+                   class="list-group-item list-group-item-action {% if intro_category.name == active_page %}active{% endif %} ">{{ intro_category.name }}</a>
             {% endfor %}
         </div>
     </div>
-{% endif %}

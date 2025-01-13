@@ -178,6 +178,7 @@ class Introduce(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100))
     introduce_content = db.Column(db.Text)
+    status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     introduce_category_id = db.Column(db.Integer, db.ForeignKey('introducecategory.id'))
@@ -189,6 +190,7 @@ class IntroduceCategory(db.Model):
     __tablename__ = 'introducecategory'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))
+    status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     introduces = db.relationship('Introduce', back_populates='introduce_category')

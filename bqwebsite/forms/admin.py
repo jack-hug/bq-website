@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, MultipleFileField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
-from ..models import Category, Brand, Subject, Product, NewsCategory
+from ..models import Category, Brand, Subject, Product, NewsCategory, IntroduceCategory
 from flask_ckeditor import CKEditorField
 
 
@@ -166,3 +166,28 @@ class AddNewsCategoryForm(FlaskForm):
     name = StringField('添加新闻分类：', validators=[DataRequired(), Length(1, 128)])
     submit = SubmitField('添加分类')
 
+
+class EditIntroduceForm(FlaskForm):
+    title = StringField('标题', validators=[DataRequired(), Length(1, 128)])
+    intro_category = SelectField('介绍分类:', coerce=int, default=1)
+    intro_content = CKEditorField('文章内容:', validators=[DataRequired()])
+    submit = SubmitField('确认修改')
+    cancel = SubmitField('取 消')
+
+    def __init__(self, *args, **kwargs):
+        super(EditIntroduceForm, self).__init__(*args, **kwargs)
+        self.intro_category.choices = [(introducecategory.id, introducecategory.name) for introducecategory in
+                                       IntroduceCategory.query.all()]
+
+
+class IntroduceAddForm(FlaskForm):
+    title = StringField('标题', validators=[DataRequired(), Length(1, 128)])
+    intro_category = SelectField('介绍分类:', coerce=int, default=1)
+    intro_content = CKEditorField('文章内容:', validators=[DataRequired()])
+    submit = SubmitField('添加文章')
+    cancel = SubmitField('取 消')
+
+    def __init__(self, *args, **kwargs):
+        super(IntroduceAddForm, self).__init__(*args, **kwargs)
+        self.intro_category.choices = [(introducecategory.id, introducecategory.name) for introducecategory in
+                                       IntroduceCategory.query.all()]

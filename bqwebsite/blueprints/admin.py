@@ -9,9 +9,10 @@ from flask_ckeditor import upload_fail, upload_success
 from flask_login import current_user, login_user, login_required, logout_user
 
 from ..extensions import db
-from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory
+from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory, Introduce
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryForm, EditBrandForm, CategoryAddForm, \
-    BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm, EditNewsForm, EditNewsCategoryForm, AddNewsCategoryForm
+    BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm, EditNewsForm, EditNewsCategoryForm, AddNewsCategoryForm, \
+    EditIntroduceForm, IntroduceAddForm
 from ..utils import random_filename, redirect_back, resize_image, save_temp_files
 
 admin_bp = Blueprint('admin', __name__)
@@ -565,10 +566,82 @@ def index_photo_list():
     return render_template('admin/index_photo_list.html')
 
 
-@admin_bp.route('/introduce_list', methods=['GET', 'POST'])  # 公司介绍列表
+@admin_bp.route('/intro_list', methods=['GET', 'POST'])  # 公司介绍列表
 @login_required
-def introduce_list():
-    return render_template('admin/introduce_list.html')
+def intro_list():
+    intro = Introduce.query.all()
+    return render_template('admin/introduce_list.html', intro=intro)
+
+@admin_bp.route('/intro_status/<int:intro_id>', methods=['GET', 'POST'])
+@login_required
+def intro_status(intro_id):
+    intro = Introduce.query.get_or_404(intro_id)
+    intro.status = not intro.status
+    db.session.commit()
+    return redirect_back()
+
+@admin_bp.route('/intro_edit/<int:intro_id>', methods=['GET', 'POST'])  # 编辑公司介绍
+@login_required
+def intro_edit(intro_id):
+    intro = News.query.get_or_404(intro_id)
+    form = EditIntroduceForm()
+    if form.validate_on_submit():
+        intro.title = form.title.data
+        intro.introduce_category_id = form.intro_category.data
+        intro.intro_content = form.intro_content.data
+        intro.timestamp = datetime.utcnow()
+        db.session.commit()
+        flash('修改成功.', 'success')
+        return redirect(url_for('admin.intro_list'))
+    form.title.data = intro.title
+    form.intro_category.data = intro.intro_category_id
+    form.intro_content.data = intro.intro_content
+    return render_template('admin/introduce_edit.html', intro=intro)
+
+@admin_bp.route('/intro_delete/<int:intro_id>', methods=['POST'])  # 删除公司介绍文章
+@login_required
+def intro_delete(intro_id):
+    intro = News.query.get_or_404(intro_id)
+    db.session.delete(intro)
+    db.session.commit()
+    flash('删除成功.', 'success')
+    return redirect(url_for('admin.intro_list'))
+
+@admin_bp.route('/intro_multiple_delete', methods=['POST'])  # 批量删除文章
+@login_required
+def intro_multiple_delete():
+    if request.method == 'POST':
+        selected_ids = request.form.getlist('item_ids')
+        for intro_id in selected_ids:
+            intro = Introduce.query.get(intro_id)
+            db.session.delete(intro)
+        db.session.commit()
+        flash('批量删除成功.', 'success')
+        return redirect(url_for('admin.intro_list'))
+    return redirect(url_for('admin.intro_list'))
+
+
+@admin_bp.route('/intro/new', methods=['GET', 'POST'])  # 新建公司介绍文章
+@login_required
+def intro_add():
+    form = IntroduceAddForm()
+    if form.validate_on_submit():
+        intro = Introduce(
+            title=form.title.data,
+            introduce_category_id=form.intro_category.data,
+            introduce_content=form.intro_content.data,
+            timestamp=datetime.utcnow()
+        )
+        db.session.add(intro)
+        db.session.commit()
+        flash('添加成功.', 'success')
+        return redirect(url_for('admin.intro_list'))
+    return render_template('admin/introduce_add.html', form=form, show_collapse=True)
+
+@admin_bp.route('/intro_category_list', methods=['GET', 'POST'])  # 公司介绍分类
+@login_required
+def intro_category_list():
+    pass
 
 
 # 类型与数据表的映射

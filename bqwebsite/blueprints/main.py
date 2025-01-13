@@ -1,6 +1,9 @@
 import os
 
-from flask import render_template, request, redirect, url_for, Blueprint, current_app, flash, send_from_directory
+from flask import render_template, request, redirect, url_for, Blueprint, current_app, flash, send_from_directory, \
+    jsonify
+from sqlalchemy.orm import joinedload
+
 from ..models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
     IntroduceCategory, Contact, ContactCategory, Subject, Research
 
@@ -194,9 +197,17 @@ def show_product(product_id):
 
 @main_bp.route('/introduce/<int:intro_id>')
 # 公司介绍
-def show_introduce(intro_id):
-    show_intro = Introduce.query.get_or_404(intro_id)
-    return render_template('main/introduce_detail.html', show_intro=show_intro)
+def show_intro(intro_id):
+    intro_categories = (
+        IntroduceCategory.query
+        .join(Introduce)  # 关联 Introduce 表
+        .filter(Introduce.status == True)  # 筛选 status 为 True 的记录
+        .options(joinedload(IntroduceCategory.introduces))  # 预加载 introduces 数据
+        .order_by(IntroduceCategory.id.asc())
+        .all()
+    )
+    intro = Introduce.query.get_or_404(intro_id)
+    return render_template('main/introduce_detail.html', intro=intro, intro_categories=intro_categories)
 
 
 @main_bp.route('/honor')
@@ -222,3 +233,5 @@ def show_research(research_id):
 @main_bp.route('/uploads/<int:filename>')  # 获得图片链接
 def get_image(filename):
     return send_from_directory(current_app.config['BQ_UPLOAD_PATH'], filename)
+
+

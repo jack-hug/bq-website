@@ -58,14 +58,13 @@ def register_template_context(app):
         brands = Brand.query.order_by(Brand.id.asc()).all()
         all_news_limit = News.query.filter(News.status == True).order_by(News.clicks.desc()).limit(10).all()
         news_categories = NewsCategory.query.order_by(NewsCategory.id.asc()).all()
-        introduce_categories = IntroduceCategory.query.order_by(IntroduceCategory.id.asc()).all()
         research_categories = ResearchCategory.query.order_by(ResearchCategory.id.asc()).all()
         contact_categories = ContactCategory.query.order_by(ContactCategory.id.asc()).all()
         hot_products = Product.query.filter(Product.clicks > 0, Product.status == True).order_by(
             Product.clicks.desc()).limit(15)
         return dict(admin=admin, categories=categories, subjects=subjects, brands=brands,
-                    news_categories=news_categories, introduce_categories=introduce_categories,
-                    contact_categories=contact_categories, all_news_limit=all_news_limit, hot_products=hot_products,
+                    news_categories=news_categories, contact_categories=contact_categories,
+                    all_news_limit=all_news_limit, hot_products=hot_products,
                     research_categories=research_categories)
 
 
