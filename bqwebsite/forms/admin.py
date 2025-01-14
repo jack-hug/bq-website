@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, MultipleFileField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
-from ..models import Category, Brand, Subject, Product, NewsCategory, IntroduceCategory
+from ..models import Category, Brand, Subject, Product, NewsCategory, IntroduceCategory, ResearchCategory
 from flask_ckeditor import CKEditorField
 
 
@@ -191,3 +191,36 @@ class IntroduceAddForm(FlaskForm):
         super(IntroduceAddForm, self).__init__(*args, **kwargs)
         self.intro_category.choices = [(introducecategory.id, introducecategory.name) for introducecategory in
                                        IntroduceCategory.query.all()]
+
+
+class AddIntroCategoryForm(FlaskForm):
+    name = StringField('添加介绍分类：', validators=[DataRequired(), Length(1, 128)])
+    submit = SubmitField('添加分类')
+
+class EditIntroCategoryForm(FlaskForm):
+    name = StringField('介绍分类名称', validators=[DataRequired(), Length(1, 128)])
+    submit = SubmitField('修改')
+
+class EditResearchForm(FlaskForm):
+    title = StringField('标题', validators=[DataRequired(), Length(1, 128)])
+    research_category = SelectField('研究分类:', coerce=int, default=1)
+    research_content = CKEditorField('文章内容:', validators=[DataRequired()])
+    submit = SubmitField('确认修改')
+    cancel = SubmitField('取 消')
+
+    def __init__(self, *args, **kwargs):
+        super(EditResearchForm, self).__init__(*args, **kwargs)
+        self.research_category.choices = [(researchcategory.id, researchcategory.name) for researchcategory in
+                                          ResearchCategory.query.all()]
+
+class ResearchAddForm(FlaskForm):
+    title = StringField('标题', validators=[DataRequired(), Length(1, 128)])
+    research_category = SelectField('研究分类:', coerce=int, default=1)
+    research_content = CKEditorField('文章内容:', validators=[DataRequired()])
+    submit = SubmitField('添加文章')
+    cancel = SubmitField('取 消')
+
+    def __init__(self, *args, **kwargs):
+        super(ResearchAddForm, self).__init__(*args, **kwargs)
+        self.research_category.choices = [(researchcategory.id, researchcategory.name) for researchcategory in
+                                          ResearchCategory.query.all()]

@@ -1,7 +1,7 @@
 {% extends 'admin_base.html' %}
 
 {% block title %}
-    后台管理面板-修改公司介绍文章
+    后台管理面板-添加研发生产文章
 {% endblock %}
 {% block head %}
     {{ super() }}
@@ -20,35 +20,34 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            <a href="{{ url_for('admin.intro_list') }}"
-                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">文章列表
+                            <a href="{{ url_for('admin.research_list') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">研发生产文章列表
                             </a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">修改文章</li>
+                        <li class="breadcrumb-item active" aria-current="page">添加文章</li>
                     </ol>
                 </nav>
-                <h4 class="text-center mb-3 mt-3">修改文章</h4>
+                <h4 class="text-center mb-3 mt-3">添加文章</h4>
                 <hr>
-                <form method="POST" enctype="multipart/form-data" class="form" id="intro-form">
+                <form method="POST" enctype="multipart/form-data" class="form" id="research-form">
                     {{ form.hidden_tag() }}
                     <div class="mb-3">
                         {{ form.title.label(class="form-label") }}
-                        {{ form.title(class="form-control", id="intro-name") }}
+                        {{ form.title(class="form-control", id="research-name") }}
                     </div>
                     <div class="mb-3">
-                        {{ form.intro_category.label(class="form-label") }}
-                        {{ form.intro_category(class="form-control") }}
+                        {{ form.research_category.label(class="form-label") }}
+                        {{ form.research_category(class="form-control") }}
                     </div>
                     <div class="mb-3">
-                        {{ form.intro_content.label(class="form-label") }}
-                        {{ form.intro_content(class="form-control") }}
+                        {{ form.research_content.label(class="form-label") }}
+                        {{ form.research_content(class="form-control") }}
                     </div>
                     <div class="mb-3">
                         {{ form.submit(class="btn btn-primary btn-md") }}
-                        {{ form.cancel(class="btn btn-primary btn-md") }}
                     </div>
                 </form>
-                {{ ckeditor.config(name='intro_content') }}
+                {{ ckeditor.config(name='research_content') }}
             </div>
         </div>
     </div>

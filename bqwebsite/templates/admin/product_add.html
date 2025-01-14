@@ -3,6 +3,7 @@
 {% block title %}
     后台管理面板-添加产品
 {% endblock %}
+{% block active_product %}active{% endblock %}
 {% block head %}
     {{ super() }}
     {{ ckeditor.load(custom_url=url_for('static', filename='admin/ckeditor/ckeditor.js')) }}

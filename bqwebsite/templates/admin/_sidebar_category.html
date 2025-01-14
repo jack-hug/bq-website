@@ -6,35 +6,46 @@
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#product-collapse"
            role="button"
            aria-expanded="false" aria-controls="product-collapse"><i class="fa-solid fa-briefcase"></i> 产品管理</a>
-        <div class="collapse {% if show_collapse %}show{% endif %}"
+        <div class="collapse {% if show_product_collapse %}show{% endif %}"
              id="product-collapse">
             <a class="list-group">
-                <a class="list-group-item {% if request.endpoint == 'admin.product_list' %}active{% endif %}"
+                <a class="list-group-item {% if request.endpoint.startswith('admin.product_') %}active{% endif %}"
                    href="{{ url_for('admin.product_list') }}">&nbsp;&nbsp;&nbsp;产品列表</a>
-                <a class="list-group-item {% if request.endpoint == 'admin.category_list' %}active{% endif %}"
+                <a class="list-group-item {% if request.endpoint.startswith('admin.category_') %}active{% endif %}"
                    href="{{ url_for('admin.category_list') }}">&nbsp;&nbsp;&nbsp;产品分类</a>
             </a>
         </div>
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#news-collapse"
            role="button" aria-expanded="false" aria-controls="news-collapse"><i class="fa-solid fa-globe"></i> 邦资讯管理</a>
-        <div class="collapse{% if request.endpoint == 'admin.news_list' or request.endpoint == 'admin.news_category_list' %}show{% endif %}"
+        <div class="collapse {% if show_news_collapse %}show{% endif %}"
              id="news-collapse">
             <a class="list-group">
-                <a class="list-group-item {% if request.endpoint == 'admin.news_list' %}active{% endif %}"
+                <a class="list-group-item {% if request.endpoint == 'admin.news_list' or request.endpoint == 'admin.news_edit' or request.endpoint == 'admin.news_add' %}active{% endif %}"
                    href="{{ url_for('admin.news_list') }}">&nbsp;&nbsp;&nbsp;文章列表</a>
-                <a class="list-group-item {% if request.endpoint == 'admin.news_category_list' %}active{% endif %}"
+                <a class="list-group-item {% if request.endpoint == 'admin.news_category_list' or request.endpoint == 'admin.news_category_edit' %}active{% endif %}"
                    href="{{ url_for('admin.news_category_list') }}">&nbsp;&nbsp;&nbsp;文章分类</a>
             </a>
         </div>
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#intro-collapse"
            role="button" aria-expanded="false" aria-controls="intro-collapse"><i class="fa-solid fa-list"></i> 公司介绍管理</a>
-        <div class="collapse{% if request.endpoint == 'admin.intro_list' or request.endpoint == 'admin.intro_category_list' %}show{% endif %}"
+        <div class="collapse {% if show_intro_collapse %}show{% endif %}"
              id="intro-collapse">
             <a class="list-group">
-                <a class="list-group-item {% if request.endpoint == 'admin.intro_list' %}active{% endif %}"
+                <a class="list-group-item {% if request.endpoint == 'admin.intro_list' or request.endpoint == 'admin.intro_edit' or request.endpoint == 'admin.intro_add' %}active{% endif %}"
                    href="{{ url_for('admin.intro_list') }}">&nbsp;&nbsp;&nbsp;文章编辑</a>
-                <a class="list-group-item {% if request.endpoint == 'admin.intro_category_list' %}active{% endif %}"
+                <a class="list-group-item {% if request.endpoint == 'admin.intro_category_list' or request.endpoint == 'admin.intro_category_edit' %}active{% endif %}"
                    href="{{ url_for('admin.intro_category_list') }}">&nbsp;&nbsp;&nbsp;分类编辑</a>
+            </a>
+        </div>
+        <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#research-collapse"
+           role="button" aria-expanded="false" aria-controls="research-collapse"><i class="fa-solid fa-book-open"></i> 研发生产管理</a>
+        <div class="collapse {% if show_research_collapse %}show{% endif %}"
+             id="research-collapse">
+            <a class="list-group">
+                <a class="list-group-item {% if request.endpoint == 'admin.research_list' or request.endpoint == 'admin.research_edit' or request.endpoint == 'admin.research_add' %}active{% endif %}"
+                   href="{{ url_for('admin.research_list') }}">&nbsp;&nbsp;&nbsp;文章编辑</a>
+                <a class="list-group-item {% if request.endpoint == 'admin.research_category_list' or request.endpoint == 'admin.research_category_edit' %}active{% endif %}"
+                   href="{{ url_for('admin.research_category_list') }}">&nbsp;&nbsp;&nbsp;分类编辑</a>
             </a>
         </div>
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#photos-collapse"

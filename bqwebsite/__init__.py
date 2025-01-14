@@ -3,6 +3,7 @@ import os
 
 from flask import Flask, render_template, jsonify
 from flask_wtf.csrf import CSRFError
+from sqlalchemy import or_
 
 from .blueprints.main import main_bp
 from .blueprints.admin import admin_bp
@@ -57,14 +58,15 @@ def register_template_context(app):
         subjects = Subject.query.order_by(Subject.id.asc()).all()
         brands = Brand.query.order_by(Brand.id.asc()).all()
         all_news_limit = News.query.filter(News.status == True).order_by(News.clicks.desc()).limit(10).all()
-        news_categories = NewsCategory.query.order_by(NewsCategory.id.asc()).all()
-        research_categories = ResearchCategory.query.order_by(ResearchCategory.id.asc()).all()
+        news_categories = NewsCategory.query.filter(NewsCategory.status == True).order_by(NewsCategory.id.asc()).all()
+        intro_categories = IntroduceCategory.query.filter(IntroduceCategory.status == True, IntroduceCategory.introduces != None, IntroduceCategory.introduces.any(status=True)).order_by(IntroduceCategory.id.asc()).all()
+        research_categories = ResearchCategory.query.filter(ResearchCategory.status == True, ResearchCategory.researchs != None, ResearchCategory.researchs.any(status=True)).order_by(ResearchCategory.id.asc()).all()
         contact_categories = ContactCategory.query.order_by(ContactCategory.id.asc()).all()
         hot_products = Product.query.filter(Product.clicks > 0, Product.status == True).order_by(
             Product.clicks.desc()).limit(15)
         return dict(admin=admin, categories=categories, subjects=subjects, brands=brands,
                     news_categories=news_categories, contact_categories=contact_categories,
-                    all_news_limit=all_news_limit, hot_products=hot_products,
+                    all_news_limit=all_news_limit, hot_products=hot_products,intro_categories=intro_categories,
                     research_categories=research_categories)
 
 

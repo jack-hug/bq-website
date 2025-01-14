@@ -53,12 +53,12 @@
                     </li>
                     <li class="nav-item mx-0 mx-lg-1">
                         <a class="nav-link py-1 px-0 px-lg-3 rounded {% block nav_intro %}{% endblock %}"
-                           href="{{ url_for('main.show_intro', intro_id=1) }}">公司介绍
+                           href="{{ url_for('main.show_intro', intro_id=intro_categories[0].id) }}">公司介绍
                         </a>
                     </li>
                     <li class="nav-item mx-0 mx-lg-1">
                         <a class="nav-link py-1 px-0 px-lg-3 rounded {% block nav_research %}{% endblock %}"
-                           href="{{ url_for('main.show_research', research_id=1) }}">研发生产
+                           href="{{ url_for('main.show_research', research_id=research_categories[0].id ) }}">研发生产
                         </a>
                     </li>
                     <li class="nav-item mx-0 mx-lg-1">

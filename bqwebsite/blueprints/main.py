@@ -2,10 +2,10 @@ import os
 
 from flask import render_template, request, redirect, url_for, Blueprint, current_app, flash, send_from_directory, \
     jsonify
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, contains_eager
 
 from ..models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
-    IntroduceCategory, Contact, ContactCategory, Subject, Research
+    IntroduceCategory, Contact, ContactCategory, Subject, Research, ResearchCategory
 
 main_bp = Blueprint('main', __name__)
 
@@ -200,13 +200,16 @@ def show_product(product_id):
 def show_intro(intro_id):
     intro_categories = (
         IntroduceCategory.query
-        .join(Introduce)  # 关联 Introduce 表
+        .join(IntroduceCategory.introduces)  # 关联 Introduce 表
         .filter(Introduce.status == True)  # 筛选 status 为 True 的记录
-        .options(joinedload(IntroduceCategory.introduces))  # 预加载 introduces 数据
+        .options(contains_eager(IntroduceCategory.introduces))  # 预加载 introduces 数据
         .order_by(IntroduceCategory.id.asc())
         .all()
     )
-    intro = Introduce.query.get_or_404(intro_id)
+    intro = Introduce.query.filter_by(id=intro_id, status=True).first_or_404()
+    if not intro.status or not intro.introduce_category.status:
+        flash('该介绍不存在', 'warning')
+        return redirect(url_for('main.index'))
     return render_template('main/introduce_detail.html', intro=intro, intro_categories=intro_categories)
 
 
@@ -223,15 +226,21 @@ def show_contact(contact_id):
     return render_template('main/contact_detail.html', show_con=show_con)
 
 
-@main_bp.route('/show_research/<int:research_id>')
+@main_bp.route('/research/<int:research_id>')
 # 研发生产
 def show_research(research_id):
-    show_research = Research.query.get_or_404(research_id)
-    return render_template('main/research_detail.html', show_research=show_research)
+    research_categories = (
+        ResearchCategory.query
+        .join(ResearchCategory.researchs)
+        .filter(Research.status == True)
+        .options(contains_eager(ResearchCategory.researchs))
+        .order_by(ResearchCategory.id.asc())
+        .all()
+    )
+    research = Research.query.filter_by(id=research_id, status=True).first_or_404()
+    return render_template('main/research_detail.html', research=research, research_categories=research_categories)
 
 
 @main_bp.route('/uploads/<int:filename>')  # 获得图片链接
 def get_image(filename):
     return send_from_directory(current_app.config['BQ_UPLOAD_PATH'], filename)
-
-

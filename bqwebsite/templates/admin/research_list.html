@@ -1,0 +1,168 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+    后台管理面板-研发生产管理
+{% endblock %}
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}"
+                                                       class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">研发生产管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">文章列表</li>
+                    </ol>
+                </nav>
+                <h4 class="text-center mb-3 mt-3">文章列表</h4>
+                <hr>
+                <div class="p-3 bg-light border rounded d-flex justify-content-between align-items-center">
+                    <div class="row">
+                        <div class="col-auto">
+                            <a type="button" class="btn btn-primary" href="{{ url_for('admin.research_add') }}"><i
+                                    class="fa-solid fa-plus"></i> 添加文章
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <form action="{{ url_for('admin.research_multiple_delete') }}" method="post"
+                                  id="delete-selected-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="button" class="btn btn-danger" id="delete-selected-button"><i
+                                        class="fa-solid fa-trash"></i> 批量删除
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% if research %}
+                    <table class="table table-striped border mt-3">
+                        <thead>
+                        <tr>
+                            <th>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value=""
+                                           id="all_research_check" name="item_ids">
+                                </div>
+                            </th>
+                            <th>ID</th>
+                            <th>标题</th>
+                            <th>内容</th>
+                            <th>分类</th>
+                            <th>发布时间</th>
+                            <th>点击数</th>
+                            <th>发布状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for research in research %}
+                            <tr>
+                                <td>
+                                    <div class="form-check">
+                                        <input class="form-check-input research-checkbox" type="checkbox"
+                                               value="{{ research.id }}"
+                                               name="item_ids">
+                                    </div>
+                                </td>
+                                <td>{{ research.id }}</td>
+                                <td><a href="{{ url_for('main.show_research', research_id=research.id) }}"
+                                       class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                       target="_blank">{{ research.title }}</a></td>
+                                <td>{{ research.research_content|safe|truncate(30) }}</td>
+                                <td>{{ research.research_category.name }}</td>
+                                <td>{{ moment(research.timestamp).format('lll') }}</td>
+                                <td>{{ research.clicks }}</td>
+                                <td>
+                                    {% if research.status %}
+                                        <small class="text-bg-primary p-1 rounded">已发布</small>
+                                    {% else %}
+                                        <small class="text-bg-secondary p-1 rounded">已下架</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('admin.research_edit', research_id=research.id) }}" class="btn btn-sm btn-primary">
+                                        <i class="fa-solid fa-pen-to-square" title="编辑"></i>
+                                    </a>
+                                    {% if research.status %}
+                                        <a href="{{ url_for('admin.research_status', research_id=research.id, next=request.full_path) }}"
+                                           class="btn btn-sm btn-secondary">
+                                            <i class="fa-solid fa-arrow-down" title="撤销"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ url_for('admin.research_status', research_id=research.id, next=request.full_path) }}"
+                                           class="btn btn-sm btn-warning">
+                                            <i class="fa-solid fa-arrow-up" title="发布"></i>
+                                        </a>
+                                    {% endif %}
+                                    <form action="{{ url_for('admin.research_delete', research_id=research.id, next=request.full_path) }}"
+                                          class="d-inline" method="post">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('确定要删除吗？')">
+                                            <i class="fa-regular fa-trash-can" title="删除"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <h3>没有文章数据</h3>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        // 选中产品
+        document.getElementById('all_research_check').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('input[name="item_ids"]');
+            for (const checkbox of checkboxes) {
+                checkbox.checked = this.checked;
+            }
+        });
+        // 删除选中的产品
+        document.getElementById('delete-selected-button').addEventListener('click', function () {
+            const checkboxes = document.querySelectorAll('.research-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('请选择要删除的产品');
+                return;
+            }
+            if (!confirm('确定要删除选中的产品吗？')) {
+                return;
+            }
+
+            const form = document.getElementById('delete-selected-form');
+            if (!form) {
+                alert('找不到删除表单');
+                return;
+            }
+
+            // 移除之前可能存在的隐藏输入
+            const existingHiddenInputs = form.querySelectorAll('input[name="item_ids"]');
+            existingHiddenInputs.forEach(input => form.removeChild(input));
+
+            // 为每个选中的复选框创建一个隐藏输入
+            checkboxes.forEach(function (checkbox) {
+                const hidden_input = document.createElement('input');
+                hidden_input.type = 'hidden';
+                hidden_input.name = 'item_ids';
+                hidden_input.value = checkbox.value;
+                form.appendChild(hidden_input);
+            });
+
+            try {
+                form.submit();
+            } catch (error) {
+                alert('提交失败');
+                console.error(error);
+            }
+        });
+    </script>
+{% endblock %}

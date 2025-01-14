@@ -200,6 +200,7 @@ class ResearchCategory(db.Model):
     __tablename__ = 'researchcategory'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))
+    status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     researchs = db.relationship('Research', back_populates='research_category')
@@ -211,6 +212,7 @@ class Research(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100))
     research_content = db.Column(db.Text)
+    status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
     research_category_id = db.Column(db.Integer, db.ForeignKey('researchcategory.id'))
