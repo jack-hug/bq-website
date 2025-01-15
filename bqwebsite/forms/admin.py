@@ -2,7 +2,8 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, MultipleFileField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
-from ..models import Category, Brand, Subject, Product, NewsCategory, IntroduceCategory, ResearchCategory
+from ..models import Category, Brand, Subject, Product, NewsCategory, IntroduceCategory, ResearchCategory, \
+    ContactCategory
 from flask_ckeditor import CKEditorField
 
 
@@ -224,3 +225,35 @@ class ResearchAddForm(FlaskForm):
         super(ResearchAddForm, self).__init__(*args, **kwargs)
         self.research_category.choices = [(researchcategory.id, researchcategory.name) for researchcategory in
                                           ResearchCategory.query.all()]
+
+class EditContactForm(FlaskForm):
+    title = StringField('标题', validators=[DataRequired(), Length(1, 128)])
+    contact_category = SelectField('联系分类:', coerce=int, default=1)
+    content = CKEditorField('文章内容:', validators=[DataRequired()])
+    submit = SubmitField('确认修改')
+    cancel = SubmitField('取 消')
+
+    def __init__(self, *args, **kwargs):
+        super(EditContactForm, self).__init__(*args, **kwargs)
+        self.contact_category.choices = [(contactcategory.id, contactcategory.name) for contactcategory in
+                                         ContactCategory.query.all()]
+
+class ContactAddForm(FlaskForm):
+    title = StringField('标题', validators=[DataRequired(), Length(1, 128)])
+    contact_category = SelectField('联系分类:', coerce=int, default=1)
+    content = CKEditorField('文章内容:', validators=[DataRequired()])
+    submit = SubmitField('添加文章')
+    cancel = SubmitField('取 消')
+
+    def __init__(self, *args, **kwargs):
+        super(ContactAddForm, self).__init__(*args, **kwargs)
+        self.contact_category.choices = [(contactcategory.id, contactcategory.name) for contactcategory in
+                                         ContactCategory.query.all()]
+
+class AddContactCategoryForm(FlaskForm):
+    name = StringField('添加联系分类：', validators=[DataRequired(), Length(1, 128)])
+    submit = SubmitField('添加分类')
+
+class EditContactCategoryForm(FlaskForm):
+    name = StringField('联系分类名称', validators=[DataRequired(), Length(1, 128)])
+    submit = SubmitField('修改')

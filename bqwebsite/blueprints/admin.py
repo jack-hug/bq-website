@@ -10,10 +10,11 @@ from flask_login import current_user, login_user, login_required, logout_user
 
 from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory, Introduce, IntroduceCategory, \
-    ResearchCategory, Research
+    ResearchCategory, Research, ContactCategory, Contact
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryForm, EditBrandForm, CategoryAddForm, \
     BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm, EditNewsForm, EditNewsCategoryForm, AddNewsCategoryForm, \
-    EditIntroduceForm, IntroduceAddForm, AddIntroCategoryForm, EditIntroCategoryForm, EditResearchForm, ResearchAddForm
+    EditIntroduceForm, IntroduceAddForm, AddIntroCategoryForm, EditIntroCategoryForm, EditResearchForm, ResearchAddForm, \
+    EditContactForm, ContactAddForm, AddContactCategoryForm, EditContactCategoryForm
 from ..utils import random_filename, redirect_back, resize_image, save_temp_files
 
 admin_bp = Blueprint('admin', __name__)
@@ -849,6 +850,151 @@ def research_category_edit(research_category_id):
 def research_category_status(research_category_id):
     research_category = ResearchCategory.query.get_or_404(research_category_id)
     research_category.status = not research_category.status
+    db.session.commit()
+    return redirect_back()
+
+
+@admin_bp.route('/research_list', methods=['GET', 'POST'])  # 研发生产文章列表
+@login_required
+def research_list():
+    research = Research.query.all()
+    return render_template('admin/research_list.html', research=research, show_research_collapse=True)
+
+
+@admin_bp.route('/research_status/<int:research_id>', methods=['GET', 'POST'])  # 研发生产文章状态
+@login_required
+def research_status(research_id):
+    research = Research.query.get_or_404(research_id)
+    research.status = not research.status
+    db.session.commit()
+    return redirect_back()
+
+
+@admin_bp.route('/contact_list', methods=['GET', 'POST'])  # 研发生产文章列表
+@login_required
+def contact_list():
+    contact = Contact.query.all()
+    return render_template('admin/contact_list.html', contact=contact, show_contact_collapse=True)
+
+
+@admin_bp.route('/contact_edit/<int:contact_id>', methods=['GET', 'POST'])  # 编辑联系我们文章
+@login_required
+def contact_edit(contact_id):
+    contact = Contact.query.get_or_404(contact_id)
+    form = EditContactForm()
+    if form.cancel.data:
+        return redirect(url_for('admin.contact_list'))
+    if form.validate_on_submit():
+        contact.title = form.title.data
+        contact.contact_category_id = form.contact_category.data
+        contact.content = form.content.data
+        contact.timestamp = datetime.utcnow()
+        db.session.commit()
+        flash('修改成功.', 'success')
+        return redirect(url_for('admin.contact_list'))
+    form.title.data = contact.title
+    form.contact_category.data = contact.contact_category_id
+    form.content.data = contact.content
+    return render_template('admin/contact_edit.html', contact=contact, form=form, show_contact_collapse=True)
+
+
+@admin_bp.route('/contact_delete/<int:contact_id>', methods=['POST'])  # 删除联系我们文章
+@login_required
+def contact_delete(contact_id):
+    contact = Contact.query.get_or_404(contact_id)
+    db.session.delete(contact)
+    db.session.commit()
+    flash('删除成功.', 'success')
+    return redirect(url_for('admin.contact_list'))
+
+
+@admin_bp.route('/contact_multiple_delete', methods=['POST'])  # 批量删除联系我们文章
+@login_required
+def contact_multiple_delete():
+    if request.method == 'POST':
+        selected_ids = request.form.getlist('item_ids')
+        for contact_id in selected_ids:
+            contact = Contact.query.get(contact_id)
+            db.session.delete(contact)
+        db.session.commit()
+        flash('批量删除成功.', 'success')
+        return redirect(url_for('admin.contact_list'))
+    return redirect(url_for('admin.contact_list'))
+
+
+@admin_bp.route('/contact/new', methods=['GET', 'POST'])  # 新建联系我们文章
+@login_required
+def contact_add():
+    form = ContactAddForm()
+    if form.validate_on_submit():
+        contact = Contact(
+            title=form.title.data,
+            contact_category_id=form.contact_category.data,
+            content=form.content.data,
+            timestamp=datetime.utcnow()
+        )
+        db.session.add(contact)
+        db.session.commit()
+        flash('添加成功.', 'success')
+        return redirect(url_for('admin.contact_list'))
+    return render_template('admin/contact_add.html', form=form, show_contact_collapse=True)
+
+
+@admin_bp.route('/contact_category_list', methods=['GET', 'POST'])  # 联系我们分类
+@login_required
+def contact_category_list():
+    contact_categories = ContactCategory.query.all()
+    form = AddContactCategoryForm()
+
+    if form.validate_on_submit():
+        contact_category = ContactCategory.query.filter_by(name=form.name.data.replace(' ', '')).first()
+        if contact_category:
+            flash('该分类已经存在', 'warning')
+            return redirect(url_for('admin.contact_category_list'))
+        else:
+            contact_category = ContactCategory(
+                name=form.name.data,
+                timestamp=datetime.utcnow()
+            )
+            db.session.add(contact_category)
+            db.session.commit()
+            flash('添加成功', 'success')
+            return redirect(url_for('admin.contact_category_list'))
+    return render_template('admin/contact_category_list.html', form=form, contact_categories=contact_categories,
+                           show_contact_collapse=True)
+
+
+@admin_bp.route('/contact_category_delete/<int:contact_category_id>', methods=['get', 'POST'])  # 删除联系我们分类
+@login_required
+def contact_category_delete(contact_category_id):
+    contact_category = ContactCategory.query.get_or_404(contact_category_id)
+    db.session.delete(contact_category)
+    db.session.commit()
+    flash('删除成功.', 'success')
+    return redirect(url_for('admin.contact_category_list'))
+
+
+@admin_bp.route('/contact_category_edit/<int:contact_category_id>', methods=['GET', 'POST'])  # 编辑联系我们分类
+@login_required
+def contact_category_edit(contact_category_id):
+    contact_category = ContactCategory.query.get_or_404(contact_category_id)
+    form = EditContactCategoryForm()
+    if form.validate_on_submit():
+        contact_category.name = form.name.data
+        contact_category.timestamp = datetime.utcnow()
+        db.session.commit()
+        flash('修改成功.', 'success')
+        return redirect(url_for('admin.contact_category_list'))
+    form.name.data = contact_category.name
+    return render_template('admin/contact_category_edit.html', contact_category=contact_category, form=form,
+                           show_contact_collapse=True)
+
+
+@admin_bp.route('/contact_status/<int:contact_id>', methods=['GET', 'POST'])  # 研发生产文章状态
+@login_required
+def contact_status(contact_id):
+    contact = Contact.query.get_or_404(contact_id)
+    contact.status = not contact.status
     db.session.commit()
     return redirect_back()
 

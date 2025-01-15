@@ -25,7 +25,7 @@ def show_news_category(news_category_id):
         return redirect(url_for('main.news'))
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BQ_NEWS_PER_PAGE']
-    pagination = News.query.with_parent(news_category).filter(NewsCategory.status == True).order_by(
+    pagination = News.query.with_parent(news_category).filter(News.status == True).order_by(
         News.timestamp.desc()).paginate(page=page,
                                         per_page=per_page)
     news_list = pagination.items
@@ -222,8 +222,12 @@ def honor():
 @main_bp.route('/contact/<int:contact_id>')
 # 联系我们
 def show_contact(contact_id):
-    show_con = Contact.query.get_or_404(contact_id)
-    return render_template('main/contact_detail.html', show_con=show_con)
+    show_contact = Contact.query.get_or_404(contact_id)
+    if contact_id == 2:
+        template_name = 'main/contact_cooperation.html'
+    else:
+        template_name = 'main/contact_detail.html'
+    return render_template(template_name, show_contact=show_contact)
 
 
 @main_bp.route('/research/<int:research_id>')

@@ -10,14 +10,16 @@
         <div class="news_bg_img"><img src="{{ url_for('static', filename='assets/img/bg_img01.png') }}"
                                       class="img-fluid" alt=""></div>
     </header>
-    <section class="page-section portfolio bg-light">
-        <div class="container pt-5">
+    <section class="page-section bg-light">
+        <div class="container">
             <div class="row">
                 {% include 'main/_sidebar_news.html' %}
-                <div class="col-lg-9 col-md-9 col-sm-12 row">
+                <div class="col-lg-9 col-md-9 col-sm-12 row mt-3 mb-5">
                     <nav aria-label="breadcrumb" class="p-1 bg-light">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ url_for('main.news') }}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">全部新闻</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_for('main.news') }}"
+                                                           class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">全部新闻</a>
+                            </li>
                             <li class="breadcrumb-item active" aria-current="page">全部新闻</li>
                         </ol>
                     </nav>
@@ -25,18 +27,22 @@
                     {% if all_news %}
                         {% for news in all_news %}
                             <div class="col-md-4 mb-3 col-sm-6">
-                                <div class="card hover-effect h-100"><a
-                                        href="{{ url_for('main.show_news', news_id=news.id) }}"><img src="{{ url_for('static', filename='assets/img/news/bangqi01.png') }}"
-                                         class="card-img-top" alt="..."></a>
+                                <div class="card hover-effect h-100">
+                                    <a href="{{ url_for('main.show_news', news_id=news.id) }}"><img
+                                            src="{{ url_for('static', filename='assets/img/news/bangqi01.png') }}"
+                                            class="card-img-top" alt="..."></a>
                                     <div class="card-body">
                                         <h6 class="card-title text-center"><a
-                                                href="{{ url_for('main.show_news', news_id=news.id) }}" class="link-dark link-offset-2 link-underline link-underline-opacity-0">{{ news.title|truncate(20) }}</a>
+                                                href="{{ url_for('main.show_news', news_id=news.id) }}"
+                                                class="link-dark link-offset-2 link-underline link-underline-opacity-0">{{ news.title|truncate(20) }}</a>
                                         </h6>
                                         <p class="card-text"><a
-                                                href="{{ url_for('main.show_news', news_id=news.id) }}" class="link-dark link-offset-2 link-underline link-underline-opacity-0">{{ news.content|truncate(60)|safe }}</a>
+                                                href="{{ url_for('main.show_news', news_id=news.id) }}"
+                                                class="link-dark link-offset-2 link-underline link-underline-opacity-0">{{ news.content|truncate(60)|safe }}</a>
                                         </p>
                                     </div>
-                                    <div class="card-footer"><span class="text-muted small">{{ moment(news.timestamp).format('lll') }}</span>
+                                    <div class="card-footer"><span
+                                            class="text-muted small">{{ moment(news.timestamp).format('lll') }}</span>
                                     </div>
                                 </div>
                             </div>

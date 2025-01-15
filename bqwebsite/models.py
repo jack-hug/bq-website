@@ -258,6 +258,7 @@ class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100))
     content = db.Column(db.Text)
+    status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     contact_category_id = db.Column(db.Integer, db.ForeignKey('contactcategory.id'))
@@ -268,6 +269,7 @@ class ContactCategory(db.Model):
     __tablename__ = 'contactcategory'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
+    status = db.Column(db.Boolean, default=True)
 
     contacts = db.relationship('Contact', back_populates='contact_category')
 

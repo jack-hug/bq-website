@@ -38,7 +38,8 @@
             </a>
         </div>
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#research-collapse"
-           role="button" aria-expanded="false" aria-controls="research-collapse"><i class="fa-solid fa-book-open"></i> 研发生产管理</a>
+           role="button" aria-expanded="false" aria-controls="research-collapse"><i class="fa-solid fa-book-open"></i>
+            研发生产管理</a>
         <div class="collapse {% if show_research_collapse %}show{% endif %}"
              id="research-collapse">
             <a class="list-group">
@@ -46,6 +47,18 @@
                    href="{{ url_for('admin.research_list') }}">&nbsp;&nbsp;&nbsp;文章编辑</a>
                 <a class="list-group-item {% if request.endpoint == 'admin.research_category_list' or request.endpoint == 'admin.research_category_edit' %}active{% endif %}"
                    href="{{ url_for('admin.research_category_list') }}">&nbsp;&nbsp;&nbsp;分类编辑</a>
+            </a>
+        </div>
+        <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#contact-collapse"
+           role="button" aria-expanded="false" aria-controls="contact-collapse"><i class="fa-solid fa-phone"></i>
+            联系我们管理</a>
+        <div class="collapse {% if show_contact_collapse %}show{% endif %}"
+             id="contact-collapse">
+            <a class="list-group">
+                <a class="list-group-item {% if request.endpoint == 'admin.contact_list' or request.endpoint == 'admin.contact_edit' or request.endpoint == 'admin.contact_add' %}active{% endif %}"
+                   href="{{ url_for('admin.contact_list') }}">&nbsp;&nbsp;&nbsp;文章编辑</a>
+                <a class="list-group-item {% if request.endpoint == 'admin.contact_category_list' or request.endpoint == 'admin.contact_category_edit' %}active{% endif %}"
+                   href="{{ url_for('admin.contact_category_list') }}">&nbsp;&nbsp;&nbsp;分类编辑</a>
             </a>
         </div>
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#photos-collapse"
@@ -64,7 +77,6 @@
                    href="{{ url_for('admin.index_photo_list') }}">&nbsp;&nbsp;&nbsp;首页其他图片</a>
             </a>
         </div>
-        <a class="list-group-item" href="#"><i class="fa-solid fa-phone"></i> 联系我们设置</a>
         <a class="list-group-item" href="#"><i class="fa-solid fa-user"></i> 管理员设置</a>
         <a class="list-group-item" href="#"><i class="fa-solid fa-gear"></i> 网站设置</a>
     </ul>
