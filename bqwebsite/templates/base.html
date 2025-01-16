@@ -63,7 +63,7 @@
                     </li>
                     <li class="nav-item mx-0 mx-lg-1">
                         <a class="nav-link py-1 px-0 px-lg-3 rounded {% block nav_contact %}{% endblock %}"
-                           href="{{ url_for('main.show_contact', contact_id=1) }}">联系我们
+                           href="{{ url_for('main.show_contact', contact_id=contact_categories[0].id) }}">联系我们
                         </a>
                     </li>
                 </ul>

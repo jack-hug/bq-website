@@ -193,7 +193,7 @@ class IntroduceCategory(db.Model):
     status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
-    introduces = db.relationship('Introduce', back_populates='introduce_category')
+    introduces = db.relationship('Introduce', back_populates='introduce_category', cascade='all, delete-orphan')
 
 class ResearchCategory(db.Model):
     # 研发生产分类
@@ -203,7 +203,7 @@ class ResearchCategory(db.Model):
     status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
-    researchs = db.relationship('Research', back_populates='research_category')
+    researchs = db.relationship('Research', back_populates='research_category', cascade='all, delete-orphan')
 
 
 class Research(db.Model):
@@ -271,7 +271,7 @@ class ContactCategory(db.Model):
     name = db.Column(db.String(100))
     status = db.Column(db.Boolean, default=True)
 
-    contacts = db.relationship('Contact', back_populates='contact_category')
+    contacts = db.relationship('Contact', back_populates='contact_category', cascade='all, delete-orphan')
 
 
 @event.listens_for(Photo, 'after_delete')

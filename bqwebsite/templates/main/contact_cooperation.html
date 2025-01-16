@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    {{ show_contact.title }}
+    {{ contact.title }}
 {% endblock %}
 {% block nav_contact %}active{% endblock %}
-{% set active_page = show_contact.contact_category.name %}
+{% set active_page = contact.contact_category.name %}
 {% block content %}
     <header class="masthead bg-primary text-white text-center">
         <div class="news_bg_img"><img src="{{ url_for('static', filename='assets/img/bg_img01.png') }}"
@@ -21,10 +21,10 @@
                             {{ message[1] }}
                         </div>
                     {% endfor %}
-                    <h3 class="text-center text-dark mt-5">{{ show_contact.title }}</h3>
-                    <p class="text-muted text-center"><small>发布时间：{{ moment(show_contact.timestamp).format('lll') }}</small></p>
+                    <h3 class="text-center text-dark mt-5">{{ contact.title }}</h3>
+                    <p class="text-muted text-center"><small>发布时间：{{ moment(contact.timestamp).format('lll') }}</small></p>
                     <hr>
-                    <p class="lh-lg text-start text-indent">{{ show_contact.content }}</p>
+                    <p class="lh-lg text-start text-indent">{{ contact.content|safe }}</p>
                     <hr class="mt-5">
                 </div>
             </div>

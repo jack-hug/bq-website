@@ -222,12 +222,23 @@ def honor():
 @main_bp.route('/contact/<int:contact_id>')
 # 联系我们
 def show_contact(contact_id):
-    show_contact = Contact.query.get_or_404(contact_id)
+    contact_categories = (
+        ContactCategory.query
+        .join(ContactCategory.contacts)
+        .filter(Contact.status == True)
+        .options(contains_eager(ContactCategory.contacts))
+        .order_by(ContactCategory.id.asc())
+        .all()
+    )
+    contact = Contact.query.filter_by(id=contact_id, status=True).first_or_404()
+    if not contact.status or not contact.contact_category.status:
+        flash('该分类不存在', 'warning')
+        return redirect(url_for('main.index'))
     if contact_id == 2:
         template_name = 'main/contact_cooperation.html'
     else:
         template_name = 'main/contact_detail.html'
-    return render_template(template_name, show_contact=show_contact)
+    return render_template(template_name, contact=contact, contact_categories=contact_categories)
 
 
 @main_bp.route('/research/<int:research_id>')

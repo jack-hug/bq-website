@@ -1,0 +1,90 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+    后台管理面板-联系我们分类列表
+{% endblock %}
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}"
+                                                       class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页</a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">联系我们管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">联系我们分类</li>
+                    </ol>
+                </nav>
+                <h4 class="text-center mb-3 mt-3">联系我们分类编辑</h4>
+                <hr>
+                <div class="p-3 bg-light border rounded d-flex justify-content-between align-items-center">
+                    <div class="row">
+                        <div class="col-auto">
+                            <form method="POST" action="{{ url_for('admin.contact_category_list') }}"
+                                  class="row align-items-center">
+                                {{ form.hidden_tag() }}
+                                <div class="col-auto">
+                                    {{ form.name(class="form-control") }}
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa-solid fa-plus"></i> {{ form.submit.label.text }}
+                                    </button>
+                                    <span id="contactcategory-name-error" class="mt-2 alert alert-danger error-message"
+                                          style="display: none;">
+                                </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        {% if contact_categories %}
+                            <table class="table table-striped table-hover border mt-3">
+                                <tr class="text-center">
+                                    <th>ID</th>
+                                    <th>分类名称</th>
+                                    <th>文章数量</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                {% for contact_category in contact_categories %}
+                                    <tbody>
+                                    <tr class="text-center">
+                                        <td>{{ contact_category.id }}</td>
+                                        <td>{{ contact_category.name }}</td>
+                                        <td>{{ contact_category.contacts|length }}</td>
+                                        <td>
+                                            {% if contact_category.status %}
+                                                <small class="text-bg-primary p-1 rounded">已发布</small>
+                                            {% else %}
+                                                <small class="text-bg-secondary p-1 rounded">已下架</small>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{{ url_for('admin.contact_category_edit', contact_category_id=contact_category.id) }}"
+                                               class="btn btn-sm btn-primary">
+                                                <i class="fa-solid fa-pen-to-square" title="编辑"></i>
+                                            </a>
+                                            <a href="{{ url_for('admin.contact_category_delete', contact_category_id=contact_category.id, next=request.full_path) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该分类？')">
+                                                <i class="fa-regular fa-trash-can" title="删除"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            <div class="alert alert-warning" role="alert">
+                                没有分类数据
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

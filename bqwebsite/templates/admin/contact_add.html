@@ -1,0 +1,55 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+    后台管理面板-添加联系我们文章
+{% endblock %}
+{% block head %}
+    {{ super() }}
+    {{ ckeditor.load(custom_url=url_for('static', filename='admin/ckeditor/ckeditor.js')) }}
+{% endblock %}
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('admin.index') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a href="{{ url_for('admin.contact_list') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">联系我们文章列表
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">添加文章</li>
+                    </ol>
+                </nav>
+                <h4 class="text-center mb-3 mt-3">添加文章</h4>
+                <hr>
+                <form method="POST" enctype="multipart/form-data" class="form" id="contact-form">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(class="form-control", id="contact-name") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.contact_category.label(class="form-label") }}
+                        {{ form.contact_category(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.content.label(class="form-label") }}
+                        {{ form.content(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.submit(class="btn btn-primary btn-md") }}
+                    </div>
+                </form>
+                {{ ckeditor.config(name='content') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

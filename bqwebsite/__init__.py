@@ -61,7 +61,7 @@ def register_template_context(app):
         news_categories = NewsCategory.query.filter(NewsCategory.status == True).order_by(NewsCategory.id.asc()).all()
         intro_categories = IntroduceCategory.query.filter(IntroduceCategory.status == True, IntroduceCategory.introduces != None, IntroduceCategory.introduces.any(status=True)).order_by(IntroduceCategory.id.asc()).all()
         research_categories = ResearchCategory.query.filter(ResearchCategory.status == True, ResearchCategory.researchs != None, ResearchCategory.researchs.any(status=True)).order_by(ResearchCategory.id.asc()).all()
-        contact_categories = ContactCategory.query.order_by(ContactCategory.id.asc()).all()
+        contact_categories = ContactCategory.query.filter(ContactCategory.status == True, ContactCategory.contacts != None, ContactCategory.contacts.any(status=True)).order_by(ContactCategory.id.asc()).all()
         hot_products = Product.query.filter(Product.clicks > 0, Product.status == True).order_by(
             Product.clicks.desc()).limit(15)
         return dict(admin=admin, categories=categories, subjects=subjects, brands=brands,

@@ -854,22 +854,6 @@ def research_category_status(research_category_id):
     return redirect_back()
 
 
-@admin_bp.route('/research_list', methods=['GET', 'POST'])  # 研发生产文章列表
-@login_required
-def research_list():
-    research = Research.query.all()
-    return render_template('admin/research_list.html', research=research, show_research_collapse=True)
-
-
-@admin_bp.route('/research_status/<int:research_id>', methods=['GET', 'POST'])  # 研发生产文章状态
-@login_required
-def research_status(research_id):
-    research = Research.query.get_or_404(research_id)
-    research.status = not research.status
-    db.session.commit()
-    return redirect_back()
-
-
 @admin_bp.route('/contact_list', methods=['GET', 'POST'])  # 研发生产文章列表
 @login_required
 def contact_list():
@@ -954,7 +938,6 @@ def contact_category_list():
         else:
             contact_category = ContactCategory(
                 name=form.name.data,
-                timestamp=datetime.utcnow()
             )
             db.session.add(contact_category)
             db.session.commit()
@@ -981,7 +964,6 @@ def contact_category_edit(contact_category_id):
     form = EditContactCategoryForm()
     if form.validate_on_submit():
         contact_category.name = form.name.data
-        contact_category.timestamp = datetime.utcnow()
         db.session.commit()
         flash('修改成功.', 'success')
         return redirect(url_for('admin.contact_category_list'))
@@ -1007,6 +989,7 @@ MODEL_MAP = {
     'news-category-input': NewsCategory,
     'intro-category-input': IntroduceCategory,
     'research-category-input': ResearchCategory,
+    'contact-category-input': ContactCategory,
 }
 
 
