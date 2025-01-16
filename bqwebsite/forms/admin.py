@@ -257,3 +257,8 @@ class AddContactCategoryForm(FlaskForm):
 class EditContactCategoryForm(FlaskForm):
     name = StringField('联系分类名称', validators=[DataRequired(), Length(1, 128)])
     submit = SubmitField('修改')
+
+
+class BannerAddForm(FlaskForm):
+    submit = SubmitField('添加轮播图')
+

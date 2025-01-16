@@ -10,11 +10,11 @@ from flask_login import current_user, login_user, login_required, logout_user
 
 from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory, Introduce, IntroduceCategory, \
-    ResearchCategory, Research, ContactCategory, Contact
+    ResearchCategory, Research, ContactCategory, Contact, Banner
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryForm, EditBrandForm, CategoryAddForm, \
     BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm, EditNewsForm, EditNewsCategoryForm, AddNewsCategoryForm, \
     EditIntroduceForm, IntroduceAddForm, AddIntroCategoryForm, EditIntroCategoryForm, EditResearchForm, ResearchAddForm, \
-    EditContactForm, ContactAddForm, AddContactCategoryForm, EditContactCategoryForm
+    EditContactForm, ContactAddForm, AddContactCategoryForm, EditContactCategoryForm, BannerAddForm
 from ..utils import random_filename, redirect_back, resize_image, save_temp_files
 
 admin_bp = Blueprint('admin', __name__)
@@ -557,7 +557,22 @@ def news_status(news_id):
 @admin_bp.route('/banner_photo_list', methods=['GET', 'POST'])  # 轮播图列表
 @login_required
 def banner_photo_list():
-    return render_template('admin/banner_photo_list.html')
+    banner = Banner.query.all()
+    return render_template('admin/banner_photo_list.html', banner=banner)
+
+
+@admin_bp.route('/banner_photo_add', methods=['POST'])  # 添加轮播图
+@login_required
+def banner_photo_add():
+    form = BannerAddForm()
+    if form.validate_on_submit():
+        banner = Banner(
+            timestamp=datetime.utcnow()
+        )
+        db.session.add(banner)
+        db.session.commit()
+        flash('添加成功.', 'success')
+        return redirect(url_for('admin.banner_photo_list'))
 
 
 @admin_bp.route('/scroll_photo_list', methods=['GET', 'POST'])  # 滚动图片列表

@@ -1,0 +1,201 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+    后台管理面板-Banner图片列表
+{% endblock %}
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}"
+                                                       class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首 页</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Banner图片列表</li>
+                    </ol>
+                </nav>
+                <h4 class="text-center mb-3 mt-3">图片列表</h4>
+                <hr>
+                <div class="p-3 bg-light border rounded d-flex justify-content-between align-items-center">
+                    <div class="row">
+                        <div class="col-auto">
+                            <a type="button" class="btn btn-primary" href="{{ url_for('admin.banner_add') }}"><i
+                                    class="fa-solid fa-plus"></i> 添加轮播图片
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <form action="{{ url_for('admin.banner_multiple_delete') }}" method="post"
+                                  id="delete-selected-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="button" class="btn btn-danger" id="delete-selected-button"><i
+                                        class="fa-solid fa-trash"></i> 批量删除
+                                </button>
+                            </form>
+                        </div>
+                        <form class="col-auto row" role="search">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <div class="col-md-auto">
+                                <input class="form-control me-2" type="search" placeholder="输入产品名称"
+                                       aria-label="Search">
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-outline-secondary" type="submit">搜 索</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <span>共有<strong> {{ products_length }} </strong>条产品数据</span>
+                    </div>
+                </div>
+                {% if products %}
+                    <table class="table table-striped border mt-3 text-center" id="productTable">
+                        <thead>
+                        <tr class="align-middle">
+                            <th>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value=""
+                                           id="all_products_check" name="item_ids">
+                                </div>
+                            </th>
+                            <th>ID</th>
+                            <th>缩略图</th>
+                            <th>产品名称</th>
+                            <th>功能主治</th>
+                            <th>剂型</th>
+                            <th>商标</th>
+                            <th>功能类别</th>
+                            <th>发布时间</th>
+                            <th>发布状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in products %}
+                            <tr class="align-middle">
+                                <td>
+                                    <div class="form-check">
+                                        <input class="form-check-input product-checkbox" type="checkbox"
+                                               value="{{ product.id }}"
+                                               name="item_ids">
+                                    </div>
+                                </td>
+                                <td>{{ loop.index + ((pagination.page - 1) * config.BQ_PRODUCT_PER_PAGE) }}</td>
+                                <td>
+                                    {% set photo = product.photos|first %}
+                                    {% if photo %}
+                                        <img src="{{ url_for('admin.get_image', filename=photo.filename_s) }}"
+                                             alt="{{ product.name }}" style="width:100px">
+                                    {% else %}
+                                        <p>暂无图片</p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('main.show_product', product_id=product.id) }}"
+                                       class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                       target="_blank">{{ product.name }}</a>
+                                </td>
+                                <td style="width:300px;"><p class="text-start">{{ product.product_indication }}</p></td>
+                                <td>{{ product.category.name }}</td>
+                                <td>{{ product.brand.name }}</td>
+                                <td>{{ product.subject.name }}</td>
+                                <td>{{ moment(product.timestamp).format('lll') }}</td>
+                                <td>
+                                    {% if product.status %}
+                                        <small class="text-bg-primary p-1 rounded">已发布</small>
+                                    {% else %}
+                                        <small class="text-bg-secondary p-1 rounded">已下架</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('admin.product_edit', product_id=product.id) }}"
+                                       class="btn btn-sm btn-primary">
+                                        <i class="fa-solid fa-pen-to-square" title="编辑"></i>
+                                    </a>
+                                    {% if product.status %}
+                                        <a href="{{ url_for('admin.product_status', product_id=product.id, next=request.full_path) }}"
+                                           class="btn btn-sm btn-secondary">
+                                            <i class="fa-solid fa-arrow-down" title="撤销"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ url_for('admin.product_status', product_id=product.id, next=request.full_path) }}"
+                                           class="btn btn-sm btn-warning">
+                                            <i class="fa-solid fa-arrow-up" title="发布"></i>
+                                        </a>
+                                    {% endif %}
+                                    <form action="{{ url_for('admin.product_delete', product_id=product.id, next=request.full_path) }}"
+                                          class="d-inline" method="post">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('确定要删除吗？')">
+                                            <i class="fa-regular fa-trash-can" title="删除"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <h3 class="mt-3 text-center">没有产品数据</h3>
+                {% endif %}
+                {% if products %}
+                    <div class="pt-2">
+                        {{ render_pagination(pagination, align='center', prev='上一页', next='下一页') }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        // 选中产品
+        document.getElementById('all_products_check').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('input[name="item_ids"]');
+            for (const checkbox of checkboxes) {
+                checkbox.checked = this.checked;
+            }
+        });
+        // 删除选中的产品
+        document.getElementById('delete-selected-button').addEventListener('click', function () {
+            const checkboxes = document.querySelectorAll('.product-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('请选择要删除的产品');
+                return;
+            }
+            if (!confirm('确定要删除选中的产品吗？')) {
+                return;
+            }
+
+            const form = document.getElementById('delete-selected-form');
+            if (!form) {
+                alert('找不到删除表单');
+                return;
+            }
+
+            // 移除之前可能存在的隐藏输入
+            const existingHiddenInputs = form.querySelectorAll('input[name="item_ids"]');
+            existingHiddenInputs.forEach(input => form.removeChild(input));
+
+            // 为每个选中的复选框创建一个隐藏输入
+            checkboxes.forEach(function (checkbox) {
+                const hidden_input = document.createElement('input');
+                hidden_input.type = 'hidden';
+                hidden_input.name = 'item_ids';
+                hidden_input.value = checkbox.value;
+                form.appendChild(hidden_input);
+            });
+
+            try {
+                form.submit();
+            } catch (error) {
+                alert('提交失败');
+                console.error(error);
+            }
+        });
+    </script>
+{% endblock %}
