@@ -71,7 +71,7 @@
                                 <td><a href="{{ url_for('main.show_intro', intro_id=intro.id) }}"
                                        class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                        target="_blank">{{ intro.title }}</a></td>
-                                <td>{{ intro.introduce_content|safe|truncate(30) }}</td>
+                                <td>{{ intro.introduce_content|striptags|truncate(30) }}</td>
                                 <td>{{ intro.introduce_category.name }}</td>
                                 <td>{{ moment(intro.timestamp).format('lll') }}</td>
                                 <td>{{ intro.clicks }}</td>

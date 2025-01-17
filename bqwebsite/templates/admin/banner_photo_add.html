@@ -1,0 +1,89 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+    后台管理面板-添加Banner图片
+{% endblock %}
+{% block active_banner %}active{% endblock %}
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('admin.index') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首 页
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a href="{{ url_for('admin.banner_photo_list') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Banner列表
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">添加Banner图片</li>
+                    </ol>
+                </nav>
+                <h4 class="text-center mb-3 mt-3">添加Banner图片</h4>
+                <hr>
+                <div class="mb-3">
+                    <label for="dropzone" class="form-label">拖拽图片到框内或点击框内上传:</label>
+                    <div class="dropzone" id="my-dropzone"></div>
+                </div>
+                <div class="mb-3">
+                    <a href="{{ url_for('admin.banner_photo_list') }}"
+                       class="btn btn-primary">完 成</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        // dropzone设置
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone("#my-dropzone", {
+            paramName: "file",
+            url: "{{ url_for('admin.banner_photo_add') }}",
+            method: "POST",
+            maxFiles: 10,
+            maxFilesize: 5,
+            acceptedFiles: "image/*",
+            addRemoveLinks: true,
+            dictRemoveFile: "删 除",
+            dictDefaultMessage: "拖拽图片到框内或点击上传",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token() }}"
+            },
+            init: function () {
+                this.on("success", function (file, response) {
+                    // 假设服务器返回的响应中包含文件的 ID
+                    file.serverId = response.file_id;
+                });
+
+                this.on("removedfile", function (file) {
+                    if (file.serverId) {
+                        // 发送删除请求
+                        fetch(`/admin/dropzone_photo_delete/${file.serverId}`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRFToken": "{{ csrf_token() }}"
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data.message);
+                            })
+                            .catch(error => {
+                                console.error("删除失败:", error);
+                            });
+                    } else {
+                        console.error("文件 ID 未找到");
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}
+

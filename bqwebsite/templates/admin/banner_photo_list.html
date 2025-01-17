@@ -11,7 +11,8 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}"
-                                                       class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首 页</a>
+                                                       class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首
+                            页</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Banner图片列表</li>
                     </ol>
@@ -21,9 +22,10 @@
                 <div class="p-3 bg-light border rounded d-flex justify-content-between align-items-center">
                     <div class="row">
                         <div class="col-auto">
-                            <a type="button" class="btn btn-primary" href="{{ url_for('admin.banner_add') }}"><i
-                                    class="fa-solid fa-plus"></i> 添加轮播图片
-                            </a>
+
+                                <a type="submit" class="btn btn-primary" href="{{ url_for('admin.banner_photo_add') }}"><i
+                                        class="fa-solid fa-plus"></i> 添加轮播图片
+                                </a>
                         </div>
                         <div class="col-auto">
                             <form action="{{ url_for('admin.banner_multiple_delete') }}" method="post"
@@ -34,97 +36,64 @@
                                 </button>
                             </form>
                         </div>
-                        <form class="col-auto row" role="search">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <div class="col-md-auto">
-                                <input class="form-control me-2" type="search" placeholder="输入产品名称"
-                                       aria-label="Search">
-                            </div>
-                            <div class="col-auto">
-                                <button class="btn btn-outline-secondary" type="submit">搜 索</button>
-                            </div>
-                        </form>
                     </div>
                     <div>
-                        <span>共有<strong> {{ products_length }} </strong>条产品数据</span>
+                        <span>共有<strong> {{ banner|length }} </strong>个Banner图片</span>
                     </div>
                 </div>
-                {% if products %}
-                    <table class="table table-striped border mt-3 text-center" id="productTable">
+                {% if banner %}
+                    <table class="table table-striped border mt-3 text-center" id="bannerTable">
                         <thead>
                         <tr class="align-middle">
                             <th>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value=""
-                                           id="all_products_check" name="item_ids">
+                                           id="all_banner_check" name="item_ids">
                                 </div>
                             </th>
                             <th>ID</th>
                             <th>缩略图</th>
-                            <th>产品名称</th>
-                            <th>功能主治</th>
-                            <th>剂型</th>
-                            <th>商标</th>
-                            <th>功能类别</th>
                             <th>发布时间</th>
                             <th>发布状态</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {% for product in products %}
+                        {% for banner in banner %}
                             <tr class="align-middle">
                                 <td>
                                     <div class="form-check">
-                                        <input class="form-check-input product-checkbox" type="checkbox"
-                                               value="{{ product.id }}"
+                                        <input class="form-check-input banner-checkbox" type="checkbox"
+                                               value="{{ banner.id }}"
                                                name="item_ids">
                                     </div>
                                 </td>
-                                <td>{{ loop.index + ((pagination.page - 1) * config.BQ_PRODUCT_PER_PAGE) }}</td>
+                                <td>{{ banner.id }}</td>
                                 <td>
-                                    {% set photo = product.photos|first %}
-                                    {% if photo %}
-                                        <img src="{{ url_for('admin.get_image', filename=photo.filename_s) }}"
-                                             alt="{{ product.name }}" style="width:100px">
-                                    {% else %}
-                                        <p>暂无图片</p>
-                                    {% endif %}
+                                    <img src="{{ url_for('admin.get_image', filename=banner.filename) }}"
+                                         alt="{{ banner.name }}" style="width:200px">
                                 </td>
+                                <td>{{ moment(banner.timestamp).format('lll') }}</td>
                                 <td>
-                                    <a href="{{ url_for('main.show_product', product_id=product.id) }}"
-                                       class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                       target="_blank">{{ product.name }}</a>
-                                </td>
-                                <td style="width:300px;"><p class="text-start">{{ product.product_indication }}</p></td>
-                                <td>{{ product.category.name }}</td>
-                                <td>{{ product.brand.name }}</td>
-                                <td>{{ product.subject.name }}</td>
-                                <td>{{ moment(product.timestamp).format('lll') }}</td>
-                                <td>
-                                    {% if product.status %}
+                                    {% if banner.status %}
                                         <small class="text-bg-primary p-1 rounded">已发布</small>
                                     {% else %}
                                         <small class="text-bg-secondary p-1 rounded">已下架</small>
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <a href="{{ url_for('admin.product_edit', product_id=product.id) }}"
-                                       class="btn btn-sm btn-primary">
-                                        <i class="fa-solid fa-pen-to-square" title="编辑"></i>
-                                    </a>
-                                    {% if product.status %}
-                                        <a href="{{ url_for('admin.product_status', product_id=product.id, next=request.full_path) }}"
+                                    {% if banner.status %}
+                                        <a href="{{ url_for('admin.banner_photo_status', banner_id=banner.id, next=request.full_path) }}"
                                            class="btn btn-sm btn-secondary">
                                             <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                         </a>
                                     {% else %}
-                                        <a href="{{ url_for('admin.product_status', product_id=product.id, next=request.full_path) }}"
+                                        <a href="{{ url_for('admin.banner_photo_status', banner_id=banner.id, next=request.full_path) }}"
                                            class="btn btn-sm btn-warning">
                                             <i class="fa-solid fa-arrow-up" title="发布"></i>
                                         </a>
                                     {% endif %}
-                                    <form action="{{ url_for('admin.product_delete', product_id=product.id, next=request.full_path) }}"
+                                    <form action="{{ url_for('admin.banner_photo_delete', banner_id=banner.id, next=request.full_path) }}"
                                           class="d-inline" method="post">
                                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                         <button type="submit" class="btn btn-sm btn-danger"
@@ -138,12 +107,7 @@
                         </tbody>
                     </table>
                 {% else %}
-                    <h3 class="mt-3 text-center">没有产品数据</h3>
-                {% endif %}
-                {% if products %}
-                    <div class="pt-2">
-                        {{ render_pagination(pagination, align='center', prev='上一页', next='下一页') }}
-                    </div>
+                    <h3 class="mt-3 text-center">没有Banner图片</h3>
                 {% endif %}
             </div>
         </div>
@@ -154,7 +118,7 @@
     {{ super() }}
     <script>
         // 选中产品
-        document.getElementById('all_products_check').addEventListener('change', function () {
+        document.getElementById('all_banner_check').addEventListener('change', function () {
             const checkboxes = document.querySelectorAll('input[name="item_ids"]');
             for (const checkbox of checkboxes) {
                 checkbox.checked = this.checked;
@@ -162,7 +126,7 @@
         });
         // 删除选中的产品
         document.getElementById('delete-selected-button').addEventListener('click', function () {
-            const checkboxes = document.querySelectorAll('.product-checkbox:checked');
+            const checkboxes = document.querySelectorAll('.banner-checkbox:checked');
             if (checkboxes.length === 0) {
                 alert('请选择要删除的产品');
                 return;

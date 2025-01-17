@@ -561,18 +561,81 @@ def banner_photo_list():
     return render_template('admin/banner_photo_list.html', banner=banner)
 
 
-@admin_bp.route('/banner_photo_add', methods=['POST'])  # 添加轮播图
+@admin_bp.route('/banner_photo_add', methods=['GET', 'POST'])  # 添加轮播图
 @login_required
 def banner_photo_add():
-    form = BannerAddForm()
-    if form.validate_on_submit():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return jsonify({"error": "没有文件上传"}), 400
+
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"error": "没有选择文件"}), 400
+
+        # 保存文件到服务器
+        filename = random_filename(file.filename)
+        file_path = os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename)
+        file.save(file_path)
+
+        # 将文件信息保存到数据库
         banner = Banner(
+            filename=filename,
             timestamp=datetime.utcnow()
         )
         db.session.add(banner)
         db.session.commit()
-        flash('添加成功.', 'success')
+
+        # 返回文件 ID
+        return jsonify({"file_id": banner.id}), 200
+
+    return render_template('admin/banner_photo_add.html', show_banner_collapse=True)
+
+
+@admin_bp.route('/banner_photo_delete/<int:banner_id>', methods=['POST'])
+@login_required
+def banner_photo_delete(banner_id):
+    banner = Banner.query.get_or_404(banner_id)
+    db.session.delete(banner)
+    db.session.commit()
+    flash('删除成功.', 'success')
+    return redirect(url_for('admin.banner_photo_list'))
+
+@admin_bp.route('/banner_multiple_delete', methods=['GET', 'POST'])
+@login_required
+def banner_multiple_delete():
+    if request.method == 'POST':
+        selected_ids = request.form.getlist('item_ids')
+        for banner_id in selected_ids:
+            banner = Banner.query.get(banner_id)
+            db.session.delete(banner)
+        db.session.commit()
+        flash('批量删除成功.', 'success')
         return redirect(url_for('admin.banner_photo_list'))
+    return redirect(url_for('admin.banner_photo_list'))
+
+
+@admin_bp.route('/banner_status/<int:banner_id>', methods=['GET', 'POST'])
+@login_required
+def banner_photo_status(banner_id):
+    banner = Banner.query.get_or_404(banner_id)
+    banner.status = not banner.status
+    db.session.commit()
+    return redirect_back()
+
+
+@admin_bp.route('/dropzone_photo_delete/<int:banner_id>', methods=['DELETE'])  # 在dropzone中删除图片
+def dropzone_photo_delete(banner_id):
+    banner = Banner.query.get_or_404(banner_id)
+    if not banner:
+        return jsonify({'error': '没有图片可以删除'}), 404
+
+    file_path = os.path.join(current_app.config['BQ_UPLOAD_PATH'], banner.filename.split('/')[-1])
+    if os.path.exists(file_path):
+        os.remove(file_path)
+    db.session.delete(banner)
+    db.session.commit()
+
+    return jsonify({'message': '删除成功'}), 200
 
 
 @admin_bp.route('/scroll_photo_list', methods=['GET', 'POST'])  # 滚动图片列表
@@ -1019,3 +1082,4 @@ def check_category_name():
 
     exists = model.query.filter_by(name=name).first() is not None
     return jsonify({'exists': exists})
+

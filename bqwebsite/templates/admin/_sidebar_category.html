@@ -67,7 +67,7 @@
         <div class="collapse{% if request.endpoint == 'admin.banner_photo_list' or request.endpoint == 'admin.scroll_photo_list' or request.endpoint == 'admin.category_photo_list' %}show{% endif %}"
              id="photos-collapse">
             <a class="list-group">
-                <a class="list-group-item {% if request.endpoint == 'admin.banner_photo_list' %}active{% endif %}"
+                <a class="list-group-item {% if request.endpoint.startswith('admin.banner_photo_') %}active{% endif %}"
                    href="{{ url_for('admin.banner_photo_list') }}">&nbsp;&nbsp;&nbsp;Banner轮播图片</a>
                 <a class="list-group-item {% if request.endpoint == 'admin.scroll_photo_list' %}active{% endif %}"
                    href="{{ url_for('admin.scroll_photo_list') }}">&nbsp;&nbsp;&nbsp;首页滚动图片</a>

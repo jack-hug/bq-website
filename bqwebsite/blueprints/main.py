@@ -13,7 +13,8 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 # 主页
 def index():
-    return render_template('main/index.html')
+    banner = Banner.query.all()
+    return render_template('main/index.html', banner=banner)
 
 
 @main_bp.route('/news-category/<int:news_category_id>')
@@ -256,6 +257,10 @@ def show_research(research_id):
     return render_template('main/research_detail.html', research=research, research_categories=research_categories)
 
 
-@main_bp.route('/uploads/<int:filename>')  # 获得图片链接
+@main_bp.route('/uploads/<path:filename>')  # 获得上传图片
 def get_image(filename):
+    upload_path = current_app.config['BQ_UPLOAD_PATH']
+    file_path = os.path.join(upload_path, filename)
+    if not os.path.exists(file_path):
+        return '图片不存在', 404
     return send_from_directory(current_app.config['BQ_UPLOAD_PATH'], filename)
