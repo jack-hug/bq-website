@@ -10,11 +10,11 @@ from flask_login import current_user, login_user, login_required, logout_user
 
 from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory, Introduce, IntroduceCategory, \
-    ResearchCategory, Research, ContactCategory, Contact, Banner
+    ResearchCategory, Research, ContactCategory, Contact, Banner, IndexAbout
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryForm, EditBrandForm, CategoryAddForm, \
     BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm, EditNewsForm, EditNewsCategoryForm, AddNewsCategoryForm, \
     EditIntroduceForm, IntroduceAddForm, AddIntroCategoryForm, EditIntroCategoryForm, EditResearchForm, ResearchAddForm, \
-    EditContactForm, ContactAddForm, AddContactCategoryForm, EditContactCategoryForm, BannerAddForm
+    EditContactForm, ContactAddForm, AddContactCategoryForm, EditContactCategoryForm, BannerAddForm, IndexAboutForm
 from ..utils import random_filename, redirect_back, resize_image, save_temp_files
 
 admin_bp = Blueprint('admin', __name__)
@@ -1057,6 +1057,30 @@ def contact_status(contact_id):
     contact.status = not contact.status
     db.session.commit()
     return redirect_back()
+
+@admin_bp.route('/index_about', methods=['GET', 'POST'])
+@login_required
+def index_about():
+    form = IndexAboutForm()
+    if form.cancel.data:
+        return redirect(url_for('admin.index_about'))
+    if form.validate_on_submit():
+        index_about = IndexAbout.query.first()
+        if index_about:
+            index_about.title = form.title.data
+            index_about.content = form.content.data
+            db.session.commit()
+            flash('修改成功.', 'success')
+            return redirect(url_for('admin.index_about'))
+        else:
+            index_about = IndexAbout(
+                title=form.title.data,
+                content=form.content.data,
+            )
+    form.title.data = IndexAbout.query.first().title
+    form.content.data = IndexAbout.query.first().content
+    return render_template('admin/index_about.html', form=form)
+
 
 
 # 类型与数据表的映射

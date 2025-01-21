@@ -262,3 +262,9 @@ class EditContactCategoryForm(FlaskForm):
 class BannerAddForm(FlaskForm):
     submit = SubmitField('添加轮播图')
 
+class IndexAboutForm(FlaskForm):
+    title = StringField('标 题', validators=[DataRequired(), Length(1, 128)])
+    content = CKEditorField('简介内容:', validators=[DataRequired()])
+    submit = SubmitField('修 改')
+    cancel = SubmitField('取 消')
+

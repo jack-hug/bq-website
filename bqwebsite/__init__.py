@@ -4,13 +4,14 @@ import os
 from flask import Flask, render_template, jsonify
 from flask_wtf.csrf import CSRFError
 from sqlalchemy import or_
+from sqlalchemy.orm import contains_eager
 
 from .blueprints.main import main_bp
 from .blueprints.admin import admin_bp
 from .config import config
 from .extensions import bootstrap, db, csrf, login_manager, ckeditor, migrate, moment
 from .models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
-    IntroduceCategory, Admin, Subject, ContactCategory, ResearchCategory, Research
+    IntroduceCategory, Admin, Subject, ContactCategory, ResearchCategory, Research, Contact
 from .utils import clean_temp_folder
 
 
@@ -59,9 +60,30 @@ def register_template_context(app):
         brands = Brand.query.order_by(Brand.id.asc()).all()
         all_news_limit = News.query.filter(News.status == True).order_by(News.clicks.desc()).limit(10).all()
         news_categories = NewsCategory.query.filter(NewsCategory.status == True).order_by(NewsCategory.id.asc()).all()
-        intro_categories = IntroduceCategory.query.filter(IntroduceCategory.status == True, IntroduceCategory.introduces != None, IntroduceCategory.introduces.any(status=True)).order_by(IntroduceCategory.id.asc()).all()
-        research_categories = ResearchCategory.query.filter(ResearchCategory.status == True, ResearchCategory.researchs != None, ResearchCategory.researchs.any(status=True)).order_by(ResearchCategory.id.asc()).all()
-        contact_categories = ContactCategory.query.filter(ContactCategory.status == True, ContactCategory.contacts != None, ContactCategory.contacts.any(status=True)).order_by(ContactCategory.id.asc()).all()
+        intro_categories = (
+            IntroduceCategory.query
+            .join(IntroduceCategory.introduces)
+            .filter(Introduce.status == True)
+            .options(contains_eager(IntroduceCategory.introduces))
+            .order_by(IntroduceCategory.id.asc())
+            .all()
+        )
+        research_categories = (
+            ResearchCategory.query
+            .join(ResearchCategory.researchs)
+            .filter(Research.status == True)
+            .options(contains_eager(ResearchCategory.researchs))
+            .order_by(ResearchCategory.id.asc())
+            .all()
+        )
+        contact_categories = (
+            ContactCategory.query
+            .join(ContactCategory.contacts)
+            .filter(Contact.status == True)
+            .options(contains_eager(ContactCategory.contacts))
+            .order_by(ContactCategory.id.asc())
+            .all()
+        )
         hot_products = Product.query.filter(Product.clicks > 0, Product.status == True).order_by(
             Product.clicks.desc()).limit(15)
         return dict(admin=admin, categories=categories, subjects=subjects, brands=brands,
@@ -127,7 +149,7 @@ def register_commands(app):
     def forge(product, news, introduce, contact, photo, research):
         from .fakes import fake_categories, admin, fake_products, news_categories, fake_news, intro_category, \
             fake_intro, fake_brand, fake_subject, contact_categories, fake_contact, fake_photo, research_category, \
-            fake_research
+            fake_research, fake_index_about
 
         click.echo('Drop tables....')
         db.drop_all()
@@ -169,5 +191,8 @@ def register_commands(app):
         click.echo('Generating intro_categories and %d introduce...' % introduce)
         intro_category()
         fake_intro(introduce)
+
+        click.echo('Generating index_about...')
+        fake_index_about()
 
         click.echo('Done!')

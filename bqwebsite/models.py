@@ -274,6 +274,17 @@ class ContactCategory(db.Model):
     contacts = db.relationship('Contact', back_populates='contact_category', cascade='all, delete-orphan')
 
 
+class IndexAbout(db.Model):
+    # 首页企业概况
+    __tablename__ = 'indexabout'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(100))
+    content = db.Column(db.Text)
+    status = db.Column(db.Boolean, default=True)
+    images = db.Column(db.String(200), nullable=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+
 @event.listens_for(Photo, 'after_delete')
 def photo_delete_files(mapper, connection, target):
     target.photos_delete()

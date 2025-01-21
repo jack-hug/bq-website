@@ -63,14 +63,14 @@
         </div>
         <a class="list-group-item has-submenu collapsed" data-bs-toggle="collapse" href="#photos-collapse"
            role="button"
-           aria-expanded="false" aria-controls="news-collapse"><i class="fa-solid fa-image"></i> 图片管理</a>
-        <div class="collapse{% if request.endpoint == 'admin.banner_photo_list' or request.endpoint == 'admin.scroll_photo_list' or request.endpoint == 'admin.category_photo_list' %}show{% endif %}"
+           aria-expanded="false" aria-controls="news-collapse"><i class="fa-solid fa-house-user"></i> 首页管理</a>
+        <div class="collapse{% if request.endpoint.startswith('admin.banner_photo_') or request.endpoint == 'admin.index_about' or request.endpoint == 'admin.category_photo_list' %}show{% endif %}"
              id="photos-collapse">
             <a class="list-group">
                 <a class="list-group-item {% if request.endpoint.startswith('admin.banner_photo_') %}active{% endif %}"
                    href="{{ url_for('admin.banner_photo_list') }}">&nbsp;&nbsp;&nbsp;Banner轮播图片</a>
-                <a class="list-group-item {% if request.endpoint == 'admin.scroll_photo_list' %}active{% endif %}"
-                   href="{{ url_for('admin.scroll_photo_list') }}">&nbsp;&nbsp;&nbsp;首页滚动图片</a>
+                <a class="list-group-item {% if request.endpoint == 'admin.index_about' %}active{% endif %}"
+                   href="{{ url_for('admin.index_about') }}">&nbsp;&nbsp;&nbsp;公司介绍</a>
                 <a class="list-group-item {% if request.endpoint == 'admin.category_photo_list' %}active{% endif %}"
                    href="{{ url_for('admin.category_photo_list') }}">&nbsp;&nbsp;&nbsp;首页剂型图片</a>
                 <a class="list-group-item {% if request.endpoint == 'admin.index_photo_list' %}active{% endif %}"

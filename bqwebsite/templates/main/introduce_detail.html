@@ -19,7 +19,7 @@
                     <p class="text-muted text-center">
                         <small>发布时间：{{ moment(intro.timestamp).format('lll') }}</small></p>
                     <hr>
-                    <p class="lh-lg text-start text-indent">{{ intro.introduce_content|safe }}</p>
+                    <p class="lh-lg text-start text-indent">{{ intro.introduce_content|replace("<img", "<img class='img-fluid h-100'")|safe }}</p>
                     <hr class="mt-5">
                 </div>
             </div>

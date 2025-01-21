@@ -8,7 +8,7 @@ from faker.providers import DynamicProvider
 from flask import current_app
 
 from .models import Admin, Category, Product, NewsCategory, News, IntroduceCategory, Introduce, Subject, Brand, \
-    Contact, ContactCategory, Photo, ResearchCategory, Research
+    Contact, ContactCategory, Photo, ResearchCategory, Research, IndexAbout
 from .extensions import db
 from .utils import generate_gradient_image
 
@@ -247,4 +247,13 @@ def fake_contact(count=3):
             contact_category=ContactCategory.query.get(i + 1)
         )
         db.session.add(contact)
+    db.session.commit()
+
+def fake_index_about():
+    index_about = IndexAbout(
+        title='邦琪集团',
+        content='广西邦琪药业集团有限公司是一家已有20多年的发展历史的民营制药企业，连续入榜广西民营制造业百强、广西高新技术企业百强行列，是广西优秀企业，是集科研、生产、销售、服务为一体的综合性企业集团。集团公司旗下现有10多家子公司，包括金鸡药业、百琪药业、葛洪堂药业、邦琪医药、泰和制药等多家医药企业。集团公司在药品的生产销售和药品研发方面有较强的特色和优势，产品资源相当丰富，药品生产批文号350多个，独家品种35个（其中10个有新药证书）。主要产品有桂龙药膏、复方鱼腥草颗粒、金鸡胶囊、五参安神口服液、罗汉果止咳膏、黄荆油胶丸、抗宫炎颗粒、三参益气口服液、参芪首乌补汁、咳喘停膏等品种。公司拥有煎膏剂、片剂、胶囊剂、颗粒剂、口服溶液剂等19个剂型现代化生产线。拥有多项自主知识产权的专利技术，核心竞争力优势明显。公司的产品销售在全国市场具有较广泛的影响力，产品销售网络覆盖全国30个省、市、自治区，与医药分销渠道始终保持良好的合作关系，网络涵括临床、大连锁药店、OTC等销售渠道，产品覆盖全国主要大中城市。',
+        timestamp=fake.date_time_this_year()
+    )
+    db.session.add(index_about)
     db.session.commit()

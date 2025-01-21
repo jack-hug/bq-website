@@ -207,6 +207,7 @@ def show_intro(intro_id):
         .order_by(IntroduceCategory.id.asc())
         .all()
     )
+
     intro = Introduce.query.filter_by(id=intro_id, status=True).first_or_404()
     if not intro.status or not intro.introduce_category.status:
         flash('该介绍不存在', 'warning')

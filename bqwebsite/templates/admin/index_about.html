@@ -1,0 +1,82 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+    后台管理面板-编辑首页公司信息
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            {% include 'admin/_sidebar_category.html' %}
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('admin.index') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首 页
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a href="{{ url_for('admin.banner_photo_list') }}"
+                               class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">首页管理
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">编辑首页公司信息</li>
+                    </ol>
+                </nav>
+                <h4 class="text-center mb-3 mt-3">编辑首页公司信息</h4>
+                <hr>
+                <form method="POST" enctype="multipart/form-data" class="form" id="about-form">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(class="form-control", id="about-name") }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="dropzone" class="form-label">图片:</label>
+                        <div class="dropzone" id="my-dropzone"></div>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.content.label(class="form-label") }}
+                        {{ form.content(class="form-control") }}
+                        {{ ckeditor.load(custom_url=url_for('static', filename='admin/ckeditor/ckeditor.js')) }}
+                        {{ ckeditor.config(name='content') }}
+                    </div>
+                    <div class="mb-3">
+                        <input type="hidden" name="temp_files" id="temp_files">
+                        {{ form.submit(class="btn btn-primary btn-md") }}
+                        {{ form.cancel(class="btn btn-secondary btn-md") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        // 获取 CSRF Token
+        function getCsrfToken() {
+            return "{{ csrf_token() }}";
+        }
+
+        // dropzone设置
+        const deletedPhotos = [];
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone("#my-dropzone", {
+            paramName: "file",
+            url: "",
+            method: "POST",
+            headers: {
+                'X-CSRF-Token': getCsrfToken()  // 添加 CSRF Token 到请求头
+            },
+            maxFiles:3,
+            maxFilesize: 5,
+            acceptedFiles: "image/*",
+            addRemoveLinks: true,
+            dictRemoveFile: "删 除",
+            dictDefaultMessage: "拖拽图片到框内或点击上传",
+        });
+    </script>
+{% endblock %}
+
