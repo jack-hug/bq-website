@@ -61,21 +61,95 @@
         }
 
         // dropzone设置
-        const deletedPhotos = [];
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone("#my-dropzone", {
             paramName: "file",
-            url: "",
+            url: "{{ url_for('admin.dropzone_photo_upload') }}",
             method: "POST",
             headers: {
                 'X-CSRF-Token': getCsrfToken()  // 添加 CSRF Token 到请求头
             },
-            maxFiles:3,
+            maxFiles: 5,
             maxFilesize: 5,
             acceptedFiles: "image/*",
             addRemoveLinks: true,
             dictRemoveFile: "删 除",
             dictDefaultMessage: "拖拽图片到框内或点击上传",
+            init: function () {
+                // 获取已上传的文件列表
+                fetch("{{ url_for('admin.get_uploaded_files') }}")
+                    .then(response => response.json())
+                    .then(data => {
+                        data.files.forEach(file => {
+                            // 使用 mockFile 方法将已上传的文件显示在 Dropzone 中
+                            const mockFile = {
+                                name: file,
+                                size: 0, // 文件大小（如果需要可以动态获取）
+                                accepted: true
+                            };
+                            this.emit("addedfile", mockFile);
+                            this.emit("thumbnail", mockFile, "{{ url_for('admin.get_image', filename='') }}" + file); // 设置缩略图
+                            this.emit("complete", mockFile);
+                            mockFile.uploadedFileName = file; // 存储文件名，用于删除时使用
+                        });
+                    });
+
+                // 新文件添加时的处理
+                this.on('addedfile', function (file) {
+                    // 隐藏默认消息
+                    this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                });
+                // 新文件上传成功后的处理
+                this.on('success', function (file, response) {
+                    const tempFiles = document.getElementById('temp_files');
+                    let files = tempFiles.value ? JSON.parse(tempFiles.value) : [];
+                    files.push(response.filename);
+                    tempFiles.value = JSON.stringify(files);
+
+                    file.uploadedFileName = response.filename;
+                });
+                // 删除文件时的处理
+                this.on('removedfile', function (file) {
+                    const tempFiles = document.getElementById('temp_files');
+                    let files = tempFiles.value ? JSON.parse(tempFiles.value) : [];
+                    files = files.filter(f => f !== file.uploadedFileName);
+                    tempFiles.value = JSON.stringify(files);
+
+                    // 向后端发送请求删除服务器上的文件
+                    fetch("{{ url_for('admin.delete_uploaded_file') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token() }}" // 如果需要 CSRF 保护
+                        },
+                        body: JSON.stringify({filename: file.uploadedFileName})
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log("文件已从服务器删除");
+                            } else {
+                                console.error("删除文件失败");
+                            }
+                        });
+
+                    // 检查 Dropzone 中剩余的文件数量
+                    if (this.files.length === 0) {
+                        // 如果没有文件，显示默认消息
+                        this.element.querySelector('.dz-default.dz-message').style.display = 'block';
+                    } else {
+                        // 如果有文件，隐藏默认消息
+                        this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                    }
+
+                });
+
+                // 初始化时检查文件数量
+                if (this.files.length > 0) {
+                    this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                } else {
+                    this.element.querySelector('.dz-default.dz-message').style.display = 'block';
+                }
+            }
         });
     </script>
 {% endblock %}

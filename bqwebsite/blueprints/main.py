@@ -5,7 +5,7 @@ from flask import render_template, request, redirect, url_for, Blueprint, curren
 from sqlalchemy.orm import joinedload, contains_eager
 
 from ..models import Category, Product, News, Brand, Honor, Banner, Introduce, Photo, NewsCategory, \
-    IntroduceCategory, Contact, ContactCategory, Subject, Research, ResearchCategory
+    IntroduceCategory, Contact, ContactCategory, Subject, Research, ResearchCategory, IndexAbout
 
 main_bp = Blueprint('main', __name__)
 
@@ -14,7 +14,8 @@ main_bp = Blueprint('main', __name__)
 # 主页
 def index():
     banner = Banner.query.all()
-    return render_template('main/index.html', banner=banner)
+    index_about = IndexAbout.query.first()
+    return render_template('main/index.html', banner=banner, index_about=index_about)
 
 
 @main_bp.route('/news-category/<int:news_category_id>')

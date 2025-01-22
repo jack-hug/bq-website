@@ -90,7 +90,7 @@
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone("#my-dropzone", {
             paramName: "file",
-            url: "{{ url_for('admin.product_photo_upload') }}",
+            url: "{{ url_for('admin.dropzone_photo_temp_upload') }}",
             method: "POST",
             headers: {
                 'X-CSRF-Token': getCsrfToken()  // 添加 CSRF Token 到请求头

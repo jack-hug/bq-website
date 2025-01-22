@@ -281,7 +281,7 @@ class IndexAbout(db.Model):
     title = db.Column(db.String(100))
     content = db.Column(db.Text)
     status = db.Column(db.Boolean, default=True)
-    images = db.Column(db.String(200), nullable=True)
+    images = db.Column(db.JSON)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 

@@ -15,7 +15,7 @@ from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryF
     BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm, EditNewsForm, EditNewsCategoryForm, AddNewsCategoryForm, \
     EditIntroduceForm, IntroduceAddForm, AddIntroCategoryForm, EditIntroCategoryForm, EditResearchForm, ResearchAddForm, \
     EditContactForm, ContactAddForm, AddContactCategoryForm, EditContactCategoryForm, BannerAddForm, IndexAboutForm
-from ..utils import random_filename, redirect_back, resize_image, save_temp_files
+from ..utils import random_filename, redirect_back, resize_image, save_temp_files, save_upload_files
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -124,6 +124,7 @@ def product_add():
 def product_edit(product_id):
     product = Product.query.get_or_404(product_id)
     photos = Photo.query.filter_by(product_id=product_id).all()
+    print(photos)
     form = EditProductForm(product=product)
 
     if form.cancel.data:
@@ -189,9 +190,9 @@ def upload_image():
     return upload_success(url=url)
 
 
-@admin_bp.route('/product_photo_upload', methods=['POST'])  # dropzone上传图片并绑定product.id
+@admin_bp.route('/dropzone_photo_temp_upload', methods=['POST'])  # dropzone上传图片到临时文件夹
 @login_required
-def product_photo_upload():
+def dropzone_photo_temp_upload():
     if 'file' not in request.files:
         return jsonify(message='没有文件或者文件出错'), 400
     if request.files['file'].filename == '':
@@ -199,6 +200,19 @@ def product_photo_upload():
     if not allowed_file(request.files['file'].filename):
         return jsonify(message='错误的文件格式！只能上传png, jpg, jpeg, gif格式文件'), 400
     filename = save_temp_files(request.files['file'])
+    return jsonify(message='上传成功', filename=filename)
+
+
+@admin_bp.route('/dropzone_photo_upload', methods=['POST'])  # dropzone上传图片到uploads文件夹
+@login_required
+def dropzone_photo_upload():
+    if 'file' not in request.files:
+        return jsonify(message='没有文件或者文件出错'), 400
+    if request.files['file'].filename == '':
+        return jsonify(message='没有上传文件'), 400
+    if not allowed_file(request.files['file'].filename):
+        return jsonify(message='错误的文件格式！只能上传png, jpg, jpeg, gif格式文件'), 400
+    filename = save_upload_files(request.files['file'])
     return jsonify(message='上传成功', filename=filename)
 
 
@@ -241,7 +255,7 @@ def product_multiple_delete():
     return redirect(url_for('admin.product_list'))
 
 
-@admin_bp.route('/photo_delete/<int:photo_id>', methods=['POST'])  # 删除图片
+@admin_bp.route('/photo_delete/<int:photo_id>', methods=['POST'])  # 删除产品图片
 @login_required
 def photo_delete(photo_id):
     photo = Photo.query.get_or_404(photo_id)
@@ -591,7 +605,7 @@ def banner_photo_add():
     return render_template('admin/banner_photo_add.html', show_banner_collapse=True)
 
 
-@admin_bp.route('/banner_photo_delete/<int:banner_id>', methods=['POST'])
+@admin_bp.route('/banner_photo_delete/<int:banner_id>', methods=['POST'])  # 删除banner
 @login_required
 def banner_photo_delete(banner_id):
     banner = Banner.query.get_or_404(banner_id)
@@ -599,6 +613,7 @@ def banner_photo_delete(banner_id):
     db.session.commit()
     flash('删除成功.', 'success')
     return redirect(url_for('admin.banner_photo_list'))
+
 
 @admin_bp.route('/banner_multiple_delete', methods=['GET', 'POST'])
 @login_required
@@ -623,7 +638,7 @@ def banner_photo_status(banner_id):
     return redirect_back()
 
 
-@admin_bp.route('/dropzone_photo_delete/<int:banner_id>', methods=['DELETE'])  # 在dropzone中删除图片
+@admin_bp.route('/dropzone_photo_delete/<int:banner_id>', methods=['DELETE'])  # 在dropzone中删除banner图片
 def dropzone_photo_delete(banner_id):
     banner = Banner.query.get_or_404(banner_id)
     if not banner:
@@ -636,24 +651,6 @@ def dropzone_photo_delete(banner_id):
     db.session.commit()
 
     return jsonify({'message': '删除成功'}), 200
-
-
-@admin_bp.route('/scroll_photo_list', methods=['GET', 'POST'])  # 滚动图片列表
-@login_required
-def scroll_photo_list():
-    return render_template('admin/scroll_photo_list.html')
-
-
-@admin_bp.route('/category_photo_list', methods=['GET', 'POST'])  # 分类图片列表
-@login_required
-def category_photo_list():
-    return render_template('admin/category_photo_list.html')
-
-
-@admin_bp.route('/index_photo_list', methods=['GET', 'POST'])  # 首页其他图片
-@login_required
-def index_photo_list():
-    return render_template('admin/index_photo_list.html')
 
 
 @admin_bp.route('/intro_list', methods=['GET', 'POST'])  # 公司介绍列表
@@ -759,7 +756,7 @@ def intro_category_list():
                            show_intro_collapse=True)
 
 
-@admin_bp.route('/intro_category_delete/<int:intro_category_id>', methods=['get', 'POST'])  # 删除公司介绍分类
+@admin_bp.route('/intro_category_delete/<int:intro_category_id>', methods=['GET', 'POST'])  # 删除公司介绍分类
 @login_required
 def intro_category_delete(intro_category_id):
     intro_category = IntroduceCategory.query.get_or_404(intro_category_id)
@@ -897,7 +894,7 @@ def research_category_list():
                            show_research_collapse=True)
 
 
-@admin_bp.route('/research_category_delete/<int:research_category_id>', methods=['get', 'POST'])  # 删除研发生产分类
+@admin_bp.route('/research_category_delete/<int:research_category_id>', methods=['GET', 'POST'])  # 删除研发生产分类
 @login_required
 def research_category_delete(research_category_id):
     research_category = ResearchCategory.query.get_or_404(research_category_id)
@@ -1025,7 +1022,7 @@ def contact_category_list():
                            show_contact_collapse=True)
 
 
-@admin_bp.route('/contact_category_delete/<int:contact_category_id>', methods=['get', 'POST'])  # 删除联系我们分类
+@admin_bp.route('/contact_category_delete/<int:contact_category_id>', methods=['GET', 'POST'])  # 删除联系我们分类
 @login_required
 def contact_category_delete(contact_category_id):
     contact_category = ContactCategory.query.get_or_404(contact_category_id)
@@ -1058,7 +1055,8 @@ def contact_status(contact_id):
     db.session.commit()
     return redirect_back()
 
-@admin_bp.route('/index_about', methods=['GET', 'POST'])
+
+@admin_bp.route('/index_about', methods=['GET', 'POST'])  # 首页简介
 @login_required
 def index_about():
     form = IndexAboutForm()
@@ -1069,6 +1067,11 @@ def index_about():
         if index_about:
             index_about.title = form.title.data
             index_about.content = form.content.data
+            index_about.timestamp = datetime.utcnow()
+
+            temp_files = request.form.get('temp_files')
+            index_about.images = json.loads(temp_files) if temp_files else []
+
             db.session.commit()
             flash('修改成功.', 'success')
             return redirect(url_for('admin.index_about'))
@@ -1076,11 +1079,52 @@ def index_about():
             index_about = IndexAbout(
                 title=form.title.data,
                 content=form.content.data,
+                ttimestamp=datetime.utcnow(),
+                images=[]
             )
-    form.title.data = IndexAbout.query.first().title
-    form.content.data = IndexAbout.query.first().content
+            db.session.add(index_about)
+            db.session.commit()
+            flash('添加成功.', 'success')
+            return redirect(url_for('admin.index_about'))
+    index_about = IndexAbout.query.first()
+    if index_about:
+        form.title.data = index_about.title
+        form.content.data = index_about.content
     return render_template('admin/index_about.html', form=form)
 
+
+@admin_bp.route('/delete_uploaded_file', methods=['POST'])  # 删除上传的文件
+@login_required
+def delete_uploaded_file():
+    data = request.get_json()
+    filename = data.get('filename')
+    if not filename:
+        return jsonify(success=False, message='文件名不能为空'), 400
+
+    file_path = os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        return jsonify(success=True, message='文件删除成功')
+    else:
+        return jsonify(success=False, message='文件不存在'), 404
+
+
+@admin_bp.route('/get_uploaded_files', methods=['GET'])
+@login_required
+def get_uploaded_files():
+    upload_folder = current_app.config['BQ_UPLOAD_PATH']
+    if not os.path.exists(upload_folder):
+        return jsonify(files=[])
+
+    # 从数据库中获取 index_about.images 的图片列表
+    index_about = IndexAbout.query.first()  # 假设只处理第一条记录
+    if not index_about or not index_about.images:
+        return jsonify(files=[])
+
+    # 获取上传文件夹中的所有文件，并过滤出与 index_about.images 匹配的文件
+    files = [f for f in os.listdir(upload_folder) if
+             os.path.isfile(os.path.join(upload_folder, f)) and f in index_about.images]
+    return jsonify(files=files)
 
 
 # 类型与数据表的映射
@@ -1106,4 +1150,3 @@ def check_category_name():
 
     exists = model.query.filter_by(name=name).first() is not None
     return jsonify({'exists': exists})
-

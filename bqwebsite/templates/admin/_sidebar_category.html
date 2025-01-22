@@ -71,10 +71,6 @@
                    href="{{ url_for('admin.banner_photo_list') }}">&nbsp;&nbsp;&nbsp;Banner轮播图片</a>
                 <a class="list-group-item {% if request.endpoint == 'admin.index_about' %}active{% endif %}"
                    href="{{ url_for('admin.index_about') }}">&nbsp;&nbsp;&nbsp;公司介绍</a>
-                <a class="list-group-item {% if request.endpoint == 'admin.category_photo_list' %}active{% endif %}"
-                   href="{{ url_for('admin.category_photo_list') }}">&nbsp;&nbsp;&nbsp;首页剂型图片</a>
-                <a class="list-group-item {% if request.endpoint == 'admin.index_photo_list' %}active{% endif %}"
-                   href="{{ url_for('admin.index_photo_list') }}">&nbsp;&nbsp;&nbsp;首页其他图片</a>
             </a>
         </div>
         <a class="list-group-item" href="#"><i class="fa-solid fa-user"></i> 管理员设置</a>

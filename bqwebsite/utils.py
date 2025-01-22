@@ -62,6 +62,14 @@ def save_temp_files(file):
     file_path = os.path.join(current_app.config['BQ_TEMP_FOLDER'], filename)
     file.save(file_path)
     return filename
+
+def save_upload_files(file):
+    if not os.path.exists(current_app.config['BQ_UPLOAD_PATH']):
+        os.makedirs(current_app.config['BQ_UPLOAD_PATH'])
+    filename = random_filename(file.filename)
+    file_path = os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename)
+    file.save(file_path)
+    return filename
 def save_uploaded_files(request_files, product_id):  # 封装上传图片函数
     photos = []
     for f in request_files.getlist('file'):
