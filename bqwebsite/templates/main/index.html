@@ -100,8 +100,13 @@
                         <div class="swiper-slide" style="width: 100%;height: 35rem;">
                             <a href="{{ url_for('main.show_news', news_id=news.id) }}" class="text-decoration-none">
                                 <div class="card mb-3 shadow-sm" style="width: 22rem;">
-                                    <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
-                                         class="card-img-top" alt="...">
+                                    {% if news.filename %}
+                                        <img src="{{ url_for('main.get_image', filename=news.filename) }}"
+                                             class="card-img-top" alt="...">
+                                    {% else %}
+                                        <img src="{{ url_for('static', filename='assets/news-default.png') }}"
+                                             class="card-img-top" alt="...">
+                                    {% endif %}
                                     <div class="card-body">
                                         <h5 class="card-title">{{ news.title }}</h5>
                                         <p class="card-text">{{ news.content|safe|truncate(50) }}</p>
@@ -118,8 +123,13 @@
                         <div class="swiper-slide" style="width: 100%;height: 35rem;">
                             <a href="{{ url_for('main.show_news', news_id=news.id) }}" class="text-decoration-none">
                                 <div class="card mb-3 shadow-sm" style="width: 22rem;">
-                                    <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
-                                         class="card-img-top" alt="...">
+                                    {% if news.filename %}
+                                        <img src="{{ url_for('main.get_image', filename=news.filename) }}"
+                                             class="card-img-top" alt="...">
+                                    {% else %}
+                                        <img src="{{ url_for('static', filename='assets/news-default.png') }}"
+                                             class="card-img-top" alt="...">
+                                    {% endif %}
                                     <div class="card-body">
                                         <h5 class="card-title">{{ news.title }}</h5>
                                         <p class="card-text">{{ news.content|safe|truncate(50) }}</p>
