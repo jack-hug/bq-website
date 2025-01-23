@@ -368,6 +368,10 @@ def category_edit(category_id):
     form = EditCategoryForm(category_id=category.id)
     if form.validate_on_submit():
         category.name = form.name.data
+        temp_files = json.loads(request.form.get('temp_files'))
+        print(temp_files)
+        category.filename = temp_files[0] if temp_files else None
+        print(category.filename)
         category.timestamp = datetime.utcnow()
         db.session.commit()
         flash('修改成功.', 'success')
@@ -1069,8 +1073,11 @@ def index_about():
             index_about.content = form.content.data
             index_about.timestamp = datetime.utcnow()
 
+            existing_images = index_about.images if index_about.images else []
             temp_files = request.form.get('temp_files')
-            index_about.images = json.loads(temp_files) if temp_files else []
+            new_images = json.loads(temp_files) if temp_files else []
+            updated_images = existing_images + new_images
+            index_about.images = updated_images
 
             db.session.commit()
             flash('修改成功.', 'success')
@@ -1080,7 +1087,7 @@ def index_about():
                 title=form.title.data,
                 content=form.content.data,
                 ttimestamp=datetime.utcnow(),
-                images=[]
+                images=json.loads(request.form.get('temp_files')) if request.form.get('temp_files') else []
             )
             db.session.add(index_about)
             db.session.commit()
@@ -1090,7 +1097,7 @@ def index_about():
     if index_about:
         form.title.data = index_about.title
         form.content.data = index_about.content
-    return render_template('admin/index_about.html', form=form)
+    return render_template('admin/index_about.html', form=form, index_about=index_about)
 
 
 @admin_bp.route('/delete_uploaded_file', methods=['POST'])  # 删除上传的文件

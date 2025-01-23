@@ -178,8 +178,6 @@ body {
 
 /*鼠标划过效果*/
 .hovereffect {
-    width: 100%;
-    height: 100%;
     float: left;
     overflow: hidden;
     position: relative;
@@ -203,6 +201,8 @@ body {
 }
 
 .hovereffect img {
+    height:100%;
+    width: auto;
     display: block;
     position: relative;
     -webkit-transform: scale(1.1);

@@ -53,24 +53,24 @@
                                         </td>
                                         <td>
                                             <a href="{{ url_for('admin.category_edit', category_id=category.id) }}"
-                                               class="btn btn-sm btn-outline-secondary">
+                                               class="btn btn-sm btn-outline-secondary {% if category.name == '未分类' %}disabled{% endif %}">
                                                 <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                             </a>
                                             {% if category.status %}
                                                 <a href="{{ url_for('admin.category_status', category_id=category.id, next=request.full_path) }}"
-                                                   class="btn btn-sm btn-secondary">
+                                                   class="btn btn-sm btn-secondary {% if category.name == '未分类' %}disabled{% endif %}">
                                                     <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                                 </a>
                                             {% else %}
                                                 <a href="{{ url_for('admin.category_status', category_id=category.id, next=request.full_path) }}"
-                                                   class="btn btn-sm btn-warning">
+                                                   class="btn btn-sm btn-warning {% if category.name == '未分类' %}disabled{% endif %}">
                                                     <i class="fa-solid fa-arrow-up" title="发布"></i>
                                                 </a>
                                             {% endif %}
                                             <form action="{{ url_for('admin.category_delete', category_id=category.id, next=request.full_path) }}"
                                                   class="d-inline" method="post">
                                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                <button type="submit" class="btn btn-sm btn-danger {% if category.name == '未分类' %}disabled{% endif %}"
                                                         onclick="return confirm('确定要删除该分类？')">
                                                     <i class="fa-regular fa-trash-can" title="删除"></i>
                                                 </button>
@@ -135,21 +135,21 @@
                                         </td>
                                         <td>
                                             <a href="{{ url_for('admin.brand_edit', brand_id=brand.id) }}"
-                                               class="btn btn-sm btn-outline-secondary">
+                                               class="btn btn-sm btn-outline-secondary {% if brand.name == '未分类' %}disabled{% endif %}">
                                                 <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                             </a>
                                             {% if brand.status %}
                                                 <a href="{{ url_for('admin.brand_status', brand_id=brand.id, next=request.full_path) }}"
-                                                   class="btn btn-sm btn-secondary">
+                                                   class="btn btn-sm btn-secondary {% if brand.name == '未分类' %}disabled{% endif %}">
                                                     <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                                 </a>
                                             {% else %}
                                                 <a href="{{ url_for('admin.brand_status', brand_id=brand.id, next=request.full_path) }}"
-                                                   class="btn btn-sm btn-warning">
+                                                   class="btn btn-sm btn-warning {% if brand.name == '未分类' %}disabled{% endif %}">
                                                     <i class="fa-solid fa-arrow-up" title="发布"></i>
                                                 </a>
                                             {% endif %}
-                                            <a href="{{ url_for('admin.brand_delete', brand_id=brand.id, next=request.full_path) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该商标？')">
+                                            <a href="{{ url_for('admin.brand_delete', brand_id=brand.id, next=request.full_path) }}" class="btn btn-sm btn-danger {% if brand.name == '未分类' %}disabled{% endif %}" onclick="return confirm('确定删除该商标？')">
                                                 <i class="fa-regular fa-trash-can" title="删除"></i>
                                             </a>
                                         </td>
@@ -212,21 +212,21 @@
                                         </td>
                                         <td>
                                             <a href="{{ url_for('admin.subject_edit', subject_id=subject.id) }}"
-                                               class="btn btn-sm btn-outline-secondary">
+                                               class="btn btn-sm btn-outline-secondary {% if subject.name == '未分类' %}disabled{% endif %}">
                                                 <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                             </a>
                                             {% if subject.status %}
                                                 <a href="{{ url_for('admin.subject_status', subject_id=subject.id, next=request.full_path) }}"
-                                                   class="btn btn-sm btn-secondary">
+                                                   class="btn btn-sm btn-secondary {% if subject.name == '未分类' %}disabled{% endif %}">
                                                     <i class="fa-solid fa-arrow-down" title="撤销"></i>
                                                 </a>
                                             {% else %}
                                                 <a href="{{ url_for('admin.subject_status', subject_id=subject.id, next=request.full_path) }}"
-                                                   class="btn btn-sm btn-warning">
+                                                   class="btn btn-sm btn-warning {% if subject.name == '未分类' %}disabled{% endif %}">
                                                     <i class="fa-solid fa-arrow-up" title="发布"></i>
                                                 </a>
                                             {% endif %}
-                                            <a href="{{ url_for('admin.subject_delete', subject_id=subject.id, next=request.full_path) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该功能分类？')">
+                                            <a href="{{ url_for('admin.subject_delete', subject_id=subject.id, next=request.full_path) }}" class="btn btn-sm btn-danger {% if subject.name == '未分类' %}disabled{% endif %}" onclick="return confirm('确定删除该功能分类？')">
                                                 <i class="fa-regular fa-trash-can" title="删除"></i>
                                             </a>
                                         </td>

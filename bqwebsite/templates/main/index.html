@@ -68,61 +68,25 @@
                 <div class="container h-100">
                     <div class="row h-100 d-flex align-items-center">
                         <h2 class="text-center mt-6">产品中心</h2>
-                        <div class="col-3 fade-in-end mb-1">
-                            <div class="hovereffect">
-                                <img class="img-fluid"
-                                     src="{{ url_for('static', filename='assets/img/portfolio/gaoji.png') }}" alt="">
-                                <div class="overlay">
-                                    <a class="info fs-4" href="#">膏 剂</a>
+                        {% for category in categories %}
+                            <div class="col-3 fade-in-end mb-1">
+                                <div class="hovereffect">
+                                    {% if category.filename %}
+                                        <img class="img-fluid"
+                                             src="{{ url_for('main.get_image', filename=category.filename) }}"
+                                             alt="">
+                                    {% else %}
+                                        <img class="img-fluid"
+                                             src="{{ url_for('static', filename='assets/category-default.jpg') }}"
+                                             alt="">
+                                    {% endif %}
+                                    <div class="overlay">
+                                        <a class="info fs-4"
+                                           href="{{ url_for('main.product_category', category=category.name) }}">{{ category.name }}</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-3 fade-in-end mb-1">
-                            <div class="hovereffect">
-                                <img class="img-fluid"
-                                     src="{{ url_for('static', filename='assets/img/portfolio/tangjiang.png') }}"
-                                     alt="">
-                                <div class="overlay">
-                                    <a class="info fs-4" href="#">糖 浆</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3 fade-in-end mb-1">
-                            <div class="hovereffect">
-                                <img class="img-fluid"
-                                     src="{{ url_for('static', filename='assets/img/portfolio/keli.png') }}" alt="">
-                                <div class="overlay">
-                                    <a class="info fs-4" href="#">颗 粒</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3 fade-in-end mb-1">
-                            <div class="hovereffect">
-                                <img class="img-fluid"
-                                     src="{{ url_for('static', filename='assets/img/portfolio/pianji.png') }}" alt="">
-                                <div class="overlay">
-                                    <a class="info fs-4" href="#">片 剂</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3 fade-in-end mb-1">
-                            <div class="hovereffect">
-                                <img class="img-fluid"
-                                     src="{{ url_for('static', filename='assets/img/portfolio/jiaonang.png') }}" alt="">
-                                <div class="overlay">
-                                    <a class="info fs-4" href="#">胶 囊</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3 fade-in-end mb-1">
-                            <div class="hovereffect">
-                                <img class="img-fluid"
-                                     src="{{ url_for('static', filename='assets/img/portfolio/dingji.png') }}" alt="">
-                                <div class="overlay">
-                                    <a class="info fs-4" href="#">酊 剂</a>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </section>
@@ -130,169 +94,43 @@
             <!-- 新闻中心 Section -->
             <section id="news"
                      class="swiper-slide swiper-news bg-white d-flex flex-column align-items-center justify-content-center pt-5">
-                <h2 class="text-center">新闻中心</h2>
+                <h2 class="text-center mb-5">新闻中心</h2>
                 <div class="swiper-wrapper d-flex align-items-center" style="width: 100%;height: 35rem;">
-                    <div class="swiper-slide" style="width: 100%;height: 35rem;">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card mb-3 shadow-sm" style="width: 22rem;">
-                                <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
-                                     class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">news title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title
-                                        and
-                                        make
-                                        up
-                                        the
-                                        bulk of the card's content.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 1 mins
-                                        ago</small>
-                                    </p>
+                    {% for news in news[:5] %}
+                        <div class="swiper-slide" style="width: 100%;height: 35rem;">
+                            <a href="{{ url_for('main.show_news', news_id=news.id) }}" class="text-decoration-none">
+                                <div class="card mb-3 shadow-sm" style="width: 22rem;">
+                                    <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
+                                         class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ news.title }}</h5>
+                                        <p class="card-text">{{ news.content|safe|truncate(50) }}</p>
+                                        <p class="card-text"><small
+                                                class="text-muted">{{ moment(news.timestamp).format('lll') }}</small>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide" style="width: 100%;height: 35rem;">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card mb-3 shadow-sm" style="width: 22rem;">
-                                <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
-                                     class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">news title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title
-                                        and
-                                        make
-                                        up
-                                        the
-                                        bulk of the card's content.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 2 mins
-                                        ago</small>
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide" style="width: 100%;height: 35rem;">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card mb-3 shadow-sm" style="width: 22rem;">
-                                <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
-                                     class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">news title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title
-                                        and
-                                        make
-                                        up
-                                        the
-                                        bulk of the card's content.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins
-                                        ago</small>
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide" style="width: 100%;height: 35rem;">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card mb-3 shadow-sm" style="width: 22rem;">
-                                <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
-                                     class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">news title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title
-                                        and
-                                        make
-                                        up
-                                        the
-                                        bulk of the card's content.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 4 mins
-                                        ago</small>
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
+                    {% endfor %}
                     <!-- 重复的幻灯片以实现无缝滚动 -->
-                    <div class="swiper-slide" style="width: 100%;height: 35rem;">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card mb-3 shadow-sm" style="width: 22rem;">
-                                <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
-                                     class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">news title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title
-                                        and
-                                        make
-                                        up
-                                        the
-                                        bulk of the card's content.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 1 mins
-                                        ago</small>
-                                    </p>
+                    {% for news in news[:5] %}
+                        <div class="swiper-slide" style="width: 100%;height: 35rem;">
+                            <a href="{{ url_for('main.show_news', news_id=news.id) }}" class="text-decoration-none">
+                                <div class="card mb-3 shadow-sm" style="width: 22rem;">
+                                    <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
+                                         class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ news.title }}</h5>
+                                        <p class="card-text">{{ news.content|safe|truncate(50) }}</p>
+                                        <p class="card-text"><small
+                                                class="text-muted">{{ moment(news.timestamp).format('lll') }}</small>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide" style="width: 100%;height: 35rem;">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card mb-3 shadow-sm" style="width: 22rem;">
-                                <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
-                                     class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">news title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title
-                                        and
-                                        make
-                                        up
-                                        the
-                                        bulk of the card's content.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 2 mins
-                                        ago</small>
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide" style="width: 100%;height: 35rem;">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card mb-3 shadow-sm" style="width: 22rem;">
-                                <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
-                                     class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">news title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title
-                                        and
-                                        make
-                                        up
-                                        the
-                                        bulk of the card's content.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins
-                                        ago</small>
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide" style="width: 100%;height: 35rem;">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card mb-3 shadow-sm" style="width: 22rem;">
-                                <img src="{{ url_for('static', filename='assets/img/bangqilogo.png') }}"
-                                     class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">news title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title
-                                        and
-                                        make
-                                        up
-                                        the
-                                        bulk of the card's content.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 4 mins
-                                        ago</small>
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
+                    {% endfor %}
                 </div>
             </section>
 
@@ -327,43 +165,41 @@
                         <div class="col-2">
                             <h5 class="mb-2">产品中心</h5>
                             <ul class="list-unstyled">
-                                <li class="my-2"><a href="#" class="footer-font-style">膏 剂</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">糖 浆</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">颗 粒</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">片 剂</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">胶 囊</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">酊 剂</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">酊 剂</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">酊 剂</a></li>
+                                {% for category in categories %}
+                                    <li class="my-2">
+                                        <a href="{{ url_for('main.product_category', category=category.name) }}"
+                                           class="footer-font-style">{{ category.name }}</a></li>
+                                {% endfor %}
                             </ul>
                         </div>
                         <div class="col-2">
                             <h5 class="mb-2">邦资讯</h5>
                             <ul class="list-unstyled">
-                                <li class="my-2"><a href="#" class="footer-font-style">公司新闻</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">行业资讯</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">家庭护理</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">商标展示</a></li>
+                                {% for news_category in news_categories %}
+                                    <li class="my-2">
+                                        <a href="{{ url_for('main.show_news_category', news_category_id=news_category.id) }}"
+                                           class="footer-font-style">{{ news_category.name }}</a></li>
+                                {% endfor %}
                             </ul>
                         </div>
                         <div class="col-2">
                             <h5 class="mb-2">公司介绍</h5>
                             <ul class="list-unstyled">
-                                <li class="my-2"><a href="#" class="footer-font-style">公司介绍</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">质量机构</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">企业架构</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">社会责任</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">企业荣誉</a></li>
+                                {% for intro_category in intro_categories %}
+                                    <li class="my-2">
+                                        <a href="{{ url_for('main.show_intro', intro_id=intro_category.id) }}"
+                                           class="footer-font-style">{{ intro_category.name }}</a></li>
+                                {% endfor %}
                             </ul>
                         </div>
                         <div class="col-2">
                             <h5 class="mb-2">研发中心</h5>
                             <ul class="list-unstyled">
-                                <li class="my-2"><a href="#" class="footer-font-style">公司介绍</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">质量机构</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">企业架构</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">社会责任</a></li>
-                                <li class="my-2"><a href="#" class="footer-font-style">企业荣誉</a></li>
+                                {% for research_category in research_categories %}
+                                    <li class="my-2">
+                                        <a href="{{ url_for('main.show_research', research_id=research_category.id) }}"
+                                           class="footer-font-style">{{ research_category.name }}</a></li>
+                                {% endfor %}
                             </ul>
                         </div>
                         <div class="col-4">

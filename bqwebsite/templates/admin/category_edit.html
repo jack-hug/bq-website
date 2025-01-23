@@ -33,11 +33,18 @@
                             <div class="mb-3">
                                 {{ form.name.label(class="form-label") }}
                                 {{ form.name(class="form-control", id="category-input") }}
-                                <div id="name-error" class="mt-2 alert alert-danger" style="display: none;">
-                                </div>
-                                <div class="my-3">
-                                    {{ form.submit(class="btn btn-primary btn-md") }}
-                                </div>
+                            </div>
+                            <div id="name-error" class="mt-2 alert alert-danger" style="display: none;">
+                            </div>
+                            <br>
+                            <div class="mb-3">
+                                <label for="dropzone" class="form-label">图片:</label>
+                                <div class="dropzone" id="my-dropzone"></div>
+                            </div>
+                            <div class="my-3">
+                                <input type="hidden" name="temp_files" id="temp_files">
+                                {{ form.submit(class="btn btn-primary btn-md") }}
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -78,7 +85,7 @@
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCsrfToken()  // 手动添加 CSRF 令牌
                 },
-                body: JSON.stringify({name: name,type: inputType}),
+                body: JSON.stringify({name: name, type: inputType}),
             })
                 .then(response => response.json())
                 .then(data => {
@@ -115,6 +122,82 @@
                 nameError.textContent = '剂型名称不能超过128个字符';
                 nameError.style.display = 'block';
                 event.preventDefault();
+            }
+        });
+
+        // dropzone设置
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone("#my-dropzone", {
+            paramName: "file",
+            url: "{{ url_for('admin.dropzone_photo_upload') }}",
+            method: "POST",
+            headers: {
+                'X-CSRF-Token': getCsrfToken()  // 添加 CSRF Token 到请求头
+            },
+            maxFiles: 1,
+            maxFilesize: 5,
+            acceptedFiles: "image/*",
+            addRemoveLinks: true,
+            dictRemoveFile: "删 除",
+            dictDefaultMessage: "拖拽图片到框内或点击上传，图片尺寸220x300px",
+            init: function () {
+
+                // 新文件添加时的处理
+                this.on('addedfile', function (file) {
+                    // 隐藏默认消息
+                    this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                });
+
+                // 新文件上传成功后的处理
+                this.on('success', function (file, response) {
+                    const tempFiles = document.getElementById('temp_files');
+                    let files = tempFiles.value ? JSON.parse(tempFiles.value) : [];
+                    files.push(response.filename);
+                    tempFiles.value = JSON.stringify(files);
+
+                    file.uploadedFileName = response.filename;
+                });
+
+                // 删除文件时的处理
+                this.on('removedfile', function (file) {
+                    const tempFiles = document.getElementById('temp_files');
+                    let files = tempFiles.value ? JSON.parse(tempFiles.value) : [];
+                    files = files.filter(f => f !== file.uploadedFileName);
+                    tempFiles.value = JSON.stringify(files);
+
+                    // 向后端发送请求删除服务器上的文件
+                    fetch("{{ url_for('admin.delete_uploaded_file') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token() }}" // 如果需要 CSRF 保护
+                        },
+                        body: JSON.stringify({filename: file.uploadedFileName})
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log("文件已从服务器删除");
+                            } else {
+                                console.error("删除文件失败");
+                            }
+                        });
+
+                    // 检查 Dropzone 中剩余的文件数量
+                    if (this.files.length === 0) {
+                        // 如果没有文件，显示默认消息
+                        this.element.querySelector('.dz-default.dz-message').style.display = 'block';
+                    } else {
+                        // 如果有文件，隐藏默认消息
+                        this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                    }
+                });
+
+                // 初始化时检查文件数量
+                if (this.files.length > 0) {
+                    this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                } else {
+                    this.element.querySelector('.dz-default.dz-message').style.display = 'block';
+                }
             }
         });
     </script>

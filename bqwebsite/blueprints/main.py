@@ -15,7 +15,10 @@ main_bp = Blueprint('main', __name__)
 def index():
     banner = Banner.query.all()
     index_about = IndexAbout.query.first()
-    return render_template('main/index.html', banner=banner, index_about=index_about)
+    categories = Category.query.filter(Category.status == True).order_by(Category.id).all()
+    filtered_categories = [category for category in categories if category.id >= 2][:8]
+    news = News.query.filter(News.status == True).order_by(News.timestamp.desc()).all()
+    return render_template('main/index.html', banner=banner, index_about=index_about, categories=filtered_categories, news=news)
 
 
 @main_bp.route('/news-category/<int:news_category_id>')

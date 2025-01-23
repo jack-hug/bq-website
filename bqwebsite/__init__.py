@@ -141,7 +141,7 @@ def register_commands(app):
 
     @app.cli.command()
     @click.option('--product', default=30, help='Quantity of products, default is 30.')
-    @click.option('--news', default=80, help='Quantity of products, default is 50.')
+    @click.option('--news', default=30, help='Quantity of products, default is 30.')
     @click.option('--introduce', default=5, help='Quantity of introduce, default is 5.')
     @click.option('--research', default=3, help='Quantity of research and development, default is 3.')
     @click.option('--contact', default=3, help='Quantity of contact, default is 3.')
@@ -149,7 +149,7 @@ def register_commands(app):
     def forge(product, news, introduce, contact, photo, research):
         from .fakes import fake_categories, admin, fake_products, news_categories, fake_news, intro_category, \
             fake_intro, fake_brand, fake_subject, contact_categories, fake_contact, fake_photo, research_category, \
-            fake_research, fake_index_about
+            fake_research, fake_index_about, fake_banners
 
         click.echo('Drop tables....')
         db.drop_all()
@@ -194,5 +194,8 @@ def register_commands(app):
 
         click.echo('Generating index_about...')
         fake_index_about()
+
+        click.echo('Generating banner photos...')
+        fake_banners()
 
         click.echo('Done!')

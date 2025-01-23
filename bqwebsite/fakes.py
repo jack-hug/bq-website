@@ -8,7 +8,7 @@ from faker.providers import DynamicProvider
 from flask import current_app
 
 from .models import Admin, Category, Product, NewsCategory, News, IntroduceCategory, Introduce, Subject, Brand, \
-    Contact, ContactCategory, Photo, ResearchCategory, Research, IndexAbout
+    Contact, ContactCategory, Photo, ResearchCategory, Research, IndexAbout, Banner
 from .extensions import db
 from .utils import generate_gradient_image
 
@@ -68,11 +68,32 @@ def admin():
     db.session.commit()
 
 
+def fake_banners():
+    for i in range(3):
+        filename = 'random_banner_%d.jpg' % i
+        generate_gradient_image(1920, 800, filename)
+
+        banner = Banner(
+            filename=filename,
+            timestamp=fake.date_time_this_year()
+        )
+        db.session.add(banner)
+    try:
+        db.session.commit()
+    except InterruptedError:
+        db.session.rollback()
+
+
 def fake_categories():
     jixing = ['膏剂', '散剂', '片剂', '胶囊', '搽剂', '颗粒剂', '糖浆', '酊剂', '其他']
 
-    for i in jixing:
-        category = Category(name=i)
+    for idx, i in enumerate(jixing):
+        filename = 'random_category_%d.jpg' % idx
+        generate_gradient_image(220, 300, filename)
+        category = Category(
+            name=i,
+            filename=filename,
+        )
         db.session.add(category)
     try:
         db.session.commit()
@@ -161,11 +182,14 @@ def news_categories():
         db.session.rollback()
 
 
-def fake_news(count=80):
+def fake_news(count=30):
     for i in range(count):
+        filename = 'random_news_%d.jpg' % i
+        generate_gradient_image(350, 350, filename)
         news = News(
             title=fake.sentence(),
             content=fake.text(200),
+            filename=filename,
             newscategory=NewsCategory.query.get(random.randint(1, NewsCategory.query.count())),
             timestamp=fake.date_time_this_year(),
             clicks=fake.random.randint(10, 500)
@@ -204,6 +228,7 @@ def fake_intro(count=5):
         db.session.add(intro)
     db.session.commit()
 
+
 def research_category():
     res_cat = ['产品研发', '质量机构', '生产车间']
 
@@ -215,6 +240,7 @@ def research_category():
     except InterruptedError:
         db.session.rollback()
 
+
 def fake_research(count=3):
     for i in range(count):
         research = Research(
@@ -225,6 +251,7 @@ def fake_research(count=3):
         )
         db.session.add(research)
     db.session.commit()
+
 
 def contact_categories():
     cont_cat = ['联系方式', '商业合作', '企业招聘']
@@ -248,6 +275,7 @@ def fake_contact(count=3):
         )
         db.session.add(contact)
     db.session.commit()
+
 
 def fake_index_about():
     index_about = IndexAbout(
