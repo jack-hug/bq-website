@@ -15,6 +15,7 @@ from .models import Category, Product, News, Brand, Honor, Banner, Introduce, Ph
 from .utils import clean_temp_folder
 
 
+
 def create_app(config_name=None):
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'development')
