@@ -512,6 +512,11 @@ def news_edit(news_id):
         news.newscategory_id = form.newscategory.data
         news.content = form.content.data
         news.timestamp = datetime.utcnow()
+
+        temp_files = request.form.get('temp_files')
+        if temp_files:
+            news.filename = temp_files
+
         db.session.commit()
         flash('修改成功.', 'success')
         return redirect(url_for('admin.news_list'))

@@ -62,6 +62,7 @@
                                 </div>
                             </th>
                             <th>ID</th>
+                            <th>缩略图</th>
                             <th>标题</th>
                             <th>内容</th>
                             <th>文章分类</th>
@@ -73,7 +74,7 @@
                         </thead>
                         <tbody>
                         {% for news in news %}
-                            <tr>
+                            <tr class="align-middle">
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input news-checkbox" type="checkbox"
@@ -81,11 +82,20 @@
                                                name="item_ids">
                                     </div>
                                 </td>
-                                <td>{{ news.id }}</td>
+                                <td>{{ loop.index + ((pagination.page - 1) * config.BQ_PRODUCT_PER_PAGE) }}</td>
+                                <td>
+                                    {% if news.filename %}
+                                        <img src="{{ url_for('admin.get_image', filename=news.filename) }}"
+                                             alt="{{ news.title }}" style="width:100px">
+                                    {% else %}
+                                        <img src="{{ url_for('static', filename='assets/news-default.png') }}"
+                                             alt="{{ news.title }}" style="width:100px">
+                                    {% endif %}
+                                </td>
                                 <td><a href="{{ url_for('main.show_news', news_id=news.id) }}"
                                        class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                        target="_blank">{{ news.title }}</a></td>
-                                <td>{{ news.content|safe|truncate(30) }}</td>
+                                <td>{{ news.content|safe|truncate(20) }}</td>
                                 <td>{{ news.newscategory.name }}</td>
                                 <td>{{ moment(news.timestamp).format('lll') }}</td>
                                 <td>{{ news.clicks }}</td>
@@ -97,7 +107,8 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <a href="{{ url_for('admin.news_edit', news_id=news.id) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ url_for('admin.news_edit', news_id=news.id) }}"
+                                       class="btn btn-sm btn-primary">
                                         <i class="fa-solid fa-pen-to-square" title="编辑"></i>
                                     </a>
                                     {% if news.status %}
