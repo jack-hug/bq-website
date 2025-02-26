@@ -7,7 +7,9 @@ from flask import render_template, Blueprint, redirect, url_for, flash, request,
     jsonify, session, abort
 from flask_ckeditor import upload_fail, upload_success
 from flask_login import current_user, login_user, login_required, logout_user
+from werkzeug.exceptions import BadRequest
 
+from .. import models
 from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory, Introduce, IntroduceCategory, \
     ResearchCategory, Research, ContactCategory, Contact, Banner, IndexAbout
@@ -514,9 +516,13 @@ def news_edit(news_id):
         news.timestamp = datetime.utcnow()
 
         temp_files = request.form.get('temp_files')
-        if temp_files:
-            news.filename = temp_files
+        try:
+            new_image = json.loads(temp_files) if temp_files else []
+        except json.JSONDecodeError:
+            new_image = []
+        news.filename = new_image
 
+        db.session.add(news)
         db.session.commit()
         flash('修改成功.', 'success')
         return redirect(url_for('admin.news_list'))
@@ -1078,11 +1084,11 @@ def index_about():
             index_about.content = form.content.data
             index_about.timestamp = datetime.utcnow()
 
-            existing_images = index_about.images if index_about.images else []
+            existing_images = index_about.filename if index_about.filename else []
             temp_files = request.form.get('temp_files')
             new_images = json.loads(temp_files) if temp_files else []
             updated_images = existing_images + new_images
-            index_about.images = updated_images
+            index_about.filename = updated_images
 
             db.session.commit()
             flash('修改成功.', 'success')
@@ -1109,34 +1115,153 @@ def index_about():
 @login_required
 def delete_uploaded_file():
     data = request.get_json()
-    filename = data.get('filename')
-    if not filename:
-        return jsonify(success=False, message='文件名不能为空'), 400
+    print(data)
+    required_fields = ['table_name', 'field_name', 'field_value']
+    if not all(key in data for key in required_fields):
+        return jsonify(success=False, message='缺少必要参数: table_name, field_name, field_value'), 400
 
-    file_path = os.path.join(current_app.config['BQ_UPLOAD_PATH'], filename)
-    if os.path.exists(file_path):
-        os.remove(file_path)
+    table_name = data['table_name']
+    field_name = data['field_name']
+    field_value = data['field_value']
+
+    # 验证参数
+    if not table_name or not field_name or not field_value:
+        return jsonify(success=False, message='参数不能为空'), 400
+
+    allowed_tables = {'indexabout', 'news', 'product'}
+    if table_name not in allowed_tables:
+        return jsonify(success=False, message='无效的表名'), 400
+
+    try:
+        # 动态获取模型类
+        model_class = get_model_by_tablename(table_name)
+        if not model_class:
+            return jsonify(success=False, message='无效的表名'), 404
+
+        # 验证字段是否存在
+        if not hasattr(model_class, field_name):
+            return jsonify(success=False, message='无效的字段名'), 400
+
+        # 查询记录
+        query_filter = {field_name: field_value}
+        record = model_class.query.filter_by(**query_filter).first()
+        if not record:
+            return jsonify(success=False, message='记录不存在'), 404
+
+        # 获取文件名并删除数据库记录
+        filename = getattr(record, field_name)
+        if isinstance(filename, list):
+            # 处理字段存储的是 JSON 数组 ["img1.jpg", "img2.jpg"]
+            if field_value not in filename:
+                return jsonify(success=False, message='文件名不在记录中'), 400
+            filename.remove(field_value)
+            record.filename = json.dumps(filename)
+        elif isinstance(filename, str):
+            # 处理字段存储的是单个文件名
+            if filename != field_value:
+                return jsonify(success=False, message='文件名不匹配'), 400
+            record.filename = None  # 或者其他默认值
+        else:
+            return jsonify(success=False, message='无效的文件名格式'), 400
+
+        db.session.commit()
+
+        # 删除服务器文件
+        file_path = os.path.join(current_app.config['BQ_UPLOAD_PATH'], field_value)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        else:
+            current_app.logger.warning(f'文件不存在: {file_path}')
+
         return jsonify(success=True, message='文件删除成功')
-    else:
-        return jsonify(success=False, message='文件不存在'), 404
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f'文件删除失败: {e}')
+        return jsonify(success=False, message=f'文件删除失败: {str(e)}'), 500
+
+
+# 辅助函数：根据表名获取模型类
+def get_model_by_tablename(table_name):
+    # 获取所有已注册的模型类
+    registry = db.Model.registry._class_registry
+    for cls in registry.values():
+        if hasattr(cls, '__table__') and cls.__table__.name == table_name:
+            return cls
+    return None
+
 
 
 @admin_bp.route('/get_uploaded_files', methods=['GET'])
 @login_required
 def get_uploaded_files():
+    """
+    通用获取已上传文件列表
+    参数说明（URL参数）：
+    - model: 模型类名（如'News', 'Product'）
+    - field: 存储文件名的字段（如'filename', 'images'）
+    - filter_condition: 筛选条件（如'id=1'），可选
+    """
+    # 获取参数
+    model_name = request.args.get('model')
+    field_name = request.args.get('field')
+    filter_condition = request.args.get('filter_condition', '')
+
+    # 验证必要参数
+    if not model_name or not field_name:
+        raise BadRequest('Missing required parameters: model and field')
+
+    # 动态获取模型类（安全考虑：限制允许访问的模型）
+    allowed_models = {'IndexAbout', 'News', 'Product'}  # 允许访问的白名单
+    if model_name not in allowed_models:
+        raise BadRequest(f'Invalid model: {model_name}')
+
+    model_class = getattr(models, model_name, None)
+    if not model_class or not hasattr(model_class, field_name):
+        raise BadRequest('Invalid model or field')
+
+    # 获取上传目录
     upload_folder = current_app.config['BQ_UPLOAD_PATH']
     if not os.path.exists(upload_folder):
         return jsonify(files=[])
 
-    # 从数据库中获取 index_about.images 的图片列表
-    index_about = IndexAbout.query.first()  # 假设只处理第一条记录
-    if not index_about or not index_about.images:
+    # 构建查询
+    try:
+        query = model_class.query
+        # 处理过滤条件（示例：id=1 -> filter_by(id=1)）
+        if filter_condition:
+            key, value = filter_condition.split('=', 1)
+            query = query.filter_by(**{key.strip(): value.strip()})
+
+        records = query.all()
+    except Exception as e:
+        current_app.logger.error(f"Database query failed: {str(e)}")
         return jsonify(files=[])
 
-    # 获取上传文件夹中的所有文件，并过滤出与 index_about.images 匹配的文件
-    files = [f for f in os.listdir(upload_folder) if
-             os.path.isfile(os.path.join(upload_folder, f)) and f in index_about.images]
-    return jsonify(files=files)
+    # 提取文件名（处理不同存储格式）
+    all_filenames = []
+    for record in records:
+        field_value = getattr(record, field_name)
+        if not field_value:
+            continue
+        # 处理不同存储格式：字符串、JSON数组、逗号分隔等
+        if isinstance(field_value, list):
+            all_filenames.extend(field_value)
+        elif field_value.startswith('['):  # 假设是JSON数组
+            try:
+                all_filenames.extend(json.loads(field_value))
+            except json.JSONDecodeError:
+                continue
+        else:
+            all_filenames.append(field_value)
+
+    # 验证文件存在性
+    existing_files = []
+    for f in os.listdir(upload_folder):
+        file_path = os.path.join(upload_folder, f)
+        if os.path.isfile(file_path) and f in all_filenames:
+            existing_files.append(f)
+
+    return jsonify(files=existing_files)
 
 
 # 类型与数据表的映射
@@ -1162,3 +1287,12 @@ def check_category_name():
 
     exists = model.query.filter_by(name=name).first() is not None
     return jsonify({'exists': exists})
+
+@admin_bp.route('/routes')
+def list_routes():
+    output = []
+    for rule in current_app.url_map.iter_rules():
+        methods = ','.join(sorted(rule.methods))
+        line = f"{rule.endpoint}: {rule.rule} [{methods}]"
+        output.append(line)
+    return '<br>'.join(output)

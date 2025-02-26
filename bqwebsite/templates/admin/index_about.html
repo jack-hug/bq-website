@@ -76,23 +76,49 @@
             dictRemoveFile: "删 除",
             dictDefaultMessage: "拖拽图片到框内或点击上传",
             init: function () {
-                // 获取已上传的文件列表
-                fetch("{{ url_for('admin.get_uploaded_files') }}")
-                    .then(response => response.json())
+                var modelName = "IndexAbout";
+                var fieldName = "filename";
+                var filterCondition = "id=1";
+
+                // 构造带参数的请求URL
+                const apiUrl = new URL("{{ url_for('admin.get_uploaded_files') }}", window.location.origin);
+                apiUrl.searchParams.append('model', modelName);
+                apiUrl.searchParams.append('field', fieldName);
+                apiUrl.searchParams.append('filter_condition', filterCondition);
+
+                // 获取已上传文件列表
+                fetch(apiUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        return response.json();
+                    })
                     .then(data => {
+                        if (!data.files || data.files.length === 0) {
+                            console.log("没有已上传的文件");
+                            return;
+                        }
+                        // 遍历文件并添加到Dropzone
                         data.files.forEach(file => {
-                            // 使用 mockFile 方法将已上传的文件显示在 Dropzone 中
                             const mockFile = {
                                 name: file,
-                                size: 0, // 文件大小（如果需要可以动态获取）
-                                accepted: true
+                                size: 0,
+                                uploadedFileName: file,
+                                isExisting: true,
                             };
+                            // 生成安全的图片URL（处理特殊字符）
+                            const imageUrl = "{{ url_for('admin.get_image', filename='') }}" + encodeURIComponent(file);
+                            // 触发Dropzone事件
                             this.emit("addedfile", mockFile);
-                            this.emit("thumbnail", mockFile, "{{ url_for('admin.get_image', filename='') }}" + file); // 设置缩略图
+                            this.emit("thumbnail", mockFile, imageUrl);
                             this.emit("complete", mockFile);
-                            mockFile.uploadedFileName = file; // 存储文件名，用于删除时使用
+                            this.files.push(mockFile);  // 将文件加入队列
                         });
+                    })
+                    .catch(error => {
+                        console.error("文件加载失败:", error);
+                        // 可选：显示错误提示（如浮动通知）
                     });
+
 
                 // 新文件添加时的处理
                 this.on('addedfile', function (file) {
@@ -102,6 +128,7 @@
 
                 // 新文件上传成功后的处理
                 this.on('success', function (file, response) {
+                    console.log("上传成功的响应:", response); // 添加调试日志
                     const tempFiles = document.getElementById('temp_files');
                     let files = tempFiles.value ? JSON.parse(tempFiles.value) : [];
                     files.push(response.filename);
@@ -117,41 +144,55 @@
                     files = files.filter(f => f !== file.uploadedFileName);
                     tempFiles.value = JSON.stringify(files);
 
-                    // 向后端发送请求删除服务器上的文件
-                    fetch("{{ url_for('admin.delete_uploaded_file') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRFToken": "{{ csrf_token() }}" // 如果需要 CSRF 保护
-                        },
-                        body: JSON.stringify({filename: file.uploadedFileName})
-                    }).then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                console.log("文件已从服务器删除");
-                            } else {
-                                console.error("删除文件失败");
-                            }
+                    // 根据 isExisting 属性判断文件来源
+                    if (file.isExisting) {
+                        // 删除已经存在的文件
+                        const deleteUrl = "{{ url_for('admin.delete_uploaded_file') }}";
+                        fetch(deleteUrl, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": "{{ csrf_token() }}"
+                            },
+                            body: JSON.stringify({
+                                table_name: "indexabout",
+                                field_name: "filename",
+                                field_value: file.uploadedFileName
+                            })
+                        }).then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    console.log("1文件已从服务器删除");
+                                } else {
+                                    console.error("1删除文件失败:", data.message);
+                                }
+                            }).catch(error => {
+                            console.error("请求失败:", error);
                         });
-
-                    // 检查 Dropzone 中剩余的文件数量
-                    if (this.files.length === 0) {
-                        // 如果没有文件，显示默认消息
-                        this.element.querySelector('.dz-default.dz-message').style.display = 'block';
                     } else {
-                        // 如果有文件，隐藏默认消息
-                        this.element.querySelector('.dz-default.dz-message').style.display = 'none';
-                    }
-                });
 
-                // 初始化时检查文件数量
-                if (this.files.length > 0) {
-                    this.element.querySelector('.dz-default.dz-message').style.display = 'none';
-                } else {
-                    this.element.querySelector('.dz-default.dz-message').style.display = 'block';
+                    }
+
+                        // 检查 Dropzone 中剩余的文件数量
+                        if (this.files.length === 0) {
+                            // 如果没有文件，显示默认消息
+                            this.element.querySelector('.dz-default.dz-message').style.display = 'block';
+                        } else {
+                            // 如果有文件，隐藏默认消息
+                            this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                        }
+                    }
+                )
+                    ;
+
+                    // 初始化时检查文件数量
+                    if (this.files.length > 0) {
+                        this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                    } else {
+                        this.element.querySelector('.dz-default.dz-message').style.display = 'block';
+                    }
                 }
-            }
-        });
+            });
     </script>
 {% endblock %}
 

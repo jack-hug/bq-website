@@ -116,7 +116,7 @@ class News(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100))
     content = db.Column(db.Text)
-    filename = db.Column(db.String(200))
+    filename = db.Column(db.JSON)
     status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
     clicks = db.Column(db.Integer, default=0)  # 点击数
@@ -283,7 +283,7 @@ class IndexAbout(db.Model):
     title = db.Column(db.String(100))
     content = db.Column(db.Text)
     status = db.Column(db.Boolean, default=True)
-    images = db.Column(db.JSON)
+    filename = db.Column(db.JSON)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 

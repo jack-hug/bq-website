@@ -82,26 +82,65 @@
             dictRemoveFile: "删 除",
             dictMaxFilesExceeded: "只能上传一张图片",
             init: function () {
+                var modelName = "indexabout";
+                var fieldName = "filename";
+                var filterCondition = "1";
                 // 加载已有的图片
-                var existingFile = "{{ news.filename }}";
+                var existingFile = "{{ news.filename if news else '' }}";
                 if (existingFile && existingFile !== "None") {
-                    var imageUrl = "{{ url_for('admin.get_image', filename='') }}" + existingFile;
-                    var mockFile = {name: existingFile, size: 0};
+                    var imageUrl = "{{ url_for('admin.get_image', filename=news.filename) }}";
+                    var mockFile = {
+                        name: existingFile,
+                        size: 0,
+                        serverFilename: existingFile
+                    };
                     this.emit('addedfile', mockFile);
                     this.emit('thumbnail', mockFile, imageUrl);
                     this.emit('complete', mockFile);
+                    this.files.push(mockFile);
                 }
 
                 // 新文件添加时的处理
                 this.on('addedfile', function (file) {
                     // 隐藏默认消息
                     this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                    var existingFile = "{{ news.filename }}";
+                    if (existingFile && existingFile !== "None") {
+                        var oldFile = this.files.find(f => f.serverFilename === existingFile);
+                        if (oldFile) {
+                            this.removeFile(oldFile);
+                        }
+                    }
+
                 });
                 // 新文件上传成功后的处理
                 this.on('success', function (file, response) {
                     document.getElementById('temp_files').value = response.filename;
                 });
+                // 文件移除时的处理
                 this.on('removedfile', function (file) {
+                    let filename = file.name;
+                    if (filename.serverFilename) {
+                        filename = filename.serverFilename;
+                    }
+                    // 发送 AJAX 请求删除图片
+                    if (filename) {
+                        fetch("{{ url_for('admin.delete_uploaded_file') }}", {
+                            method: "POST",
+                            headers: {
+                                'X-CSRF-Token': getCsrfToken(),
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({filename: filename})
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.error) alert(data.error);
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                    }
                     document.getElementById('temp_files').value = '';
                 });
             }
