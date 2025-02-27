@@ -85,7 +85,7 @@
                                 <td>{{ loop.index + ((pagination.page - 1) * config.BQ_PRODUCT_PER_PAGE) }}</td>
                                 <td>
                                     {% if news.filename %}
-                                        <img src="{{ url_for('admin.get_image', filename=news.filename) }}"
+                                        <img src="{{ url_for('admin.get_image', filename=news.filename[0]) }}"
                                              alt="{{ news.title }}" style="width:100px">
                                     {% else %}
                                         <img src="{{ url_for('static', filename='assets/news-default.png') }}"

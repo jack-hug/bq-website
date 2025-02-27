@@ -30,7 +30,7 @@
                                 <div class="card hover-effect h-100">
                                     <a href="{{ url_for('main.show_news', news_id=news.id) }}">
                                         {% if news.filename %}
-                                            <img src="{{ url_for('main.get_image', filename=news.filename) }}"
+                                            <img src="{{ url_for('main.get_image', filename=news.filename[0]) }}"
                                                  class="card-img-top" alt="...">
                                         {% else %}
                                             <img src="{{ url_for('static', filename='assets/news-default.png') }}"

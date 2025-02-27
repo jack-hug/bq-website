@@ -184,12 +184,14 @@ def news_categories():
 
 def fake_news(count=30):
     for i in range(count):
+        filenames = []
         filename = 'random_news_%d.jpg' % i
         generate_gradient_image(350, 350, filename)
+        filenames.append(filename)
         news = News(
             title=fake.sentence(),
             content=fake.text(200),
-            filename=filename,
+            filename=filenames,
             newscategory=NewsCategory.query.get(random.randint(1, NewsCategory.query.count())),
             timestamp=fake.date_time_this_year(),
             clicks=fake.random.randint(10, 500)

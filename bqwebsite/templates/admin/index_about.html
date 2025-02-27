@@ -103,7 +103,6 @@
                                 name: file,
                                 size: 0,
                                 uploadedFileName: file,
-                                isExisting: true,
                             };
                             // 生成安全的图片URL（处理特殊字符）
                             const imageUrl = "{{ url_for('admin.get_image', filename='') }}" + encodeURIComponent(file);
@@ -139,13 +138,11 @@
 
                 // 删除文件时的处理
                 this.on('removedfile', function (file) {
-                    const tempFiles = document.getElementById('temp_files');
-                    let files = tempFiles.value ? JSON.parse(tempFiles.value) : [];
-                    files = files.filter(f => f !== file.uploadedFileName);
-                    tempFiles.value = JSON.stringify(files);
+                        const tempFiles = document.getElementById('temp_files');
+                        let files = tempFiles.value ? JSON.parse(tempFiles.value) : [];
+                        files = files.filter(f => f !== file.uploadedFileName);
+                        tempFiles.value = JSON.stringify(files);
 
-                    // 根据 isExisting 属性判断文件来源
-                    if (file.isExisting) {
                         // 删除已经存在的文件
                         const deleteUrl = "{{ url_for('admin.delete_uploaded_file') }}";
                         fetch(deleteUrl, {
@@ -169,9 +166,6 @@
                             }).catch(error => {
                             console.error("请求失败:", error);
                         });
-                    } else {
-
-                    }
 
                         // 检查 Dropzone 中剩余的文件数量
                         if (this.files.length === 0) {
@@ -182,17 +176,16 @@
                             this.element.querySelector('.dz-default.dz-message').style.display = 'none';
                         }
                     }
-                )
-                    ;
+                );
 
-                    // 初始化时检查文件数量
-                    if (this.files.length > 0) {
-                        this.element.querySelector('.dz-default.dz-message').style.display = 'none';
-                    } else {
-                        this.element.querySelector('.dz-default.dz-message').style.display = 'block';
-                    }
+                // 初始化时检查文件数量
+                if (this.files.length > 0) {
+                    this.element.querySelector('.dz-default.dz-message').style.display = 'none';
+                } else {
+                    this.element.querySelector('.dz-default.dz-message').style.display = 'block';
                 }
-            });
+            }
+        });
     </script>
 {% endblock %}
 
