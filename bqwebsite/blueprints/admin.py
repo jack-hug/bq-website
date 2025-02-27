@@ -7,6 +7,7 @@ from flask import render_template, Blueprint, redirect, url_for, flash, request,
     jsonify, session, abort
 from flask_ckeditor import upload_fail, upload_success
 from flask_login import current_user, login_user, login_required, logout_user
+from sqlalchemy import func
 from werkzeug.exceptions import BadRequest
 
 from .. import models
@@ -1084,10 +1085,17 @@ def index_about():
             index_about.content = form.content.data
             index_about.timestamp = datetime.utcnow()
 
+            # 假设 existing_images 是从数据库读取的 JSON 字符串
             existing_images = index_about.filename if index_about.filename else []
+
+            # 假设 new_images 是从表单获取的 JSON 字符串
             temp_files = request.form.get('temp_files')
             new_images = json.loads(temp_files) if temp_files else []
+
+            # 拼接两个列表
             updated_images = existing_images + new_images
+
+            # 将更新后的列表保存回数据库
             index_about.filename = updated_images
 
             db.session.commit()
@@ -1098,7 +1106,7 @@ def index_about():
                 title=form.title.data,
                 content=form.content.data,
                 ttimestamp=datetime.utcnow(),
-                images=json.loads(request.form.get('temp_files')) if request.form.get('temp_files') else []
+                filename=request.form.get('temp_files') if request.form.get('temp_files') else []
             )
             db.session.add(index_about)
             db.session.commit()
@@ -1115,7 +1123,6 @@ def index_about():
 @login_required
 def delete_uploaded_file():
     data = request.get_json()
-    print(data)
     required_fields = ['table_name', 'field_name', 'field_value']
     if not all(key in data for key in required_fields):
         return jsonify(success=False, message='缺少必要参数: table_name, field_name, field_value'), 400
@@ -1142,9 +1149,10 @@ def delete_uploaded_file():
         if not hasattr(model_class, field_name):
             return jsonify(success=False, message='无效的字段名'), 400
 
-        # 查询记录
-        query_filter = {field_name: field_value}
-        record = model_class.query.filter_by(**query_filter).first()
+        # 查询条件：filename 字段的 JSON 数组中包含 field_value
+        record = db.session.query(model_class).filter(
+            getattr(model_class, field_name).cast(db.String).like(f'%"{field_value}"%')
+        ).first()
         if not record:
             return jsonify(success=False, message='记录不存在'), 404
 
@@ -1154,8 +1162,13 @@ def delete_uploaded_file():
             # 处理字段存储的是 JSON 数组 ["img1.jpg", "img2.jpg"]
             if field_value not in filename:
                 return jsonify(success=False, message='文件名不在记录中'), 400
-            filename.remove(field_value)
-            record.filename = json.dumps(filename)
+            # 清理路径分隔符
+            field_value_clean = field_value.replace('\\', '/')
+            filename_clean = [f.replace('\\', '/') for f in filename]
+            if field_value_clean not in filename_clean:
+                return jsonify(success=False, message='2文件名不在记录中'), 400
+            filename_clean.remove(field_value_clean)
+            record.filename = filename_clean
         elif isinstance(filename, str):
             # 处理字段存储的是单个文件名
             if filename != field_value:
@@ -1188,7 +1201,6 @@ def get_model_by_tablename(table_name):
         if hasattr(cls, '__table__') and cls.__table__.name == table_name:
             return cls
     return None
-
 
 
 @admin_bp.route('/get_uploaded_files', methods=['GET'])
@@ -1287,6 +1299,7 @@ def check_category_name():
 
     exists = model.query.filter_by(name=name).first() is not None
     return jsonify({'exists': exists})
+
 
 @admin_bp.route('/routes')
 def list_routes():
