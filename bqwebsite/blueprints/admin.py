@@ -1,13 +1,11 @@
 import json
 import os
-import time
 from datetime import datetime
 
 from flask import render_template, Blueprint, redirect, url_for, flash, request, current_app, send_from_directory, \
     jsonify, session, abort
 from flask_ckeditor import upload_fail, upload_success
 from flask_login import current_user, login_user, login_required, logout_user
-from sqlalchemy import func
 from werkzeug.exceptions import BadRequest
 
 from .. import models
@@ -15,7 +13,7 @@ from ..extensions import db
 from ..models import Admin, Photo, Product, Brand, Category, Subject, News, NewsCategory, Introduce, IntroduceCategory, \
     ResearchCategory, Research, ContactCategory, Contact, Banner, IndexAbout
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryForm, EditBrandForm, CategoryAddForm, \
-    BrandAddForm, SubjectAddForm, EditSubjectForm, NewsForm, EditNewsForm, EditNewsCategoryForm, AddNewsCategoryForm, \
+    BrandAddForm, SubjectAddForm, EditSubjectForm, NewsAddForm, EditNewsForm, EditNewsCategoryForm, AddNewsCategoryForm, \
     EditIntroduceForm, IntroduceAddForm, AddIntroCategoryForm, EditIntroCategoryForm, EditResearchForm, ResearchAddForm, \
     EditContactForm, ContactAddForm, AddContactCategoryForm, EditContactCategoryForm, BannerAddForm, IndexAboutForm
 from ..utils import random_filename, redirect_back, resize_image, save_temp_files, save_upload_files
@@ -371,11 +369,15 @@ def category_edit(category_id):
     form = EditCategoryForm(category_id=category.id)
     if form.validate_on_submit():
         category.name = form.name.data
-        temp_files = json.loads(request.form.get('temp_files'))
-        print(temp_files)
-        category.filename = temp_files[0] if temp_files else None
-        print(category.filename)
         category.timestamp = datetime.utcnow()
+
+        temp_files = request.form.get('temp_files')
+        try:
+            new_image = json.loads(temp_files) if temp_files else []
+        except json.JSONDecodeError:
+            new_image = []
+        category.filename = new_image
+
         db.session.commit()
         flash('修改成功.', 'success')
         return redirect(url_for('admin.category_list'))
@@ -546,7 +548,9 @@ def news_delete(news_id):
 @admin_bp.route('/news/new', methods=['GET', 'POST'])  # 新建文章
 @login_required
 def news_add():
-    form = NewsForm()
+    form = NewsAddForm()
+    if form.cancel.data:
+        return redirect(url_for('admin.news_list'))
     if form.validate_on_submit():
         news = News(
             title=form.title.data,
@@ -1135,7 +1139,7 @@ def delete_uploaded_file():
     if not table_name or not field_name or not field_value:
         return jsonify(success=False, message='参数不能为空'), 400
 
-    allowed_tables = {'indexabout', 'news', 'product'}
+    allowed_tables = {'indexabout', 'news', 'category'}
     if table_name not in allowed_tables:
         return jsonify(success=False, message='无效的表名'), 400
 
@@ -1223,7 +1227,7 @@ def get_uploaded_files():
         raise BadRequest('Missing required parameters: model and field')
 
     # 动态获取模型类（安全考虑：限制允许访问的模型）
-    allowed_models = {'IndexAbout', 'News', 'Product'}  # 允许访问的白名单
+    allowed_models = {'IndexAbout', 'News', 'Category'}  # 允许访问的白名单
     if model_name not in allowed_models:
         raise BadRequest(f'Invalid model: {model_name}')
 

@@ -69,9 +69,12 @@ def admin():
 
 
 def fake_banners():
-    for i in range(3):
-        filename = 'random_banner_%d.jpg' % i
-        generate_gradient_image(1920, 800, filename)
+    filenames = ['banner01.jpg', 'banner02.jpg', 'banner03.jpg']
+    for i, filename in enumerate(filenames):
+        file_path = os.path.join(current_app.static_folder, 'assets', 'img', filename)
+        if not os.path.exists(file_path):
+            click.echo('File not found: %s' % filename)
+            continue
 
         banner = Banner(
             filename=filename,
@@ -88,11 +91,13 @@ def fake_categories():
     jixing = ['膏剂', '散剂', '片剂', '胶囊', '搽剂', '颗粒剂', '糖浆', '酊剂', '其他']
 
     for idx, i in enumerate(jixing):
+        filenames = []
         filename = 'random_category_%d.jpg' % idx
         generate_gradient_image(220, 300, filename)
+        filenames.append(filename)
         category = Category(
             name=i,
-            filename=filename,
+            filename=filenames,
         )
         db.session.add(category)
     try:

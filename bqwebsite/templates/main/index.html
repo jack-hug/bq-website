@@ -26,8 +26,23 @@
                 <div class="container-fluid h-100">
                     <div class="row h-100 d-flex align-items-center">
                         <div class="col-md-6 col-sm-12">
-                            <img src="{{ url_for('static', filename='assets/img/index-logo.png') }}" alt="About Us"
-                                 class="img-fluid fade-in-left" style="max-width: 70%;height: auto;">
+                            {% if index_about.filename %}
+                                <!-- 轮播项 -->
+                                <div id="index-about-carousel" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        {% for filename in index_about.filename %}
+                                            <div class="carousel-item {% if loop.first %}active{% endif %}"
+                                                 data-bs-interval="5000">
+                                                <img src="{{ url_for('admin.get_image', filename=filename) }}"
+                                                     class="img-fluid" alt="About us photo">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <img src="{{ url_for('static', filename='assets/img/index-logo.png') }}" alt="About Us"
+                                     class="img-fluid fade-in-left" style="max-width: 70%;height: auto;">
+                            {% endif %}
                         </div>
                         <div class="col-md-6 col-sm-12 fade-in-right">
                             <h2 class="text-center mb-4">{{ index_about.title }}</h2>
@@ -73,7 +88,7 @@
                                 <div class="hovereffect">
                                     {% if category.filename %}
                                         <img class="img-fluid"
-                                             src="{{ url_for('main.get_image', filename=category.filename) }}"
+                                             src="{{ url_for('main.get_image', filename=category.filename[0]) }}"
                                              alt="">
                                     {% else %}
                                         <img class="img-fluid"
@@ -101,7 +116,7 @@
                             <a href="{{ url_for('main.show_news', news_id=news.id) }}" class="text-decoration-none">
                                 <div class="card mb-3 shadow-sm" style="width: 22rem;">
                                     {% if news.filename %}
-                                        <img src="{{ url_for('main.get_image', filename=news.filename) }}"
+                                        <img src="{{ url_for('main.get_image', filename=news.filename[0]) }}"
                                              class="card-img-top" alt="...">
                                     {% else %}
                                         <img src="{{ url_for('static', filename='assets/news-default.png') }}"
@@ -124,7 +139,7 @@
                             <a href="{{ url_for('main.show_news', news_id=news.id) }}" class="text-decoration-none">
                                 <div class="card mb-3 shadow-sm" style="width: 22rem;">
                                     {% if news.filename %}
-                                        <img src="{{ url_for('main.get_image', filename=news.filename) }}"
+                                        <img src="{{ url_for('main.get_image', filename=news.filename[0]) }}"
                                              class="card-img-top" alt="...">
                                     {% else %}
                                         <img src="{{ url_for('static', filename='assets/news-default.png') }}"
@@ -149,20 +164,28 @@
                 <div class="container h-100 d-flex">
                     <div class="row d-flex align-items-center">
                         <div class="col-3 fade-in-end mb-1">
-                            <img class="img-fluid"
-                                 src="{{ url_for('static', filename='assets/img/company.jpg') }}" alt="">
+                            <a href="{{ url_for('main.show_intro', intro_id=3) }}">
+                                <img class="img-fluid"
+                                     src="{{ url_for('static', filename='assets/img/company.jpg') }}" alt="">
+                            </a>
                         </div>
                         <div class="col-3 fade-in-end mb-1">
-                            <img class="img-fluid"
-                                 src="{{ url_for('static', filename='assets/img/developing.jpg') }}" alt="">
+                            <a href="{{ url_for('main.show_intro', intro_id=1) }}">
+                                <img class="img-fluid"
+                                     src="{{ url_for('static', filename='assets/img/developing.jpg') }}" alt="">
+                            </a>
                         </div>
                         <div class="col-3 fade-in-end mb-1">
-                            <img class="img-fluid"
-                                 src="{{ url_for('static', filename='assets/img/culture.jpg') }}" alt="">
+                            <a href="{{ url_for('main.show_intro', intro_id=1) }}">
+                                <img class="img-fluid"
+                                     src="{{ url_for('static', filename='assets/img/culture.jpg') }}" alt="">
+                            </a>
                         </div>
                         <div class="col-3 fade-in-end mb-1">
-                            <img class="img-fluid"
-                                 src="{{ url_for('static', filename='assets/img/research.jpg') }}" alt="">
+                            <a href="{{ url_for('main.show_research', research_id=1) }}">
+                                <img class="img-fluid"
+                                     src="{{ url_for('static', filename='assets/img/research.jpg') }}" alt="">
+                            </a>
                         </div>
                     </div>
                 </div>

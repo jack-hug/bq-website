@@ -14,7 +14,7 @@ class Category(db.Model):
     __tablename__ = 'category'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False, unique=True)  # 产品分类名称
-    filename = db.Column(db.String(200))
+    filename = db.Column(db.JSON)
     status = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
 
