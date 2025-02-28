@@ -63,7 +63,22 @@ var swiper2 = new Swiper('.swiper-banner', {
         disableOnInteraction: false,
     },
     loop: true,
+    on: {
+        slideChange: function () {
+            document.querySelectorAll('.swiper-slide').forEach(slide => {
+                slide.classList.remove('animate-scale');
+            });
+            // 强制触发
+            void swiper2.slides[swiper2.activeIndex].offsetWidth;
+
+        //     为当前幻灯片添加动画类
+            swiper2.slides[swiper2.activeIndex].classList.add('animate-scale');
+        }
+    }
 });
+
+    // 初始化时触发第一个幻灯片的动画
+    swiper2.slides[swiper2.activeIndex].classList.add('animate-scale');
 
 // 首页news效果
 var swiper3 = new Swiper('.swiper-news', {

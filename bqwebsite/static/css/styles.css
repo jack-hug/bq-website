@@ -201,7 +201,7 @@ body {
 }
 
 .hovereffect img {
-    height:100%;
+    height: 100%;
     width: auto;
     display: block;
     position: relative;
@@ -251,14 +251,13 @@ body {
 }
 
 /* banner图片逐渐变小效果 */
+/* 初始状态 */
 .scale-image-effect img {
     transform: scale(1.2);
+    will-change: transform; /* 提示浏览器提前准备好动画 */
 }
 
-.scale-image-effect img {
-    animation: scale-image 12s linear;
-}
-
+/* 动画效果 */
 @keyframes scale-image {
     0% {
         transform: scale(1.2);
@@ -266,6 +265,11 @@ body {
     100% {
         transform: scale(1);
     }
+}
+
+/* 动态添加的动画类 */
+.animate-scale img {
+    animation: scale-image 12s linear;
 }
 
 /* 背景居中变色 */
