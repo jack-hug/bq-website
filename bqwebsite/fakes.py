@@ -88,7 +88,7 @@ def fake_banners():
 
 
 def fake_categories():
-    jixing = ['膏剂', '散剂', '片剂', '胶囊', '搽剂', '颗粒剂', '糖浆', '酊剂', '其他']
+    jixing = ['膏剂', '糖浆', '颗粒剂', '片剂', '胶囊', '搽剂', '酊剂', '丸剂', '散剂', '其他']
 
     for idx, i in enumerate(jixing):
         filenames = []
