@@ -15,7 +15,8 @@ from ..models import Admin, Photo, Product, Brand, Category, Subject, News, News
 from ..forms.admin import LoginForm, ProductForm, EditProductForm, EditCategoryForm, EditBrandForm, CategoryAddForm, \
     BrandAddForm, SubjectAddForm, EditSubjectForm, NewsAddForm, EditNewsForm, EditNewsCategoryForm, AddNewsCategoryForm, \
     EditIntroduceForm, IntroduceAddForm, AddIntroCategoryForm, EditIntroCategoryForm, EditResearchForm, ResearchAddForm, \
-    EditContactForm, ContactAddForm, AddContactCategoryForm, EditContactCategoryForm, BannerAddForm, IndexAboutForm
+    EditContactForm, ContactAddForm, AddContactCategoryForm, EditContactCategoryForm, BannerAddForm, IndexAboutForm, \
+    ChangePasswordForm
 from ..utils import random_filename, redirect_back, resize_image, save_temp_files, save_upload_files
 
 admin_bp = Blueprint('admin', __name__)
@@ -59,6 +60,24 @@ def logout():
     logout_user()
     flash('Logout success.', 'info')
     return redirect(url_for('admin.login'))
+
+
+@admin_bp.route('/change-password', methods=['GET', 'POST'])  # 修改密码
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if current_user.validate_password(form.old_password.data):
+            current_user.set_password(form.password.data)
+            db.session.commit()
+            logout_user()
+            flash('密码修改成功，请重新登录', 'success')
+            return redirect(url_for('admin.login'))
+        else:
+            flash('旧密码不正确，请重新输入', 'warning')
+            return redirect_back()
+    return render_template('admin/change_password.html', form=form)
+
 
 
 @admin_bp.route('/forget-password', methods=['GET', 'POST'])  # 忘记密码

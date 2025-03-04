@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, MultipleFileField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
-from wtforms.validators import DataRequired, Length, Email, ValidationError
+from wtforms.validators import DataRequired, Length, Email, ValidationError, EqualTo
 from ..models import Category, Brand, Subject, Product, NewsCategory, IntroduceCategory, ResearchCategory, \
     ContactCategory
 from flask_ckeditor import CKEditorField
@@ -269,3 +269,10 @@ class IndexAboutForm(FlaskForm):
     submit = SubmitField('修 改')
     cancel = SubmitField('取 消')
 
+
+class ChangePasswordForm(FlaskForm):
+    old_password = PasswordField('旧密码', validators=[DataRequired()])
+    password = PasswordField('新密码', validators=[
+        DataRequired(), EqualTo('password2', message='两个密码必须一致')])
+    password2 = PasswordField('确认新密码', validators=[DataRequired()])
+    submit = SubmitField('修 改')
