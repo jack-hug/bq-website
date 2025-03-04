@@ -6,7 +6,7 @@
                     {% for product in products %}
                         {% if product.status %}
                             <div class="col-md-3 col-sm-6 mb-5">
-                                <div class="product_hover_effect">
+                                <div class="product_hover_effect border">
                                     {% set photo = product.photos|first %}
                                     {% if photo %}
                                         <img src="{{ url_for('admin.get_image', filename=photo.filename_m) }}"
