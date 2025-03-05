@@ -62,20 +62,26 @@ def logout():
     return redirect(url_for('admin.login'))
 
 
-@admin_bp.route('/change-password', methods=['GET', 'POST'])  # 修改密码
+@admin_bp.route('/change-password', methods=['GET', 'POST'])
 @login_required
 def change_password():
     form = ChangePasswordForm()
     if form.validate_on_submit():
-        if current_user.validate_password(form.old_password.data):
-            current_user.set_password(form.password.data)
+        print("表单验证通过")  # 调试输出
+        if current_user.validate_password(form.current_password.data):
+            print("旧密码验证通过")  # 调试输出
+            current_user.set_password(form.new_password1.data)
             db.session.commit()
             logout_user()
             flash('密码修改成功，请重新登录', 'success')
             return redirect(url_for('admin.login'))
         else:
+            print("旧密码验证失败")  # 调试输出
             flash('旧密码不正确，请重新输入', 'warning')
-            return redirect_back()
+            return redirect(url_for('admin.change_password'))
+    else:
+        print("表单验证失败")  # 调试输出
+        print(form.errors)  # 打印表单错误信息
     return render_template('admin/change_password.html', form=form)
 
 

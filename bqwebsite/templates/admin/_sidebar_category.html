@@ -73,7 +73,7 @@
                    href="{{ url_for('admin.index_about') }}">&nbsp;&nbsp;&nbsp;公司介绍</a>
             </a>
         </div>
-        <a class="list-group-item {% if request.endpoint == 'admin.change_password' %}active{% endif %}" href="{{ url_for('admin.change_password') }}"><i class="fa-solid fa-user"></i> 管理员设置</a>
+        <a class="list-group-item {% if request.endpoint == 'admin.change_password' %}active{% endif %}" href="{{ url_for('admin.change_password') }}"><i class="fa-solid fa-user"></i> 修改密码</a>
         <a class="list-group-item" href="#"><i class="fa-solid fa-gear"></i> 网站设置</a>
     </ul>
 </div>

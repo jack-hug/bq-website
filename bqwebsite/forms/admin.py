@@ -271,8 +271,8 @@ class IndexAboutForm(FlaskForm):
 
 
 class ChangePasswordForm(FlaskForm):
-    old_password = PasswordField('旧密码', validators=[DataRequired()])
-    password = PasswordField('新密码', validators=[
-        DataRequired(), EqualTo('password2', message='两个密码必须一致')])
-    password2 = PasswordField('确认新密码', validators=[DataRequired()])
+    current_password = PasswordField('旧密码', validators=[DataRequired()])
+    new_password1 = PasswordField('新密码', validators=[
+        DataRequired(), EqualTo('new_password2', message='两个密码必须一致')])
+    new_password2 = PasswordField('确认新密码', validators=[DataRequired()])
     submit = SubmitField('修 改')

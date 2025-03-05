@@ -34,7 +34,7 @@
                                             <div class="carousel-item {% if loop.first %}active{% endif %}"
                                                  data-bs-interval="4000">
                                                 <img src="{{ url_for('admin.get_image', filename=filename) }}"
-                                                     class="img-fluid fade-in-right"  style="max-width: 70%;height: auto;" alt="About us photo">
+                                                     class="img-fluid"  style="max-width: 70%;height: auto;" alt="About us photo">
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -166,25 +166,25 @@
                         <div class="col-3 fade-in-end mb-1">
                             <a href="{{ url_for('main.show_intro', intro_id=3) }}">
                                 <img class="img-fluid"
-                                     src="{{ url_for('static', filename='assets/img/company.jpg') }}" alt="">
+                                     src="{{ url_for('static', filename='assets/img/company.png') }}" alt="">
                             </a>
                         </div>
                         <div class="col-3 fade-in-end mb-1">
                             <a href="{{ url_for('main.show_intro', intro_id=1) }}">
                                 <img class="img-fluid"
-                                     src="{{ url_for('static', filename='assets/img/developing.jpg') }}" alt="">
+                                     src="{{ url_for('static', filename='assets/img/developing.png') }}" alt="">
                             </a>
                         </div>
                         <div class="col-3 fade-in-end mb-1">
                             <a href="{{ url_for('main.show_intro', intro_id=1) }}">
                                 <img class="img-fluid"
-                                     src="{{ url_for('static', filename='assets/img/culture.jpg') }}" alt="">
+                                     src="{{ url_for('static', filename='assets/img/culture.png') }}" alt="">
                             </a>
                         </div>
                         <div class="col-3 fade-in-end mb-1">
                             <a href="{{ url_for('main.show_research', research_id=1) }}">
                                 <img class="img-fluid"
-                                     src="{{ url_for('static', filename='assets/img/research.jpg') }}" alt="">
+                                     src="{{ url_for('static', filename='assets/img/research.png') }}" alt="">
                             </a>
                         </div>
                     </div>
