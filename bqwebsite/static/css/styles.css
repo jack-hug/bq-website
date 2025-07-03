@@ -434,3 +434,8 @@ body {
     z-index: 1050; /* 确保它在其他内容之上 */
     text-align: center; /* 确保文本居中 */
 }
+
+/* 首行缩进 */
+.text-indent {
+    text-indent: 2em;
+}

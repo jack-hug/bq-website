@@ -24,7 +24,7 @@
                     <h3 class="text-center text-dark mt-5">{{ contact.title }}</h3>
                     <p class="text-muted text-center"><small>发布时间：{{ moment(contact.timestamp).format('lll') }}</small></p>
                     <hr>
-                    <p class="lh-lg text-start text-indent">{{ contact.content|safe }}</p>
+                    <div class="lh-lg text-start text-indent px-3">{{ contact.content|safe }}</div>
                     <hr class="mt-5">
                 </div>
             </div>

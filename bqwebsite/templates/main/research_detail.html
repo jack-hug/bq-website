@@ -19,7 +19,7 @@
                     <p class="text-muted text-center">
                         <small>发布时间：{{ moment(research.timestamp).format('lll') }}</small></p>
                     <hr>
-                    <p class="lh-lg text-start text-indent">{{ research.research_content|replace("<img", "<img class='img-fluid h-100'")|safe }}</p>
+                    <div class="lh-lg text-start text-indent px-3">{{ research.research_content|replace("<img", "<img class='img-fluid h-100'")|safe }}</div>
                     <hr class="mt-5">
                 </div>
             </div>

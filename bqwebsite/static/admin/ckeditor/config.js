@@ -9,6 +9,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
+
 	config.toolbarGroups = [
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
@@ -20,7 +21,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'others' },
 		'/',
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'lineheight' ] },
 		{ name: 'styles' },
 		{ name: 'colors' },
 		{ name: 'about' }
@@ -35,4 +36,10 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+
+	// 启用 lineheight 插件
+    config.extraPlugins = 'lineheight';
+
+    // 设置可选行高值（分号分隔）
+    config.line_height = '1;1.5;2;2.5;3';
 };

@@ -36,8 +36,8 @@ class BaseConfig:
     MAX_CONTENT_LENGTH = 50 * 1024 * 1024  # 限制整个请求体的大小，而不仅仅是单个文件的大小。
 
     CKEDITOR_ENABLE_CSRF = True
-    CKEDITOR_SERVE_LOCAL = True
-    CKEDITOR_PKG_TYPE = 'standard'
+    # CKEDITOR_SERVE_LOCAL = True
+    # CKEDITOR_PKG_TYPE = 'standard'
     CKEDITOR_HEIGHT = 400
     CKEDITOR_FILE_UPLOADER = 'admin.upload_image'  # ckeditor上传图片的函数
 
