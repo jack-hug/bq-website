@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>现代化全屏滑动页面</title>
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <!-- Bootstrap 5 CSS (仅用于部分样式) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            color: white;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Swiper容器全屏 */
+        .swiper {
+            width: 100%;
+            height: 100vh;
+        }
+
+        /* 每个幻灯片（页面） */
+        .swiper-slide {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 页面背景 */
+        .slide-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .slide-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .slide-3 {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .slide-4 {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .slide-5 {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .slide-6 {
+            background: linear-gradient(135deg, #f8b16a 0%, #bf7334 100%);
+        }
+
+        /* 页面内容样式 */
+        .slide-content {
+            max-width: 90%;
+            z-index: 10;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .page-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            opacity: 0.85;
+        }
+
+        /* 页面编号 */
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* 第一页的上划提示 */
+        .swipe-hint {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95rem;
+            z-index: 20;
+            animation: floatUp 2.5s infinite ease-in-out;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px 0;
+            backdrop-filter: blur(5px);
+        }
+
+        @keyframes floatUp {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.85;
+            }
+            50% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        .swipe-hint i {
+            display: block;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        /* 自定义分页器（右侧白色小点） */
+        .custom-pagination {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .custom-pagination-bullet {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .custom-pagination-bullet-active {
+            background-color: white;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        /* 页面图标 */
+        .page-icon {
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 2.2rem;
+            }
+
+            .page-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .page-icon {
+                font-size: 3.5rem;
+            }
+
+            .slide-content {
+                padding: 15px;
+            }
+        }
+
+        /* 进度条样式 */
+        .progress-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* 页面装饰元素 */
+        .decoration-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 1;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            right: -150px;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -100px;
+            left: -100px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 进度条 -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Swiper容器 -->
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <!-- 页面 1 -->
+            <div class="swiper-slide slide-1">
+                <div class="decoration-circle circle-1"></div>
+                <div class="decoration-circle circle-2"></div>
+
+                <div class="slide-content">
+                    <div class="page-icon">
+                        <i class="bi bi-phone"></i>
+                    </div>
+                    <h1 class="page-title">复方鱼腥草颗粒</h1>
+                    <p class="page-subtitle">功能主治</p>
+                    <p class="page-description">
+                        清热解毒。用于外感风热引起的咽喉疼痛；急性咽炎、扁桃体炎。
+                    </p>
+                </div>
+
+                <!-- 第一页专属：上划提示 -->
+                <div class="swipe-hint">
+                    <i class="bi bi-chevron-up"></i>
+                    <span>上划查看下一页</span>
+                </div>
+
+                <div class="page-number">01</div>
+            </div>
+
+            <!-- 页面 2 -->
+            <div class="swiper-slide slide-2">
+                <div class="slide-content">
+                    <div class="page-icon">
+                        <i class="bi bi-palette"></i>
+                    </div>
+                    <h1 class="page-title">感冒灵茶</h1>
+                    <p class="page-subtitle">功能主治</p>
+                    <p class="page-description">
+                        解热镇痛。用于感冒引起的头痛，发热，鼻塞，流涕，咽痛。
+                    </p>
+                </div>
+                <div class="page-number">02</div>
+            </div>
+
+            <!-- 页面 3 -->
+            <div class="swiper-slide slide-3">
+                <div class="slide-content">
+                    <div class="page-icon">
+                        <i class="bi bi-palette"></i>
+                    </div>
+                    <h1 class="page-title">感冒灵颗粒</h1>
+                    <p class="page-subtitle">功能主治</p>
+                    <p class="page-description">
+                        解热镇痛。用于感冒引起的头痛，发热，鼻塞，流涕，咽痛。
+                    </p>
+                </div>
+                <div class="page-number">02</div>
+            </div>
+
+            <!-- 页面 4 -->
+            <div class="swiper-slide slide-4">
+                <div class="slide-content">
+                    <div class="page-icon">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <h1 class="page-title">加味藿香正气合剂</h1>
+                    <p class="page-subtitle">功能主治</p>
+                    <p class="page-description">
+                        解表化湿，理气和中。用于暑湿感冒，头痛身重胸闷，或恶寒发热，脘腹胀痛，呕吐泄泻。
+                    </p>
+                </div>
+                <div class="page-number">03</div>
+            </div>
+
+            <!-- 页面 5 -->
+            <div class="swiper-slide slide-5">
+                <div class="slide-content">
+                    <div class="page-icon">
+                        <i class="bi bi-grid-3x3-gap"></i>
+                    </div>
+                    <h1 class="page-title">痛肿灵（酊剂）</h1>
+                    <p class="page-subtitle">功能主治</p>
+                    <p class="page-description">
+                        祛风除湿，消肿止痛。用于风湿骨痛，跌打损伤。
+                    </p>
+                </div>
+                <div class="page-number">04</div>
+            </div>
+
+            <!-- 页面 6 -->
+            <div class="swiper-slide slide-6">
+                <div class="slide-content">
+                    <div class="page-icon">
+                        <i class="bi bi-stars"></i>
+                    </div>
+                    <h1 class="page-title">百咳静糖浆</h1>
+                    <p class="page-subtitle">功能主治</p>
+                    <p class="page-description">
+                        清热化痰，止咳平喘。用于外感风热所致的咳嗽、咯痰；感冒， 急、慢性支气管炎见上述证候者。
+                    </p>
+                    <button class="btn btn-outline-light mt-3" id="backToTopBtn">
+                        <i class="bi bi-arrow-up"></i> 返回顶部
+                    </button>
+                </div>
+                <div class="page-number">05</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 自定义分页器（右侧白色小点） -->
+    <div class="custom-pagination" id="customPagination">
+        <span class="custom-pagination-bullet custom-pagination-bullet-active" data-index="0"></span>
+        <span class="custom-pagination-bullet" data-index="1"></span>
+        <span class="custom-pagination-bullet" data-index="2"></span>
+        <span class="custom-pagination-bullet" data-index="3"></span>
+        <span class="custom-pagination-bullet" data-index="4"></span>
+        <span class="custom-pagination-bullet" data-index="5"></span>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // 初始化Swiper
+        const swiper = new Swiper('.mySwiper', {
+            // 垂直方向
+            direction: 'vertical',
+            // 循环切换（可选，根据需求）
+            loop: false,
+            // 滑动速度
+            speed: 600,
+            // 触摸参数
+            touchRatio: 1,
+            touchAngle: 45,
+            grabCursor: false,
+            // 滑动到边缘的抵抗力
+            resistanceRatio: 0.8,
+            // 每屏一个幻灯片
+            slidesPerView: 1,
+            spaceBetween: 0,
+            // 鼠标滚轮控制
+            mousewheel: {
+                forceToAxis: true,
+                sensitivity: 0.8,
+            },
+            // 键盘控制
+            keyboard: {
+                enabled: true,
+                onlyInViewport: true,
+            },
+            // 滑动后回调
+            on: {
+                init: function() {
+                    updateCustomPagination(this.activeIndex);
+                    updateProgressBar(this.activeIndex);
+                },
+                slideChange: function() {
+                    updateCustomPagination(this.activeIndex);
+                    updateProgressBar(this.activeIndex);
+
+                    // 第一页显示提示，其他页隐藏
+                    const swipeHint = document.querySelector('.swipe-hint');
+                    if (this.activeIndex === 0) {
+                        swipeHint.style.display = 'block';
+                    } else {
+                        swipeHint.style.display = 'none';
+                    }
+                }
+            }
+        });
+
+        // 更新自定义分页器
+        function updateCustomPagination(activeIndex) {
+            const bullets = document.querySelectorAll('.custom-pagination-bullet');
+            bullets.forEach((bullet, index) => {
+                if (index === activeIndex) {
+                    bullet.classList.add('custom-pagination-bullet-active');
+                } else {
+                    bullet.classList.remove('custom-pagination-bullet-active');
+                }
+            });
+        }
+
+        // 更新进度条
+        function updateProgressBar(activeIndex) {
+            const progress = ((activeIndex + 1) / 5) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // 自定义分页器点击事件
+        document.querySelectorAll('.custom-pagination-bullet').forEach(bullet => {
+            bullet.addEventListener('click', function() {
+                const index = parseInt(this.getAttribute('data-index'));
+                swiper.slideTo(index);
+            });
+        });
+
+        // 返回顶部按钮
+        document.getElementById('backToTopBtn').addEventListener('click', function() {
+            swiper.slideTo(0);
+        });
+
+        // 防止意外横向滑动
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        document.querySelector('.swiper').addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.querySelector('.swiper').addEventListener('touchmove', function(e) {
+            if (!swiper) return;
+
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+            const diffX = Math.abs(touchX - touchStartX);
+            const diffY = Math.abs(touchY - touchStartY);
+
+            // 如果是明显的横向滑动，阻止默认行为
+            if (diffX > diffY && diffX > 10) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // 页面加载后隐藏加载状态
+        window.addEventListener('load', function() {
+            document.body.style.opacity = 1;
+        });
+    </script>
+</body>
+</html>

@@ -269,3 +269,7 @@ def get_image(filename):
     if not os.path.exists(file_path):
         return '图片不存在', 404
     return send_from_directory(current_app.config['BQ_UPLOAD_PATH'], filename)
+
+@main_bp.route('/train/products') # 动车广告品种页面
+def train_products():
+    return render_template('main/train_products.html')
