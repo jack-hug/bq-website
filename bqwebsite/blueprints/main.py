@@ -273,3 +273,13 @@ def get_image(filename):
 @main_bp.route('/train/products') # 动车广告品种页面
 def train_products():
     return render_template('main/train_products.html')
+
+@main_bp.route('/train/products/<int:product_id>') # 动车广告品种详细页面
+def train_product(product_id):
+    product = Product.query.get_or_404(product_id)
+    if not product.status:
+        flash('该产品不存在', 'info')
+        return redirect(url_for('main.train_products'))
+    return render_template('main/train_product_detail.html', product=product)
+
+

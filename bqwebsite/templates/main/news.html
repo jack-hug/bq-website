@@ -44,7 +44,7 @@
                                         </h5>
                                         <p class="card-text"><a
                                                 href="{{ url_for('main.show_news', news_id=news.id) }}"
-                                                class="link-dark link-offset-2 link-underline link-underline-opacity-0">{{ news.content|truncate(60)|safe }}</a>
+                                                class="link-dark link-offset-2 link-underline link-underline-opacity-0">{{ news.content|striptags|truncate(60)|safe }}</a>
                                         </p>
                                     </div>
                                     <div class="card-footer"><span
